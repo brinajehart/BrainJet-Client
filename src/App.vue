@@ -55,7 +55,7 @@
       </v-container>
     </v-content>
     <v-footer color="indigo" app>
-      <span class="white--text">&copy; 2020 ( Brina Jehart / Janez Sedeljsak )</span>
+      <span class="white--text">&copy; 2020 ( Brina Jehart & Janez Sedeljsak )</span>
     </v-footer>
   </v-app>
 </template>
@@ -72,12 +72,10 @@ export default {
   },
   updated() {
     this.setCurrentUser();
-    console.log("updated");
   },
   methods: {
     setCurrentUser: function() {
       this.user = JSON.stringify(this.$store.getters.user);
-      console.log(this.$store.getters);
     },
     logout: function() {
       this.$store.dispatch("logout").then(() => {

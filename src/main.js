@@ -19,14 +19,18 @@ Vue.use(VueRouter);
 
 Vue.filter('fullname', user => {
     if (user.length < 10) return '';
-    const user_obj = JSON.parse(user);
-    return user_obj.first_name + " " + user_obj.last_name
+    while (typeof user != typeof {}) {
+        user = JSON.parse(user);
+    }
+    return user.first_name + " " + user.last_name
 });
 
 Vue.filter('genavatar', user => {
     if (user.length < 10) return '';
-    const user_obj = JSON.parse(user);
-    return user_obj.first_name.toUpperCase()[0] + user_obj.last_name.toUpperCase()[0]
+    while (typeof user != typeof {}) {
+        user = JSON.parse(user);
+    }
+    return user.first_name[0] + user.last_name[0]
 })
 
 new Vue({

@@ -9,7 +9,7 @@ export default new Vuex.Store({
     state: {
         status: '',
         token: localStorage.getItem('token') || '',
-        user: ''
+        user: localStorage.getItem('user') || ''
     },
     mutations: {
         auth_request(state) {
@@ -37,13 +37,15 @@ export default new Vuex.Store({
                     .then(resp => {
                         const data = resp.data
                         localStorage.setItem('token', data.token)
+                        localStorage.setItem('user', JSON.stringify(data.user))
                         axios.defaults.headers.common['Authorization'] = data.token
                         commit('auth_success', data)
                         resolve(resp)
                     })
                     .catch(err => {
                         commit('auth_error')
-                        localStorage.removeItem('token')
+                        localStorage.removeItem('token');
+                        localStorage.removeItem('user');
                         reject(err)
                     })
             })
@@ -55,7 +57,6 @@ export default new Vuex.Store({
                     .then(resp => {
                         const token = resp.data.token;
                         const user = resp.data.user;
-                        console.log(resp.data.user);
                         localStorage.setItem('token', token)
                         axios.defaults.headers.common['Authorization'] = token;
                         commit('auth_success', token, user);
@@ -63,7 +64,8 @@ export default new Vuex.Store({
                     })
                     .catch(err => {
                         commit('auth_error', err)
-                        localStorage.removeItem('token')
+                        localStorage.removeItem('token');
+                        localStorage.removeItem('user');
                         reject(err)
                     })
             })
@@ -71,7 +73,8 @@ export default new Vuex.Store({
         logout({ commit }) {
             return new Promise((resolve) => {
                 commit(`${URI}/auth/logout`)
-                localStorage.removeItem('token')
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
                 delete axios.defaults.headers.common['Authorization']
                 resolve()
             })

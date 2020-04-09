@@ -5,6 +5,9 @@
 #app {
     background: #f3f3ff;
     background-size: cover;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: flex-start !important;
 }
 
 .no-back-wrapper {
