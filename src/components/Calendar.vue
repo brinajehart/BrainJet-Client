@@ -21,12 +21,15 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+    };
   },
   computed: {
     isLoggedIn: function() {
       return this.$store.getters.isLoggedIn;
     }
   },
+  methods: {
+  }
 };
 </script>

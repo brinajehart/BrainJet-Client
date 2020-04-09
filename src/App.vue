@@ -4,9 +4,9 @@
       <v-list dense>
         <v-list-item>
           <v-avatar color="red">
-            <span class="white--text headline">JS</span>
+            <span class="white--text headline">{{ user | genavatar }}</span>
           </v-avatar>
-          <v-list-item-title style="margin-left: 10px">Janez Sedeljsak</v-list-item-title>
+          <v-list-item-title style="margin-left: 10px">{{ user | fullname }}</v-list-item-title>
         </v-list-item>
         <v-divider style="margin-top: 10px"></v-divider>
         <v-list-item link>
@@ -56,9 +56,20 @@ export default {
   name: "App",
 
   data: () => ({
-    //
+    user: null
   }),
+  created: function() {
+    this.setCurrentUser();
+  },
+  updated() {
+    this.setCurrentUser();
+    console.log('updated');
+  },
   methods: {
+    setCurrentUser: function() {
+        this.user = JSON.stringify(this.$store.getters.user);
+        console.log(this.$store.getters);
+    },
     logout: function() {
       this.$store.dispatch("logout").then(() => {
         this.$router.push("/login");
