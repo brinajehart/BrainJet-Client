@@ -40,9 +40,12 @@ export default {
     };
   },
   methods: {
+
+
+      
     login: function() {
       this.$store.dispatch("login", { ...this.form })
-        .then(() => this.$router.push('/home'))
+        .then(() => this.$router.push('/calendar'))
         .catch(err => console.log(err))
     }
   }

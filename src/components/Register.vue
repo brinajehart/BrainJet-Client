@@ -9,17 +9,17 @@
         </v-toolbar>
         <v-card-text>
           <v-form>
-            <v-text-field label="First Name" name="login" type="text" />
-            <v-text-field label="Last Name" name="login" type="text" />
-            <v-text-field label="Username" name="login" type="text" />
-            <v-text-field label="Email" name="login" type="email" />
-            <v-text-field id="password" label="Password" name="password" type="password" />
+            <v-text-field v-model="form.first_name" label="First Name" name="login" type="text" />
+            <v-text-field v-model="form.last_name" label="Last Name" name="login" type="text" />
+            <v-text-field v-model="form.username" label="Username" name="login" type="text" />
+            <v-text-field v-model="form.email" label="Email" name="login" type="email" />
+            <v-text-field v-model="form.password" id="password" label="Password" name="password" type="password" />
           </v-form>
         </v-card-text>
         <v-card-actions>
           <router-link class="form-link" to="/login" >Already have an account?</router-link>
           <v-spacer />
-          <v-btn color="primary">Login</v-btn>
+          <v-btn @click="register()" color="primary">Login</v-btn>
         </v-card-actions>
       </v-card>
     </v-col>
@@ -29,8 +29,23 @@
 
 <script>
 export default {
-  props: {
-    source: String
+  data() {
+    return {
+      form: {
+        first_name: "",
+        last_name: "",
+        email: "",
+        username: "",
+        password: ""
+      }
+    };
+  },
+  methods: {
+    register: function() {
+      this.$store.dispatch('register', { ...this.form })
+        .then(() => console.log("user created"))
+        .catch(err => console.log(err))
+    }
   }
 };
 </script>
