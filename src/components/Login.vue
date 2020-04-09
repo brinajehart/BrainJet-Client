@@ -45,7 +45,7 @@ export default {
       
     login: function() {
       this.$store.dispatch("login", { ...this.form })
-        .then(() => this.$router.push('/calendar'))
+        .then(() => this.$router.push('/tasks/calendar'))
         .catch(err => console.log(err))
     }
   }

@@ -9,12 +9,20 @@
           <v-list-item-title style="margin-left: 10px">{{ user | fullname }}</v-list-item-title>
         </v-list-item>
         <v-divider style="margin-top: 10px"></v-divider>
-        <v-list-item link>
+        <v-list-item link @click="changeNav('/tasks/calendar')">
           <v-list-item-action>
             <v-icon>mdi-calendar</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>Plan</v-list-item-title>
+            <v-list-item-title>Plan - CalendarView</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item link @click="changeNav('/tasks/list')">
+          <v-list-item-action>
+            <v-icon>mdi-dns</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Plan - ListView</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-list-item link>
@@ -25,6 +33,7 @@
             <v-list-item-title>Settings</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        <v-divider style="margin-top: 10px"></v-divider>
         <v-list-item @click="logout()">
           <v-list-item-action>
             <v-icon>mdi-logout</v-icon>
@@ -63,17 +72,20 @@ export default {
   },
   updated() {
     this.setCurrentUser();
-    console.log('updated');
+    console.log("updated");
   },
   methods: {
     setCurrentUser: function() {
-        this.user = JSON.stringify(this.$store.getters.user);
-        console.log(this.$store.getters);
+      this.user = JSON.stringify(this.$store.getters.user);
+      console.log(this.$store.getters);
     },
     logout: function() {
       this.$store.dispatch("logout").then(() => {
         this.$router.push("/login");
       });
+    },
+    changeNav: function(uri) {
+      this.$router.push(uri);
     }
   }
 };

@@ -6,6 +6,7 @@ import store from './store.js';
 import Login from "./components/Login.vue";
 import Register from "./components/Register.vue";
 import Calendar from './components/Calendar.vue';
+import TasksListView from './components/TasksListView.vue';
 
 Vue.use(Router);
 
@@ -15,7 +16,12 @@ let router = new Router({
         { path: "/login", name: 'login', component: Login },
         { path: "/register", 'name': 'register', component: Register },
         {
-            path: '/calendar', 'name': 'calendar', component: Calendar, meta: {
+            path: '/tasks/calendar', 'name': 'calendar', component: Calendar, meta: {
+                requiresAuth: true
+            }
+        },
+        {
+            path: '/tasks/list', 'name': 'your-tasks', component: TasksListView, meta: {
                 requiresAuth: true
             }
         },
