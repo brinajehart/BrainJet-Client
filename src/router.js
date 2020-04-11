@@ -7,6 +7,7 @@ import Login from "./components/Login.vue";
 import Register from "./components/Register.vue";
 import Calendar from './components/Calendar.vue';
 import TasksListView from './components/TasksListView.vue';
+import TaskEdit from './components/TaskEdit.vue';
 
 Vue.use(Router);
 
@@ -22,6 +23,16 @@ let router = new Router({
         },
         {
             path: '/tasks/list', 'name': 'your-tasks', component: TasksListView, meta: {
+                requiresAuth: true
+            }
+        },
+        {
+            path: '/tasks/edit/:id', 'name': 'edit-task', component: TaskEdit, meta: {
+                requiresAuth: true
+            }
+        },
+        {
+            path: '/tasks/create', 'name': 'create-task', component: TaskEdit, meta: {
                 requiresAuth: true
             }
         },

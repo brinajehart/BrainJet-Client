@@ -4,6 +4,7 @@ import App from './App.vue'
 import store from './store';
 import router from './router';
 import vuetify from './plugins/vuetify';
+import RichTextEditor from 'rich-text-editor-vuetify';
 import Axios from 'axios';
 
 Vue.prototype.$http = Axios;
@@ -12,10 +13,10 @@ if (token) {
   Vue.prototype.$http.defaults.headers.common['Authorization'] = token
 }
 
-
 Vue.config.productionTip = false;
 
 Vue.use(VueRouter);
+Vue.use(RichTextEditor);
 
 Vue.filter('fullname', user => {
     if (user.length < 10) return '';

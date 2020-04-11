@@ -3,7 +3,7 @@
     <v-row style="margin-bottom: 20px">
       <v-col cols="12" sm="2" style="margin-top: 10px">
         <v-row>
-          <v-btn class="mx-4" fab dark color="indigo">
+          <v-btn @click="addTask()" class="mx-4" fab dark color="indigo">
             <v-icon dark>mdi-plus</v-icon>
           </v-btn>
           <v-btn @click="printOut()" class="mx-4" fab dark color="indigo">
@@ -12,7 +12,12 @@
         </v-row>
       </v-col>
       <v-col cols="12" sm="6" style="margin-top: 10px">
-        <v-text-field @change="filterTasks()" v-model="taskFilter" label="Filter" append-icon="mdi-filter"></v-text-field>
+        <v-text-field
+          @change="filterTasks()"
+          v-model="taskFilter"
+          label="Filter"
+          append-icon="mdi-filter"
+        ></v-text-field>
       </v-col>
       <v-col cols="12" sm="4">
         <v-overflow-btn class="my-2" :items="order" label="Select order"></v-overflow-btn>
@@ -32,9 +37,14 @@
             </v-list-item-content>
 
             <v-list-item-action>
-              <v-btn icon>
-                <v-icon color="grey lighten-1">mdi-information</v-icon>
-              </v-btn>
+              <v-row>
+                <v-btn icon @click="openEdit(item.id)">
+                  <v-icon color="blue lighten-1">mdi-pen</v-icon>
+                </v-btn>
+                <v-btn icon @click="openView(item.id)">
+                  <v-icon color="indigo lighten-1">mdi-tab</v-icon>
+                </v-btn>
+              </v-row>
             </v-list-item-action>
           </v-list-item>
         </v-list>
@@ -63,12 +73,23 @@ export default {
       this.tasks = response.data;
       this.filteredTasks = response.data;
     },
+    addTask() {
+      this.$router.push("/tasks/create");
+    },
+    openEdit(id) {
+        this.$router.push(`/tasks/edit/${id}`);
+    },
+    openView(id) {
+        this.$router.push(`/tasks/edit/${id}`);
+    },
     printOut() {
       window.open(`${URI}/render/pdf`, "_blank");
     },
     filterTasks() {
       const { tasks, taskFilter } = this;
-      this.filteredTasks = tasks.filter(item => item.title.toLowerCase().includes(taskFilter.toLowerCase()));
+      this.filteredTasks = tasks.filter(item =>
+        item.title.toLowerCase().includes(taskFilter.toLowerCase())
+      );
     }
   }
 };

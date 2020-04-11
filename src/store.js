@@ -35,7 +35,7 @@ export default new Vuex.Store({
                 commit('auth_request')
                 axios({ url: `${URI}/auth/login`, data: user, method: 'POST' })
                     .then(resp => {
-                        const data = resp.data
+                        const { data } = resp;
                         localStorage.setItem('token', data.token)
                         localStorage.setItem('user', JSON.stringify(data.user))
                         axios.defaults.headers.common['Authorization'] = `Token ${data.token}`
@@ -55,6 +55,7 @@ export default new Vuex.Store({
                 commit('auth_request')
                 axios({ url: `${URI}/auth/create_auth`, data: user, method: 'POST' })
                     .then(resp => {
+                        const { data } = resp;
                         const token = resp.data.token;
                         const user = resp.data.user;
                         localStorage.setItem('token', token)

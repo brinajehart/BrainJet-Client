@@ -25,6 +25,14 @@
             <v-list-item-title>Plan - ListView</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        <v-list-item link @click="changeNav('/tasks/create')">
+          <v-list-item-action>
+            <v-icon>mdi-plus</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Add Plan</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
         <v-list-item link>
           <v-list-item-action>
             <v-icon>mdi-wrench</v-icon>
