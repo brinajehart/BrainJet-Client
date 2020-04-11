@@ -1,25 +1,30 @@
 .form-link {
-    padding: 10px !important;
+  padding: 10px !important;
 }
 
 #app {
-    background: #f3f3ff;
-    background-size: cover;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: flex-start !important;
+  background: #f3f3ff;
+  background-size: cover;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: flex-start !important;
 }
 
 .no-back-wrapper {
-    background-color: #f3f3ff;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    overflow: hidden;
+  background-color: #f3f3ff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.tasks-list-item:hover {
+  background-color: #f3f3ff;
+  cursor: pointer;
 }

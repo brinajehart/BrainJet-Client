@@ -1,80 +1,75 @@
 <template>
   <v-container style="width: 100%">
-    <v-row>
-      <v-col>
-        <v-text-field label="Solo" placeholder="Search" solo></v-text-field>
+    <v-row style="margin-bottom: 20px">
+      <v-col cols="12" sm="2" style="margin-top: 10px">
+        <v-row>
+          <v-btn class="mx-4" fab dark color="indigo">
+            <v-icon dark>mdi-plus</v-icon>
+          </v-btn>
+          <v-btn @click="printOut()" class="mx-4" fab dark color="indigo">
+            <v-icon dark>mdi-file</v-icon>
+          </v-btn>
+        </v-row>
+      </v-col>
+      <v-col cols="12" sm="6" style="margin-top: 10px">
+        <v-text-field @change="filterTasks()" v-model="taskFilter" label="Filter" append-icon="mdi-filter"></v-text-field>
+      </v-col>
+      <v-col cols="12" sm="4">
+        <v-overflow-btn class="my-2" :items="order" label="Select order"></v-overflow-btn>
       </v-col>
     </v-row>
     <v-row>
-      <template v-for="(item, index) in items">
-        <v-list-item :key="item.title">
-          <template v-slot:default="{ active }">
+      <v-card style="width: 100%">
+        <v-list two-line subheader>
+          <v-list-item class="tasks-list-item" v-for="(item, index) in filteredTasks" :key="index">
+            <v-list-item-avatar>
+              <v-icon v-text="item.icon">mdi-note</v-icon>
+            </v-list-item-avatar>
+
             <v-list-item-content>
               <v-list-item-title v-text="item.title"></v-list-item-title>
-              <v-list-item-subtitle class="text--primary" v-text="item.headline"></v-list-item-subtitle>
-              <v-list-item-subtitle v-text="item.subtitle"></v-list-item-subtitle>
+              <v-list-item-subtitle v-text="'keks'"></v-list-item-subtitle>
             </v-list-item-content>
 
             <v-list-item-action>
-              <v-list-item-action-text v-text="item.action"></v-list-item-action-text>
-              <v-icon v-if="!active" color="grey lighten-1">star_border</v-icon>
-
-              <v-icon v-else color="yellow">star</v-icon>
+              <v-btn icon>
+                <v-icon color="grey lighten-1">mdi-information</v-icon>
+              </v-btn>
             </v-list-item-action>
-          </template>
-        </v-list-item>
-
-        <v-divider v-if="index + 1 < items.length" :key="index"></v-divider>
-      </template>
+          </v-list-item>
+        </v-list>
+      </v-card>
     </v-row>
   </v-container>
 </template>
 
 <script>
+import api from "./../api";
+import { URI } from "./../uri";
+
 export default {
   data: () => ({
-    selected: [2],
-    items: [
-      {
-        action: "15 min",
-        headline: "Brunch this weekend?",
-        title: "Ali Connors",
-        subtitle:
-          "I'll be in your neighborhood doing errands this weekend. Do you want to hang out?"
-      },
-      {
-        action: "2 hr",
-        headline: "Summer BBQ",
-        title: "me, Scrott, Jennifer",
-        subtitle: "Wish I could come, but I'm out of town this weekend."
-      },
-      {
-        action: "6 hr",
-        headline: "Oui oui",
-        title: "Sandra Adams",
-        subtitle: "Do you have Paris recommendations? Have you ever been?"
-      },
-      {
-        action: "12 hr",
-        headline: "Birthday gift",
-        title: "Trevor Hansen",
-        subtitle:
-          "Have any ideas about what we should get Heidi for her birthday?"
-      },
-      {
-        action: "18hr",
-        headline: "Recipe to try",
-        title: "Britta Holt",
-        subtitle:
-          "We should eat this: Grate, Squash, Corn, and tomatillo Tacos."
-      }
-    ]
+    taskFilter: "",
+    order: ["date-down", "date-up", "progress-down", "progress-up"],
+    tasks: [],
+    filteredTasks: []
   }),
-  computed: {
-    isLoggedIn: function() {
-      return this.$store.getters.isLoggedIn;
-    }
+  created: function() {
+    this.fetchMyTasks();
   },
-  methods: {}
+  methods: {
+    async fetchMyTasks() {
+      const response = await api.getMyTasks();
+      this.tasks = response.data;
+      this.filteredTasks = response.data;
+    },
+    printOut() {
+      window.open(`${URI}/render/pdf`, "_blank");
+    },
+    filterTasks() {
+      const { tasks, taskFilter } = this;
+      this.filteredTasks = tasks.filter(item => item.title.toLowerCase().includes(taskFilter.toLowerCase()));
+    }
+  }
 };
 </script>
