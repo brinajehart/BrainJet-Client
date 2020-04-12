@@ -51,6 +51,11 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
+      <template v-slot:append>
+        <div class="pa-2 credits">
+          <small>&copy; 2020 <br> ( Brina Jehart & Janez Sedeljsak )</small>
+        </div>
+      </template>
     </v-navigation-drawer>
 
     <v-app-bar app color="indigo" dark>
@@ -62,9 +67,6 @@
         <router-view />
       </v-container>
     </v-content>
-    <v-footer color="indigo" app>
-      <span class="white--text">&copy; 2020 ( Brina Jehart & Janez Sedeljsak )</span>
-    </v-footer>
   </v-app>
 </template>
 

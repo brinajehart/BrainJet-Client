@@ -10,6 +10,12 @@
   align-items: flex-start !important;
 }
 
+.credits {
+    display: flex !important;
+    text-align: center !important;
+    justify-content: center !important;
+}
+
 .no-back-wrapper {
   background-color: #f3f3ff;
   position: fixed;
@@ -27,4 +33,11 @@
 .tasks-list-item:hover {
   background-color: #f3f3ff;
   cursor: pointer;
+}
+
+.fixed-bottom-right-button {
+    position: fixed !important;
+    bottom: 20px !important;
+    right: 20px !important;
+    z-index: 100 !important;
 }
