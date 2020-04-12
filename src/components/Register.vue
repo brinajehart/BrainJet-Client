@@ -8,15 +8,6 @@
             <v-toolbar color="transparent" dark flat>
               <v-toolbar-title>Sign Up</v-toolbar-title>
               <v-spacer />
-              <v-btn
-                v-if="isLoggedIn"
-                style="margin-right: 10px"
-                v-tooltip="'Return Home'"
-                icon
-                @click="returnHome()"
-              >
-                <v-icon color="white">mdi-home</v-icon>
-              </v-btn>
             </v-toolbar>
             <v-card-text>
               <v-form>
@@ -56,12 +47,8 @@ export default {
         email: "",
         username: "",
         password: ""
-      },
-      isLoggedIn: false
+      }
     };
-  },
-  created: function() {
-    this.isLoggedIn = this.$store.getters.isLoggedIn;
   },
   methods: {
     register: function() {

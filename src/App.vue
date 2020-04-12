@@ -49,7 +49,7 @@
             <v-list-item-title>Profile</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item link @click="changeNav('/register')">
+        <v-list-item link @click="registerNewUser()">
           <v-list-item-action>
             <v-icon>mdi-account-plus</v-icon>
           </v-list-item-action>
@@ -121,6 +121,25 @@ export default {
     changeNav: function(uri) {
       if (this.$router.currentRoute.path == uri) return;
       this.$router.push(uri);
+    },
+    registerNewUser() {
+      this.$swal
+        .fire({
+          title: "Are you sure?",
+          text: "You will be logged out of your current account!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Confirm"
+        })
+        .then(result => {
+          if (result.value) {
+            this.$store.dispatch("logout").then(() => {
+                this.$router.push("/register");
+            });
+          }
+        });
     }
   }
 };
