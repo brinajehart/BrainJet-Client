@@ -82,13 +82,10 @@
                 </v-col>
                 <v-col>
                   <v-row>
-                    <v-btn icon @click="openEdit(item.id)">
-                      <v-icon color="blue lighten-1">mdi-pen</v-icon>
-                    </v-btn>
-                    <v-btn icon @click="openView(item.id)">
+                    <v-btn v-tooltip="'Edit Task'" icon @click="openEdit(item.id)">
                       <v-icon color="indigo lighten-1">mdi-tab</v-icon>
                     </v-btn>
-                    <v-btn icon @click="deleteTask(item.id)">
+                    <v-btn v-tooltip="'Delete Task'" icon @click="deleteTask(item.id)">
                       <v-icon color="red lighten-1">mdi-delete</v-icon>
                     </v-btn>
                   </v-row>
@@ -158,9 +155,6 @@ export default {
             );
           }
         });
-    },
-    openView(id) {
-      this.$router.push(`/tasks/edit/${id}`);
     },
     printOut() {
       window.open(`${URI}/render/pdf`, "_blank");

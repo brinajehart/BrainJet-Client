@@ -9,20 +9,20 @@
         </v-list-item>
 
         <v-divider style="margin-top: 10px"></v-divider>
-        <v-list-item link @click="changeNav('/tasks/calendar')">
-          <v-list-item-action>
-            <v-icon>mdi-calendar-today</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>Tasks - Calendar</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
         <v-list-item link @click="changeNav('/tasks/list')">
           <v-list-item-action>
             <v-icon>mdi-view-list</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>Tasks - List</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item link @click="changeNav('/tasks/calendar')">
+          <v-list-item-action>
+            <v-icon>mdi-calendar-today</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Tasks - Calendar</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-list-item link @click="changeNav('/tasks/create')">
@@ -33,7 +33,7 @@
             <v-list-item-title>Add Task</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item link @click="changeNav('/tasks/create')">
+        <v-list-item link @click="changeNav('/chats')">
           <v-list-item-action>
             <v-icon>mdi-chat</v-icon>
           </v-list-item-action>
@@ -41,12 +41,20 @@
             <v-list-item-title>Your Chats</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item link @click="changeNav('/tasks/create')">
+        <v-list-item link @click="changeNav('/profile')">
           <v-list-item-action>
             <v-icon>mdi-account-circle</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>Profile</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item link @click="changeNav('/register')">
+          <v-list-item-action>
+            <v-icon>mdi-account-plus</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Register New User</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-divider style="margin-top: 10px"></v-divider>
@@ -111,6 +119,7 @@ export default {
       });
     },
     changeNav: function(uri) {
+      if (this.$router.currentRoute.path == uri) return;
       this.$router.push(uri);
     }
   }

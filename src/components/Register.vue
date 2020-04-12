@@ -8,16 +8,20 @@
             <v-toolbar color="transparent" dark flat>
               <v-toolbar-title>Sign Up</v-toolbar-title>
               <v-spacer />
+              <v-btn
+                v-if="isLoggedIn"
+                style="margin-right: 10px"
+                v-tooltip="'Return Home'"
+                icon
+                @click="returnHome()"
+              >
+                <v-icon color="white">mdi-home</v-icon>
+              </v-btn>
             </v-toolbar>
             <v-card-text>
               <v-form>
-                <v-text-field
-                  v-model="form.first_name"
-                  label="First Name"
-                  name="login"
-                  type="text"
-                />
-                <v-text-field v-model="form.last_name" label="Last Name" name="login" type="text" />
+                <v-text-field v-model="form.first_name" label="Name" name="login" type="text" />
+                <v-text-field v-model="form.last_name" label="Surname" name="login" type="text" />
                 <v-text-field v-model="form.username" label="Username" name="login" type="text" />
                 <v-text-field v-model="form.email" label="Email" name="login" type="email" />
                 <v-text-field
@@ -52,8 +56,12 @@ export default {
         email: "",
         username: "",
         password: ""
-      }
+      },
+      isLoggedIn: false
     };
+  },
+  created: function() {
+    this.isLoggedIn = this.$store.getters.isLoggedIn;
   },
   methods: {
     register: function() {
@@ -61,6 +69,9 @@ export default {
         .dispatch("register", { ...this.form })
         .then(() => console.log("user created"))
         .catch(err => console.log(err));
+    },
+    returnHome() {
+      this.$router.push("/tasks/list");
     }
   }
 };

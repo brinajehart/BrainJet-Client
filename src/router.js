@@ -9,6 +9,8 @@ import Calendar from './components/Calendar.vue';
 import TasksListView from './components/TasksListView.vue';
 import TaskEdit from './components/TaskEdit.vue';
 import Chat from './components/Chat.vue';
+import MyChats from './components/MyChats.vue';
+import Profile from './components/Profile.vue';
 
 Vue.use(Router);
 
@@ -21,28 +23,31 @@ let router = new Router({
             path: '/tasks/calendar', 'name': 'Tasks - Calendar', component: Calendar, meta: {
                 requiresAuth: true
             }
-        },
-        {
-            path: '/tasks/list/', 'name': 'Tasks - List', component: TasksListView, meta: {
+        },{
+            path: '/tasks/list', 'name': 'Tasks - List', component: TasksListView, meta: {
                 requiresAuth: true
             }
-        },
-        {
+        },{
             path: '/tasks/edit/:id', 'name': 'Edit - Task', component: TaskEdit, meta: {
                 requiresAuth: true
             }
-        },
-        {
+        },{
             path: '/tasks/create', 'name': 'Create - Task', component: TaskEdit, meta: {
                 requiresAuth: true
             }
-        },
-        {
-            path: '/chat/:id', 'name': 'Chat', component: Chat, meta: {
+        },{
+            path: '/chats/:id', 'name': 'Chat', component: Chat, meta: {
                 requiresAuth: true
             }
-        },
-        { path: '*', redirect: '/tasks/calendar' }
+        },{
+            path: '/chats', 'name': 'My Chats', component: MyChats, meta: {
+                requiresAuth: true
+            }
+        },{
+            path: '/profile', 'name': 'Profile', component: Profile, meta: {
+                requiresAuth: true
+            }
+        },{ path: '*', redirect: '/tasks/list' }
     ]
 });
 

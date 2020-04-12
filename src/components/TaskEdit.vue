@@ -139,7 +139,7 @@ export default {
   }),
   methods: {
     openChat(id) {
-      this.$router.push(`/chat/${id}`);
+      this.$router.push(`/chats/${id}`);
     }
   }
 };
