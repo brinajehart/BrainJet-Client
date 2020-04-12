@@ -2,6 +2,10 @@
   padding: 10px !important;
 }
 
+::-webkit-scrollbar {
+  display: none !important;
+}
+
 #app {
   background: #f3f3ff;
   background-size: cover;
@@ -11,13 +15,14 @@
 }
 
 .credits {
-    display: flex !important;
-    text-align: center !important;
-    justify-content: center !important;
+  display: flex !important;
+  text-align: center !important;
+  justify-content: center !important;
 }
 
 .no-back-wrapper {
-  background-color: #f3f3ff;
+  background-image: url(back.jpg);
+  background-size: cover;
   position: fixed;
   top: 0;
   left: 0;
@@ -30,14 +35,108 @@
   overflow: hidden;
 }
 
+.no-back-container {
+  background-image: url(base-form-container2.png);
+  background-size: cover !important;
+  position: fixed;
+  right: 0;
+  top: 0;
+  min-width: 500px !important;
+  width: 45vw;
+  height: 100vh;
+  display: flex;
+  padding: 20px;
+  z-index: 1001;
+}
+
+.no-back-wrapper * {
+  overflow: visible !important;
+}
+
+.white-text {
+  color: #f3f3ff !important;
+}
+
+.form-divider {
+  border-top: 2px solid #3f51b5 !important;
+  margin-top: 15px !important;
+  margin-bottom: 15px !important;
+}
+
 .tasks-list-item:hover {
   background-color: #f3f3ff;
   cursor: pointer;
 }
 
 .fixed-bottom-right-button {
-    position: fixed !important;
-    bottom: 20px !important;
-    right: 20px !important;
-    z-index: 100 !important;
+  position: fixed !important;
+  bottom: 20px !important;
+  right: 20px !important;
+  z-index: 100 !important;
+}
+
+.base-form-card {
+  background: transparent !important;
+  box-shadow: 0px !important;
+  outline: 0px !important;
+  border: 0px !important;
+  overflow: visible !important;
+}
+
+.login-form .base-form-card header {
+  margin-left: -40px !important;
+  width: 96% !important;
+}
+
+.login-form .base-form-card .v-form .v-input:nth-child(1) {
+  overflow: visible !important;
+  margin-left: -35px !important;
+}
+
+.login-form .base-form-card .v-form .v-input:nth-child(2) {
+  margin-left: -20px !important;
+}
+
+.register-form .base-form-card header {
+  margin-left: -75px !important;
+  width: 96% !important;
+}
+
+.register-form .base-form-card .v-form .v-input:nth-child(1) {
+  overflow: visible !important;
+  margin-left: -75px !important;
+}
+
+.register-form .base-form-card .v-form .v-input:nth-child(2) {
+  margin-left: -60px !important;
+}
+
+.register-form .base-form-card .v-form .v-input:nth-child(3) {
+  margin-left: -45px !important;
+}
+
+.register-form .base-form-card .v-form .v-input:nth-child(4) {
+  margin-left: -30px !important;
+}
+
+.register-form .base-form-card .v-form .v-input:nth-child(5) {
+  margin-left: -15px !important;
+}
+
+.base-form-card header:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #3f51b5;
+
+  -webkit-transform-origin: 100% 100%;
+  -ms-transform-origin: 100% 100%;
+  transform-origin: 100% 100%;
+
+  -webkit-transform: skewX(17deg);
+  -ms-transform: skewX(17deg);
+  transform: skewX(13deg);
 }

@@ -1,31 +1,35 @@
 <template>
   <div class="no-back-wrapper">
-    <v-row align="center" justify="center">
-      <v-col cols="12" sm="8" md="4">
-        <v-card class="elevation-12">
-          <v-toolbar color="primary" dark flat>
-            <v-toolbar-title>Login form</v-toolbar-title>
-            <v-spacer />
-          </v-toolbar>
-          <v-card-text>
-            <v-form>
-              <v-text-field v-model="form.username" label="Username" name="username" type="text" />
-              <v-text-field
-                v-model="form.password"
-                label="Password"
-                name="password"
-                type="password"
-              />
-            </v-form>
-          </v-card-text>
-          <v-card-actions>
-            <router-link class="form-link" to="/register">Don't have an account yet?</router-link>
-            <v-spacer />
-            <v-btn color="primary" @click="login()">Login</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-col>
-    </v-row>
+    <div class="no-back-container login-form">
+      <v-row align="center" justify="center">
+        <v-col cols="12" sm="8" md="2"></v-col>
+        <v-col cols="12" sm="8" md="9">
+          <v-card class="elevation-0 base-form-card" style="margin-bottom: 20px">
+            <v-toolbar color="transparent" dark flat>
+              <v-toolbar-title>Sign In</v-toolbar-title>
+              <v-spacer />
+            </v-toolbar>
+            <v-card-text>
+              <v-form>
+                <v-text-field v-model="form.username" label="Username" name="username" type="text" />
+                <v-text-field
+                  v-model="form.password"
+                  label="Password"
+                  name="password"
+                  type="password"
+                />
+              </v-form>
+            </v-card-text>
+            <v-card-actions>
+              <router-link class="form-link" to="/register">Don't have an account yet?</router-link>
+              <v-spacer />
+              <v-btn color="indigo white-text" @click="login()">Sign In</v-btn>
+            </v-card-actions>
+          </v-card>
+          <v-img src="./../assets/form-logo.png" aspect-ratio="2.26"></v-img>
+        </v-col>
+      </v-row>
+    </div>
   </div>
 </template>
 
@@ -41,9 +45,10 @@ export default {
   },
   methods: {
     login: function() {
-      this.$store.dispatch("login", { ...this.form })
-        .then(() => this.$router.push('/tasks/calendar'))
-        .catch(err => console.log(err))
+      this.$store
+        .dispatch("login", { ...this.form })
+        .then(() => this.$router.push("/tasks/calendar"))
+        .catch(err => console.log(err));
     }
   }
 };
