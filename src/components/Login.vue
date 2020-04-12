@@ -53,7 +53,7 @@ export default {
         .then(() => this.$router.push("/tasks/calendar"))
         .catch(err => {
           this.loading = false;
-          this.$swal("Failed to authenticate!");
+          this.$swal.fire("Failed to authenticate!", "", "error");
           console.log(err);
         });
     }
