@@ -10,6 +10,7 @@ import VueMoment from 'vue-moment';
 import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 import VTooltip from 'v-tooltip';
+import LoadingComponent from './helpers/Loading.vue';
 
 Vue.prototype.$http = Axios;
 const token = localStorage.getItem('token')
@@ -38,6 +39,8 @@ Vue.filter('genavatar', user => {
     }
     return user.first_name[0] + user.last_name[0]
 })
+
+Vue.component('bj-loading', LoadingComponent);
 
 new Vue({
   vuetify,

@@ -30,6 +30,7 @@
         </v-col>
       </v-row>
     </div>
+    <bj-loading v-if="loading" />
   </div>
 </template>
 
@@ -40,15 +41,21 @@ export default {
       form: {
         username: "",
         password: ""
-      }
+      },
+      loading: false
     };
   },
   methods: {
-    login: function() {
-      this.$store
+    async login() {
+      this.loading = true;
+      await this.$store
         .dispatch("login", { ...this.form })
         .then(() => this.$router.push("/tasks/calendar"))
-        .catch(err => console.log(err));
+        .catch(err => {
+          this.loading = false;
+          this.$swal("Failed to authenticate!");
+          console.log(err);
+        });
     }
   }
 };

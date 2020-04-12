@@ -20,6 +20,20 @@
   justify-content: center !important;
 }
 
+.loading-wrapper {
+    background-color: #fffff0a6;
+    background-size: cover;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
 .no-back-wrapper {
   background-image: url(back.jpg);
   background-size: cover;
