@@ -42,7 +42,7 @@ let router = new Router({
                 requiresAuth: true
             }
         },
-        { path: '*', redirect: '/login' }
+        { path: '*', redirect: '/tasks/calendar' }
     ]
 });
 

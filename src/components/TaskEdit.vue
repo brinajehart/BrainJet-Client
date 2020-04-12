@@ -96,8 +96,8 @@
         </v-row>
       </v-container>
     </v-form>
-    <v-btn class="fixed-bottom-right-button mx-2" @click="openChat(5)" fab dark large color="purple">
-      <v-icon dark>mdi-android</v-icon>
+    <v-btn v-tooltip="'Open Chat'" class="fixed-bottom-right-button mx-2" @click="openChat(5)" fab dark large color="purple">
+      <v-icon dark>mdi-chat</v-icon>
     </v-btn>
   </v-card>
 </template>

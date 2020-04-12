@@ -1,11 +1,11 @@
 <template>
   <v-card class="mx-auto" style="width: 100%">
     <v-toolbar color="grey" dark>
-      <v-app-bar-nav-icon></v-app-bar-nav-icon>
-      <v-toolbar-title>Task Chat</v-toolbar-title>
+      <v-icon dark>mdi-forum</v-icon>
+      <v-toolbar-title style="margin-left: 5px">Task Chat</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn class="mx-2" fab dark small color="red">
-        <v-icon dark>mdi-arrow-left</v-icon>
+      <v-btn v-tooltip="'Back to task Edit'" class="mx-2" fab dark small color="red">
+        <v-icon dark>mdi-folder</v-icon>
       </v-btn>
     </v-toolbar>
 

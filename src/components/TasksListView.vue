@@ -3,13 +3,34 @@
     <v-row style="margin-bottom: 20px">
       <v-col cols="12" sm="2" style="margin-top: 10px">
         <v-row>
-          <v-btn v-tooltip="'Add new task'" @click="addTask()" class="mx-4 ma-0 pa-0" fab dark color="teal darken-2">
+          <v-btn
+            v-tooltip="'Add new task'"
+            @click="addTask()"
+            class="mx-4 ma-0 pa-0"
+            fab
+            dark
+            color="teal darken-2"
+          >
             <v-icon dark>mdi-plus</v-icon>
           </v-btn>
-          <v-btn v-tooltip="'Export to pdf'" @click="printOut()" class="mx-4 ma-0 pa-0" fab dark color="orange darken-3">
+          <v-btn
+            v-tooltip="'Export to pdf'"
+            @click="printOut()"
+            class="mx-4 ma-0 pa-0"
+            fab
+            dark
+            color="orange darken-3"
+          >
             <v-icon dark>mdi-file</v-icon>
           </v-btn>
-          <v-btn v-tooltip="'Order tasks by'" @click="printOut()" class="mx-4 ma-0 pa-0" fab dark color="orange darken-4">
+          <v-btn
+            v-tooltip="'Order tasks by'"
+            @click="printOut()"
+            class="mx-4 ma-0 pa-0"
+            fab
+            dark
+            color="orange darken-4"
+          >
             <v-icon dark>mdi-sort</v-icon>
           </v-btn>
         </v-row>
@@ -26,7 +47,7 @@
     <v-row>
       <v-card v-bind:class="{ 'task-list-card': !loading }" style="width: 100%">
         <div class="text-center pa-10" v-if="loading">
-          <v-progress-circular :size="70" :width="7" color="purple" indeterminate></v-progress-circular>
+          <v-progress-circular :size="70" :width="7" color="indigo" indeterminate></v-progress-circular>
         </div>
         <v-list two-line subheader v-else-if="filteredTasks.length">
           <v-list-item class="tasks-list-item" v-for="(item, index) in filteredTasks" :key="index">
@@ -117,8 +138,26 @@ export default {
       this.$router.push(`/tasks/edit/${id}`);
     },
     deleteTask(id) {
-      //todo
-      console.log("delete", id);
+      console.log(id);
+      this.$swal
+        .fire({
+          title: "Are you sure?",
+          text: "You won't be able to revert this!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes, delete it!"
+        })
+        .then(result => {
+          if (result.value) {
+            this.$swal.fire(
+              "Deleted!",
+              "The task has been deleted.",
+              "success"
+            );
+          }
+        });
     },
     openView(id) {
       this.$router.push(`/tasks/edit/${id}`);

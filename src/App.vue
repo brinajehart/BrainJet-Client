@@ -27,10 +27,26 @@
         </v-list-item>
         <v-list-item link @click="changeNav('/tasks/create')">
           <v-list-item-action>
-            <v-icon>mdi-plus-box</v-icon>
+            <v-icon>mdi-plus-circle</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>Add Plan</v-list-item-title>
+            <v-list-item-title>Add Task</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item link @click="changeNav('/tasks/create')">
+          <v-list-item-action>
+            <v-icon>mdi-chat</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Your Chats</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item link @click="changeNav('/tasks/create')">
+          <v-list-item-action>
+            <v-icon>mdi-account-circle</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Profile</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-divider style="margin-top: 10px"></v-divider>
@@ -104,4 +120,5 @@ export default {
 
 <style lang="css">
 @import "./assets/overwrite.css";
+@import "./assets/tooltip.css";
 </style>
