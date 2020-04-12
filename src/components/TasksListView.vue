@@ -33,7 +33,7 @@
 
             <v-list-item-content>
               <v-list-item-title v-text="item.title"></v-list-item-title>
-              <v-list-item-subtitle v-text="'keks'"></v-list-item-subtitle>
+              <v-list-item-subtitle>Due: {{ item.due_date | moment("dddd, MMMM Do YYYY") }}</v-list-item-subtitle>
             </v-list-item-content>
 
             <v-list-item-action>
@@ -43,6 +43,9 @@
                 </v-btn>
                 <v-btn icon @click="openView(item.id)">
                   <v-icon color="indigo lighten-1">mdi-tab</v-icon>
+                </v-btn>
+                <v-btn icon @click="deleteTask(item.id)">
+                  <v-icon color="red lighten-1">mdi-delete</v-icon>
                 </v-btn>
               </v-row>
             </v-list-item-action>
@@ -77,10 +80,14 @@ export default {
       this.$router.push("/tasks/create");
     },
     openEdit(id) {
-        this.$router.push(`/tasks/edit/${id}`);
+      this.$router.push(`/tasks/edit/${id}`);
+    },
+    deleteTask(id) {
+        //todo
+        console.log("delete", id);
     },
     openView(id) {
-        this.$router.push(`/tasks/edit/${id}`);
+      this.$router.push(`/tasks/edit/${id}`);
     },
     printOut() {
       window.open(`${URI}/render/pdf`, "_blank");

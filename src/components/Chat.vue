@@ -24,7 +24,6 @@
           </v-list-item-content>
         </v-list-item>
       </template>
-      <v-divider style="margin-top: 10px"></v-divider>
       <v-text-field style="padding: 10px" label="Send Chat" append-icon="mdi-send" outlined></v-text-field>
     </v-list>
   </v-card>

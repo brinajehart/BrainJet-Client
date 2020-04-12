@@ -6,6 +6,7 @@ import router from './router';
 import vuetify from './plugins/vuetify';
 import RichTextEditor from 'rich-text-editor-vuetify';
 import Axios from 'axios';
+import VueMoment from 'vue-moment';
 
 Vue.prototype.$http = Axios;
 const token = localStorage.getItem('token')
@@ -17,6 +18,7 @@ Vue.config.productionTip = false;
 
 Vue.use(VueRouter);
 Vue.use(RichTextEditor);
+Vue.use(VueMoment);
 
 Vue.filter('fullname', user => {
     if (user.length < 10) return '';
