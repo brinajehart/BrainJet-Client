@@ -15,30 +15,30 @@ Vue.use(Router);
 let router = new Router({
     mode: 'history',
     routes: [
-        { path: "/login", name: 'login', component: Login },
-        { path: "/register", 'name': 'register', component: Register },
+        { path: "/login", name: 'Sign In', component: Login },
+        { path: "/register", 'name': 'Sign Up', component: Register },
         {
-            path: '/tasks/calendar', 'name': 'calendar', component: Calendar, meta: {
+            path: '/tasks/calendar', 'name': 'Tasks - Calendar', component: Calendar, meta: {
                 requiresAuth: true
             }
         },
         {
-            path: '/tasks/list/', 'name': 'your-tasks', component: TasksListView, meta: {
+            path: '/tasks/list/', 'name': 'Tasks - List', component: TasksListView, meta: {
                 requiresAuth: true
             }
         },
         {
-            path: '/tasks/edit/:id', 'name': 'edit-task', component: TaskEdit, meta: {
+            path: '/tasks/edit/:id', 'name': 'Edit - Task', component: TaskEdit, meta: {
                 requiresAuth: true
             }
         },
         {
-            path: '/tasks/create', 'name': 'create-task', component: TaskEdit, meta: {
+            path: '/tasks/create', 'name': 'Create - Task', component: TaskEdit, meta: {
                 requiresAuth: true
             }
         },
         {
-            path: '/chat/:id', 'name': 'chat', component: Chat, meta: {
+            path: '/chat/:id', 'name': 'Chat', component: Chat, meta: {
                 requiresAuth: true
             }
         },
