@@ -3,6 +3,7 @@
     <v-card style="margin-bottom: 20px">
       <v-form v-model="valid">
         <v-container>
+          <h2 class="display-1 font-weight-light">New Credentials</h2>
           <v-row>
             <v-col>
               <v-text-field v-model="user.first_name" label="Name" required></v-text-field>
@@ -32,18 +33,28 @@
     <v-card>
       <v-form>
         <v-container>
+          <h2 class="display-1 font-weight-light">Confirm Old Credentials</h2>
+          <v-row>
+            <v-col>
+              <v-text-field v-model="user.old_username" label="Username" required></v-text-field>
+            </v-col>
+          </v-row>
           <v-row>
             <v-col>
               <v-text-field
                 type="password"
-                v-model="oldPassword"
-                label="Confrim Old Password"
+                v-model="user.old_password"
+                label="Password"
                 required
               ></v-text-field>
             </v-col>
           </v-row>
           <v-row>
-            <v-btn class="ma-4" color="primary" :disabled="!oldPassword">Update</v-btn>
+            <v-btn
+              class="ma-4"
+              color="primary"
+              :disabled="!user.old_password || !user.old_username"
+            >Update</v-btn>
             <v-btn class="ma-4" color="error" @click="$router.go(-1)">Cancel</v-btn>
           </v-row>
         </v-container>
@@ -55,8 +66,7 @@
 <script>
 export default {
   data: () => ({
-    user: {},
-    oldPassword: ""
+    user: {}
   }),
   created: function() {
     this.getUserFromStore();
