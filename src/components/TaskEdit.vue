@@ -35,6 +35,10 @@
             </div>
           </v-col>
         </v-row>
+        <v-row>
+          <v-btn class="ma-4" color="primary">Update</v-btn>
+          <v-btn class="ma-4" color="error" @click="$router.go(-1)">Cancel</v-btn>
+        </v-row>
       </v-container>
     </v-form>
     <v-btn
