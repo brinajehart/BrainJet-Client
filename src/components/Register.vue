@@ -56,7 +56,7 @@ export default {
     register: async function() {
       const response = await api.registerUser(this.form);
       if (response) {
-        this.$swal.fire("Created!", response.data.message, "success").then(() => {
+        this.$swal.fire("Success!", response.data.message, "success").then(() => {
           this.$router.push("/login");
         });
       }
