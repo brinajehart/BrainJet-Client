@@ -116,7 +116,7 @@ export default {
     this.setCurrentUser();
     const theme = JSON.parse(this.$store.getters.theme);
     if (theme) {
-        this.isLightTheme = theme.light;
+      this.isLightTheme = theme.light;
     }
   },
   updated() {
@@ -124,8 +124,8 @@ export default {
   },
   methods: {
     toggleTheme() {
-      this.$store.dispatch("theme", { light: !this.isLightTheme }).then(() => {
-        this.isLightTheme = !this.isLightTheme;
+      this.$store.dispatch("theme", { light: !this.isLightTheme }).then(res => {
+        this.isLightTheme = res.light;
       });
     },
     setCurrentUser: function() {

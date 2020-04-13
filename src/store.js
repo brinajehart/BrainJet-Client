@@ -30,7 +30,7 @@ export default new Vuex.Store({
             state.user = ''
         },
         set_theme(state, data) {
-            state.theme = data.theme
+            state.theme = data;
         }
     },
     actions: {
