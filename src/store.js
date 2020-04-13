@@ -9,7 +9,7 @@ export default new Vuex.Store({
     state: {
         status: '',
         token: localStorage.getItem('token') || '',
-        user: localStorage.getItem('user') || '',
+        user: localStorage.getItem('user') || null,
         theme: localStorage.getItem('theme') || JSON.stringify({ light: true })
     },
     mutations: {

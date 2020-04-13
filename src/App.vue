@@ -115,12 +115,12 @@ export default {
   created: function() {
     this.setCurrentUser();
     const theme = JSON.parse(this.$store.getters.theme);
-    if (theme) {
-      this.isLightTheme = theme.light;
-    }
+    if (theme) this.isLightTheme = theme.light;
   },
-  updated() {
-    this.setCurrentUser();
+  watch: {
+    $route() {
+      this.setCurrentUser();
+    }
   },
   methods: {
     toggleTheme() {
@@ -129,7 +129,12 @@ export default {
       });
     },
     setCurrentUser: function() {
-      this.user = JSON.stringify(this.$store.getters.user);
+      const currentUser = this.$store.getters.user;
+      if (currentUser)
+        this.user =
+          typeof currentUser != typeof {}
+            ? JSON.parse(currentUser)
+            : currentUser;
     },
     logout: function() {
       this.$store.dispatch("logout").then(() => {

@@ -166,6 +166,7 @@ header.v-sheet {
   margin-left: -35px !important;
 }
 
+
 .login-form .base-form-card .v-form .v-input:nth-child(2) {
   margin-left: -20px !important;
 }
@@ -213,4 +214,15 @@ header.v-sheet {
   -webkit-transform: skewX(17deg);
   -ms-transform: skewX(17deg);
   transform: skewX(13deg);
+}
+
+.vdp-datepicker {
+    font-family: "Roboto", sans-serif !important;
+    margin-top: 5px;
+    border-bottom: 1px solid #55555588;
+}
+
+.vdp-datepicker input {
+    width: 100% !important;
+    padding: 5px !important
 }

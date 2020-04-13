@@ -8,95 +8,44 @@
           </v-col>
         </v-row>
         <v-row>
-          <v-col>
-            <p>Description</p>
-            <rich-text-editor height="250" cancelText="Cancel" validText="Update" />
+          <v-col cols="12" md="6">
+            <label>Description</label>
+            <tiny-mce
+              api-key="cfdw8uwtdyjxz965k0wctju2xsnoyj3nnncgef9gghebc16m"
+              :init="{
+                    menubar: false,
+                    plugins: [
+                    'autolink lists link image charmap print anchor',
+                    'searchreplace code fullscreen',
+                    'insertdatetime media table paste code help wordcount'
+                    ],
+                    toolbar:
+                    'undo redo | bold italic | \
+                    alignleft aligncenter alignright alignjustify | \
+                    bullist numlist outdent indent | removeformat | help'
+            }"
+            />
           </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12" md="4">
-            <v-text-field style="margin-top: 15px" label="Due Date" required></v-text-field>
-          </v-col>
-          <v-col cols="12" md="4">
+          <v-col cols="12" md="6">
             <v-text-field style="margin-top: 15px" label="Time Complexity" required></v-text-field>
-          </v-col>
-          <v-col cols="12" md="4">
-            <v-overflow-btn class="my-2" :items="order" label="Select unit"></v-overflow-btn>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12" md="6">
-            <v-card class="mx-auto">
-              <v-toolbar color="indigo" dark>
-                <v-app-bar-nav-icon></v-app-bar-nav-icon>
-
-                <v-toolbar-title>Subtasks</v-toolbar-title>
-
-                <v-spacer></v-spacer>
-
-                <v-btn icon>
-                  <v-icon>mdi-magnify</v-icon>
-                </v-btn>
-
-                <v-btn icon>
-                  <v-icon>mdi-dots-vertical</v-icon>
-                </v-btn>
-              </v-toolbar>
-              <v-list>
-                <v-list-item v-for="item in items" :key="item.title">
-                  <v-list-item-icon>
-                    <v-icon v-if="item.icon" color="pink">mdi-star</v-icon>
-                  </v-list-item-icon>
-
-                  <v-list-item-content>
-                    <v-list-item-title v-text="item.title"></v-list-item-title>
-                  </v-list-item-content>
-
-                  <v-list-item-avatar>
-                    <v-img :src="item.avatar"></v-img>
-                  </v-list-item-avatar>
-                </v-list-item>
-              </v-list>
-            </v-card>
-          </v-col>
-          <v-col cols="12" md="6">
-            <v-card class="mx-auto">
-              <v-toolbar color="indigo" dark>
-                <v-app-bar-nav-icon></v-app-bar-nav-icon>
-
-                <v-toolbar-title>Collaborators</v-toolbar-title>
-
-                <v-spacer></v-spacer>
-
-                <v-btn icon>
-                  <v-icon>mdi-magnify</v-icon>
-                </v-btn>
-
-                <v-btn icon>
-                  <v-icon>mdi-dots-vertical</v-icon>
-                </v-btn>
-              </v-toolbar>
-              <v-list>
-                <v-list-item v-for="item in items" :key="item.title">
-                  <v-list-item-icon>
-                    <v-icon v-if="item.icon" color="pink">mdi-star</v-icon>
-                  </v-list-item-icon>
-
-                  <v-list-item-content>
-                    <v-list-item-title v-text="item.title"></v-list-item-title>
-                  </v-list-item-content>
-
-                  <v-list-item-avatar>
-                    <v-img :src="item.avatar"></v-img>
-                  </v-list-item-avatar>
-                </v-list-item>
-              </v-list>
-            </v-card>
+            <v-text-field style="margin-top: 15px" label="Time Complexity" required></v-text-field>
+            <div>
+              <label style="color: #555">Due Date</label>
+              <datepicker :value="new Date()" name="due_date" style="width: 100%"></datepicker>
+            </div>
           </v-col>
         </v-row>
       </v-container>
     </v-form>
-    <v-btn v-tooltip="'Open Chat'" class="fixed-bottom-right-button mx-2" @click="openChat(5)" fab dark large color="purple">
+    <v-btn
+      v-tooltip="'Open Chat'"
+      class="fixed-bottom-right-button mx-2"
+      @click="openChat(5)"
+      fab
+      dark
+      large
+      color="purple"
+    >
       <v-icon dark>mdi-chat</v-icon>
     </v-btn>
   </v-card>
