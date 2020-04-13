@@ -6,6 +6,18 @@
   display: none !important;
 }
 
+.dark-navigation {
+    background-image: url(dark-nav.jpg) !important;
+    background-position: center;
+    background-size: cover;
+}
+
+.light-navigation {
+    background-image: url(light-nav.jpg) !important;
+    background-position: center;
+    background-size: cover;
+}
+
 .swal2-popup * {
   font-family: "Roboto", sans-serif !important;
 }
@@ -47,8 +59,12 @@ header.v-sheet {
   display: flex !important;
   text-align: center !important;
   justify-content: center !important;
-  background-color: #3f51b5;
+  background-color: #303f9f !important;
   color: ivory !important;
+}
+
+.dark-navigation .credits {
+    background-color: transparent !important;
 }
 
 .loading-wrapper {

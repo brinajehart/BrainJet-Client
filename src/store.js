@@ -9,7 +9,8 @@ export default new Vuex.Store({
     state: {
         status: '',
         token: localStorage.getItem('token') || '',
-        user: localStorage.getItem('user') || ''
+        user: localStorage.getItem('user') || '',
+        theme: localStorage.getItem('theme') || JSON.stringify({ light: true })
     },
     mutations: {
         auth_request(state) {
@@ -28,8 +29,20 @@ export default new Vuex.Store({
             state.token = ''
             state.user = ''
         },
+        set_theme(state, data) {
+            state.theme = data.theme
+        }
     },
     actions: {
+        theme({ commit }, data) {
+            return new Promise((resolve, reject) => {
+                try {
+                    localStorage.setItem('theme', JSON.stringify(data))
+                    commit('set_theme', data);
+                    resolve(data);
+                } catch (err) { reject(err) }
+            });
+        },
         login({ commit }, user) {
             return new Promise((resolve, reject) => {
                 commit('auth_request')
@@ -84,6 +97,7 @@ export default new Vuex.Store({
     getters: {
         isLoggedIn: state => !!state.token,
         authStatus: state => state.status,
-        user: state => state.user
+        user: state => state.user,
+        theme: state => state.theme
     }
 })

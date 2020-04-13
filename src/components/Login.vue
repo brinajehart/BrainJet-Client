@@ -26,7 +26,7 @@
               <v-btn color="indigo white-text" @click="login()">Sign In</v-btn>
             </v-card-actions>
           </v-card>
-          <v-img src="./../assets/form-logo.png" aspect-ratio="2.26"></v-img>
+          <v-img src="./../assets/logo-dark.png" aspect-ratio="2.26"></v-img>
         </v-col>
       </v-row>
     </div>

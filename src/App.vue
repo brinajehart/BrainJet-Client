@@ -1,10 +1,15 @@
 <template>
   <v-app id="inspire">
-    <v-navigation-drawer app>
+    <v-navigation-drawer
+      v-bind:dark="!isLightTheme"
+      v-bind:class="{ 'dark-navigation': !isLightTheme, 'light-navigation': isLightTheme }"
+      app
+    >
       <v-list dense>
         <v-list-item class="pa-0 ma-0">
           <v-list-item-content class="pa-0 ma-0">
-            <v-img src="./assets/form-logo.png" aspect-ratio="2.26"></v-img>
+            <v-img v-if="!isLightTheme" src="./assets/logo-light.png" aspect-ratio="2.26"></v-img>
+            <v-img v-else src="./assets/logo-dark.png" aspect-ratio="2.26"></v-img>
           </v-list-item-content>
         </v-list-item>
 
@@ -35,7 +40,7 @@
         </v-list-item>
         <v-list-item link @click="changeNav('/chats')">
           <v-list-item-action>
-            <v-icon>mdi-chat</v-icon>
+            <v-icon>mdi-email</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>Your Chats</v-list-item-title>
@@ -77,7 +82,10 @@
       </template>
     </v-navigation-drawer>
 
-    <v-app-bar app color="indigo" dark>
+    <v-app-bar app color="indigo darken-2" dark>
+      <v-avatar v-tooltip="'Toggle theme'">
+        <v-icon @click="toggleTheme()">{{ !isLightTheme ? 'mdi-brightness-3' : 'mdi-brightness-7'}}</v-icon>
+      </v-avatar>
       <v-toolbar-title style="margin-left: 5px">{{ $route.name }}</v-toolbar-title>
       <v-spacer></v-spacer>
       <div>
@@ -101,15 +109,25 @@ export default {
   name: "App",
 
   data: () => ({
-    user: null
+    user: null,
+    isLightTheme: false
   }),
   created: function() {
     this.setCurrentUser();
+    const theme = JSON.parse(this.$store.getters.theme);
+    if (theme) {
+        this.isLightTheme = theme.light;
+    }
   },
   updated() {
     this.setCurrentUser();
   },
   methods: {
+    toggleTheme() {
+      this.$store.dispatch("theme", { light: !this.isLightTheme }).then(() => {
+        this.isLightTheme = !this.isLightTheme;
+      });
+    },
     setCurrentUser: function() {
       this.user = JSON.stringify(this.$store.getters.user);
     },
@@ -136,7 +154,7 @@ export default {
         .then(result => {
           if (result.value) {
             this.$store.dispatch("logout").then(() => {
-                this.$router.push("/register");
+              this.$router.push("/register");
             });
           }
         });
