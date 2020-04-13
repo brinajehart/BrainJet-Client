@@ -38,6 +38,8 @@
 </template>
 
 <script>
+import api from "./../api";
+
 export default {
   data() {
     return {
@@ -51,14 +53,13 @@ export default {
     };
   },
   methods: {
-    register: function() {
-      this.$store
-        .dispatch("register", { ...this.form })
-        .then(() => console.log("user created"))
-        .catch(err => console.log(err));
-    },
-    returnHome() {
-      this.$router.push("/tasks/list");
+    register: async function() {
+      const response = await api.registerUser(this.form);
+      if (response) {
+        this.$swal.fire("Created!", response.data.message, "success").then(() => {
+          this.$router.push("/login");
+        });
+      }
     }
   }
 };
