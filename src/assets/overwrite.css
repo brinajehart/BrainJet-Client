@@ -63,10 +63,6 @@ header.v-sheet {
   color: ivory !important;
 }
 
-.dark-navigation .credits {
-    background-color: transparent !important;
-}
-
 .loading-wrapper {
   background-color: #fffff0a6;
   background-size: cover;
