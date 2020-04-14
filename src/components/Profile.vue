@@ -70,6 +70,7 @@ export default {
   }),
   created: function() {
     this.getUserFromStore();
+    this.user.old_username = this.user.username;
   },
   methods: {
     getUserFromStore() {
