@@ -1,7 +1,7 @@
 <template>
   <div style="width: 100%">
     <v-card style="margin-bottom: 20px">
-      <v-form v-model="valid">
+      <v-form>
         <v-container>
           <h2 class="display-1 font-weight-light">New Credentials</h2>
           <v-row>
@@ -24,7 +24,7 @@
           </v-row>
           <v-row>
             <v-col>
-              <v-text-field type="password" label="New Password"></v-text-field>
+              <v-text-field v-model="user.password" type="password" label="New Password"></v-text-field>
             </v-col>
           </v-row>
         </v-container>
@@ -41,12 +41,7 @@
           </v-row>
           <v-row>
             <v-col>
-              <v-text-field
-                type="password"
-                v-model="user.old_password"
-                label="Password"
-                required
-              ></v-text-field>
+              <v-text-field type="password" v-model="user.old_password" label="Password" required></v-text-field>
             </v-col>
           </v-row>
           <v-row>
@@ -54,6 +49,7 @@
               class="ma-4"
               color="primary"
               :disabled="!user.old_password || !user.old_username"
+              @click="updateAuth()"
             >Update</v-btn>
             <v-btn class="ma-4" color="error" @click="$router.go(-1)">Cancel</v-btn>
           </v-row>
@@ -71,6 +67,7 @@ export default {
   created: function() {
     this.getUserFromStore();
     this.user.old_username = this.user.username;
+    this.user.password = "";
   },
   methods: {
     getUserFromStore() {
@@ -79,6 +76,13 @@ export default {
         currentUser = JSON.parse(currentUser);
       }
       this.user = currentUser;
+    },
+    updateAuth() {
+      this.$store.dispatch("updateUser", this.user).then(res => {
+        this.$swal.fire("Success!", res.data.message, "success").then(() => {
+            this.$router.go(0);
+        });
+      });
     }
   }
 };

@@ -31,6 +31,9 @@ export default new Vuex.Store({
         },
         set_theme(state, data) {
             state.theme = data;
+        },
+        auth_update(state, data) {
+            state.data = data
         }
     },
     actions: {
@@ -41,6 +44,23 @@ export default new Vuex.Store({
                     commit('set_theme', data);
                     resolve(data);
                 } catch (err) { reject(err) }
+            });
+        },
+        updateUser({ commit }, data) {
+            return new Promise((resolve, reject) => {
+                axios({ url: `${URI}/auth/update`, data, method: 'POST' })
+                    .then(resp => {
+                        const { data } = resp;
+                        localStorage.setItem('user', JSON.stringify(data.user));
+                        commit('auth_update', data.user);
+                        resolve(resp)
+                    })
+                    .catch(err => {
+                        commit('auth_error')
+                        localStorage.removeItem('token');
+                        localStorage.removeItem('user');
+                        reject(err)
+                    })
             });
         },
         login({ commit }, user) {

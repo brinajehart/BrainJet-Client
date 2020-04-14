@@ -226,3 +226,7 @@ header.v-sheet {
     width: 100% !important;
     padding: 5px !important
 }
+
+.user-avatar:hover {
+    cursor: pointer !important;
+}

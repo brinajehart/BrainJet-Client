@@ -89,7 +89,7 @@
       <v-toolbar-title style="margin-left: 5px">{{ $route.name }}</v-toolbar-title>
       <v-spacer></v-spacer>
       <div>
-        <v-avatar color="red">
+        <v-avatar color="red" class="user-avatar" @click="changeNav('/profile')">
           <span class="white--text headline">{{ user | genavatar }}</span>
         </v-avatar>
         <span style="margin-left: 10px">{{ user | fullname }}</span>
