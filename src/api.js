@@ -21,15 +21,9 @@ export default class api {
         });
     }
 
-    static async retriveStatuses() {
+    static async pickerRetriver(item_type) {
         return new Promise((resolve, reject) => {
-            axios.get(`${URI}/picker/status`).then(resolve).catch(reject);
-        }); 
-    }
-
-    static async retrivePermissions() {
-        return new Promise((resolve, reject) => {
-            axios.get(`${URI}/picker/permission`).then(resolve).catch(reject);
+            axios.get(`${URI}/picker/${item_type}`).then(resolve).catch(reject);
         }); 
     }
 }

@@ -1,26 +1,30 @@
 <template>
-  <v-card style="width: 100%">
-    <v-form v-model="valid">
-      <v-container>
-        <v-row>
-          <v-col cols="12" md="4" style="margin-top:15px">
-            <v-text-field v-model="form.title" label="Title" required></v-text-field>
-          </v-col>
-          <v-col cols="12" md="4" style="margin-top:15px">
-            <v-text-field v-model="form.time_complexity" label="Time Complexity (days)" required></v-text-field>
-          </v-col>
-          <v-col cols="12" md="4">
-            <small style="color: #555">Due Date</small>
-            <datepicker v-model="form.due_date" name="due_date" style="width: 100%"></datepicker>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12" md="12">
-            <label>Description</label>
-            <tiny-mce
-              api-key="cfdw8uwtdyjxz965k0wctju2xsnoyj3nnncgef9gghebc16m"
-              v-model="form.description"
-              :init="{
+  <div style="width: 100%">
+    <v-row>
+      <h2 style="margin: 0 0 0 15px;" class="display-1 font-weight-light">General</h2>
+    </v-row>
+    <v-card style="width: 100%; margin-bottom: 15px">
+      <v-form>
+        <v-container>
+          <v-row>
+            <v-col cols="12" md="4" style="margin-top:15px">
+              <v-text-field v-model="form.title" label="Title" required></v-text-field>
+            </v-col>
+            <v-col cols="12" md="4" style="margin-top:15px">
+              <v-text-field v-model="form.time_complexity" label="Time Complexity (days)" required></v-text-field>
+            </v-col>
+            <v-col cols="12" md="4">
+              <small style="color: #555">Due Date</small>
+              <datepicker v-model="form.due_date" name="due_date" style="width: 100%"></datepicker>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12" md="12">
+              <label>Description</label>
+              <tiny-mce
+                api-key="cfdw8uwtdyjxz965k0wctju2xsnoyj3nnncgef9gghebc16m"
+                v-model="form.description"
+                :init="{
                     menubar: false,
                     plugins: [
                     'autolink lists link image charmap print anchor',
@@ -32,137 +36,167 @@
                     alignleft aligncenter alignright alignjustify | \
                     bullist numlist outdent indent | removeformat | help'
             }"
-            />
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12" md="12">
-            <v-row>
-              <h2 style="margin: 0 10px 0 15px;" class="display-1 font-weight-light">Subtasks</h2>
-              <v-btn v-tooltip="'Add Subtask'" color="primary" @click="addSubtask">Add</v-btn>
-            </v-row>
-            <v-simple-table dense>
-              <template v-slot:default>
-                <thead>
-                  <tr>
-                    <th class="text-left">Title</th>
-                    <th class="text-left">Status</th>
-                    <th class="text-left">Done By</th>
-                    <th class="text-left">Date Completed</th>
-                    <th class="text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody v-if="form.subtasks.length">
-                  <tr v-for="(item,key) in form.subtasks" :key="key">
-                    <td>
-                      <v-text-field
-                        style="margin-top:15px"
-                        v-model="item.title"
-                        label="Title"
-                        required
-                      ></v-text-field>
-                    </td>
-                    <td>
-                      <v-select
-                        style="margin-top:15px"
-                        :items="statuses"
-                        item-value="id"
-                        item-text="display_as"
-                        :change="statusChanged(key)"
-                        v-model="item.status"
-                      ></v-select>
-                    </td>
-                    <td>
-                      <v-text-field
-                        style="margin-top:15px"
-                        v-model="item.done_by"
-                        label="Title"
-                        required
-                      ></v-text-field>
-                    </td>
-                    <td>
-                      <datepicker
-                        v-model="item.date_completed"
-                        name="due_date"
-                        :disabled="item.status !== 3"
-                        style="width: 100%"
-                      ></datepicker>
-                    </td>
-                    <td class="text-right">
-                      <v-btn v-tooltip="'Delete Subtask'" icon @click="deleteSubtask(key)">
-                        <v-icon color="red lighten-1">mdi-delete</v-icon>
-                      </v-btn>
-                    </td>
-                  </tr>
-                </tbody>
-                <tbody v-else>
-                  <tr>
-                    <td colspan="5" class="pa-3">
-                      <v-alert
-                        type="warning"
-                      >Currently the there are no subtasks! You can add them with the button above!</v-alert>
-                    </td>
-                  </tr>
-                </tbody>
-              </template>
-            </v-simple-table>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12" md="12">
-            <v-row>
-              <h2 style="margin: 0 10px 0 15px;" class="display-1 font-weight-light">Collaborators</h2>
-              <v-btn v-tooltip="'Add Collaborator'" color="primary" @click="addCollaborator()">Add</v-btn>
-            </v-row>
-            <v-simple-table dense>
-              <template v-slot:default>
-                <thead>
-                  <tr>
-                    <th class="text-left">Name</th>
-                    <th class="text-left">Permissions</th>
-                    <th class="text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody v-if="form.collaborators.length">
-                  <tr v-for="(item,key) in form.collaborators" :key="key" style="height: 50px">
-                    <td>
-                      <v-text-field v-model="item.fullname" label="Title" required></v-text-field>
-                    </td>
-                    <td>
-                      <v-select
-                        :items="permissions"
-                        item-value="id"
-                        item-text="display_as"
-                        v-model="item.permission"
-                      ></v-select>
-                    </td>
-                    <td class="text-right">
-                      <v-btn v-tooltip="'Delete Subtask'" icon @click="deleteCollaborator(key)">
-                        <v-icon color="red lighten-1">mdi-delete</v-icon>
-                      </v-btn>
-                    </td>
-                  </tr>
-                </tbody>
-                <tbody v-else>
-                  <tr>
-                    <td colspan="5" class="pa-3">
-                      <v-alert
-                        type="warning"
-                      >Currently the there are no collaborators! You can add them with the button above!</v-alert>
-                    </td>
-                  </tr>
-                </tbody>
-              </template>
-            </v-simple-table>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-btn class="ma-4" color="primary">Update</v-btn>
-          <v-btn class="ma-4" color="error" @click="$router.go(-1)">Cancel</v-btn>
-        </v-row>
-      </v-container>
-    </v-form>
-  </v-card>
+              />
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-btn
+              class="ma-4"
+              color="primary"
+              @click="primarySubmit()"
+            >{{ $route.name === 'Edit - Task' ? 'Update' : 'Create' }}</v-btn>
+            <v-btn class="ma-4" color="error" @click="$router.go(-1)">Cancel</v-btn>
+          </v-row>
+        </v-container>
+      </v-form>
+    </v-card>
+    <v-row>
+      <h2 style="margin: 0 5px 0 15px;" class="display-1 font-weight-light">Subtasks</h2>
+      <v-btn large v-tooltip="'Add Subtask'" color="primary" icon @click="addSubtask()">
+        <v-icon color="teal">mdi-plus-circle</v-icon>
+      </v-btn>
+    </v-row>
+    <v-card style="margin-bottom: 15px">
+      <v-form>
+        <v-container>
+          <v-row>
+            <v-col cols="12" md="12">
+              <v-simple-table dense style="table-layout: fixed;">
+                <template v-slot:default>
+                  <thead>
+                    <tr>
+                      <th class="text-left">Title</th>
+                      <th class="text-left">Status</th>
+                      <th class="text-left">Done By</th>
+                      <th class="text-left">Date Completed</th>
+                      <th class="text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody v-if="form.subtasks.length">
+                    <tr v-for="(item,key) in form.subtasks" :key="key">
+                      <td>
+                        <v-text-field
+                          style="margin-top:15px"
+                          v-model="item.title"
+                          label="Title"
+                          required
+                        ></v-text-field>
+                      </td>
+                      <td>
+                        <v-select
+                          style="margin-top:15px"
+                          :items="statuses"
+                          item-value="id"
+                          item-text="display_as"
+                          :change="statusChanged(key)"
+                          v-model="item.status"
+                        ></v-select>
+                      </td>
+                      <td>
+                        <v-autocomplete
+                          v-model="item.done_by"
+                          item-value="id"
+                          item-text="display_as"
+                          :items="doneByUserOptions"
+                          style="margin-top: 15px"
+                          label="User Picker"
+                        ></v-autocomplete>
+                      </td>
+                      <td>
+                        <datepicker
+                          v-model="item.date_completed"
+                          name="due_date"
+                          :disabled="item.status !== 3"
+                          style="width: 100%"
+                        ></datepicker>
+                      </td>
+                      <td class="text-right">
+                        <v-btn v-tooltip="'Delete Subtask'" icon @click="deleteSubtask(key)">
+                          <v-icon color="red lighten-1">mdi-delete</v-icon>
+                        </v-btn>
+                      </td>
+                    </tr>
+                  </tbody>
+                  <tbody v-else>
+                    <tr>
+                      <td colspan="5" class="pa-3">
+                        <v-alert
+                          type="warning"
+                        >Currently the there are no subtasks! You can add them with the button above!</v-alert>
+                      </td>
+                    </tr>
+                  </tbody>
+                </template>
+              </v-simple-table>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-form>
+    </v-card>
+    <v-row>
+      <h2 style="margin: 0 5px 0 15px;" class="display-1 font-weight-light">Collaborators</h2>
+      <v-btn large v-tooltip="'Add Collaborator'" color="primary" icon @click="addCollaborator()">
+        <v-icon color="teal">mdi-plus-circle</v-icon>
+      </v-btn>
+    </v-row>
+    <v-card style="margin-bottom: 20vw">
+      <v-form>
+        <v-container>
+          <v-row>
+            <v-col cols="12" md="12">
+              <v-simple-table dense style="table-layout: fixed;">
+                <template v-slot:default>
+                  <thead>
+                    <tr>
+                      <th class="text-left">Name</th>
+                      <th class="text-left">Permissions</th>
+                      <th class="text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody v-if="form.collaborators.length">
+                    <tr v-for="(item,key) in form.collaborators" :key="key" style="height: 50px">
+                      <td>
+                        <v-autocomplete
+                          v-model="item.user"
+                          :items="newCollaboratorOptions"
+                          item-value="id"
+                          item-text="display_as"
+                          style="margin-top: 15px"
+                          label="User Picker"
+                        ></v-autocomplete>
+                      </td>
+                      <td>
+                        <v-select
+                          :items="permissions"
+                          item-value="id"
+                          item-text="display_as"
+                          v-model="item.permission"
+                        ></v-select>
+                      </td>
+                      <td class="text-right">
+                        <v-btn v-tooltip="'Delete Subtask'" icon @click="deleteCollaborator(key)">
+                          <v-icon color="red lighten-1">mdi-delete</v-icon>
+                        </v-btn>
+                      </td>
+                    </tr>
+                  </tbody>
+                  <tbody v-else>
+                    <tr>
+                      <td colspan="5" class="pa-3">
+                        <v-alert
+                          type="warning"
+                        >Currently the there are no collaborators! You can add them with the button above!</v-alert>
+                      </td>
+                    </tr>
+                  </tbody>
+                </template>
+              </v-simple-table>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-form>
+    </v-card>
+  </div>
 </template>
 
 <script>
@@ -179,43 +213,100 @@ export default {
         collaborators: []
       },
       statuses: [],
-      permissions: []
+      permissions: [],
+      users: []
     };
   },
   created: function() {
     this.fetchPermissions();
     this.fetchStatuses();
+    this.fetchUsers();
+  },
+  computed: {
+    doneByUserOptions() {
+      const { users, form, $store } = this;
+
+      // get owner of task
+      let currentUser = $store.getters.user;
+      if (currentUser)
+        currentUser =
+          typeof currentUser != typeof {}
+            ? JSON.parse(currentUser)
+            : currentUser;
+
+      const collaboratorIds = form.collaborators.map(colab => colab.user);
+      const options = users.filter(
+        user => collaboratorIds.includes(user.id) || user.id == currentUser.id
+      );
+      return options;
+    },
+    newCollaboratorOptions() {
+      const { users, $store } = this;
+
+      // get owner of task
+      let currentUser = $store.getters.user;
+      if (currentUser)
+        currentUser =
+          typeof currentUser != typeof {}
+            ? JSON.parse(currentUser)
+            : currentUser;
+
+      const options = users.filter(user => user.id !== currentUser.id);
+      return options;
+    }
   },
   methods: {
     async fetchStatuses() {
-      const response = await api.retriveStatuses();
+      const response = await api.pickerRetriver("status");
       if (response.status == 200) {
         this.statuses = response.data;
       }
     },
     async fetchPermissions() {
-      const response = await api.retrivePermissions();
-      console.log(response);
+      const response = await api.pickerRetriver("permission");
       if (response.status == 200) {
         this.permissions = response.data;
       }
     },
+    async fetchUsers() {
+      const response = await api.pickerRetriver("user");
+      if (response.status == 200) {
+        this.users = response.data;
+      }
+    },
     statusChanged(subtask_index) {
-        if (this.form.subtasks[subtask_index].status !== 3) {
-            delete this.form.subtasks[subtask_index].date_completed;
-        }
+      if (this.form.subtasks[subtask_index].status !== 3) {
+        delete this.form.subtasks[subtask_index].date_completed;
+      }
     },
     addSubtask() {
-      this.form.subtasks.push({ status: this.statuses[0] });
+      this.form.subtasks.push({ status: this.statuses[0].id });
     },
     deleteSubtask(index) {
       this.form.subtasks.splice(index, 1);
     },
     addCollaborator() {
-      this.form.collaborators.push({ permission: this.permissions[0] });
+      this.form.collaborators.push({ permission: this.permissions[0].id });
     },
     deleteCollaborator(index) {
+      this.form.subtasks.forEach((item, key) => {
+        if (item.done_by == this.form.collaborators[index].user) {
+          delete this.form.subtasks[key].done_by;
+        }
+      });
       this.form.collaborators.splice(index, 1);
+    },
+    primarySubmit() {
+      switch (this.$router.currentRoute.name) {
+        case "Create - Task":
+          debugger;
+          return;
+        case "Edit - Task":
+          console.log("update");
+          return;
+        default:
+          return;
+      }
     }
   }
 };

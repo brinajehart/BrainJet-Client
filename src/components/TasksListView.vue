@@ -224,7 +224,6 @@ export default {
     async fetchMyTasks() {
       const response = await api.getMyTasks();
       this.tasks = response.data;
-      this.filteredTasks = response.data;
       this.loading = false;
     },
     addTask() {

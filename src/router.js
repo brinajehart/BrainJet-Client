@@ -18,36 +18,42 @@ let router = new Router({
     mode: 'history',
     routes: [
         { path: "/login", name: 'Sign In', component: Login },
-        { path: "/register", 'name': 'Sign Up', component: Register },
+        { path: "/register", name: 'Sign Up', component: Register },
         {
-            path: '/tasks/calendar', 'name': 'Tasks - Calendar', component: Calendar, meta: {
+            path: '/tasks/calendar', name: 'Tasks - Calendar', component: Calendar, meta: {
                 requiresAuth: true
             }
-        },{
-            path: '/tasks/list', 'name': 'Tasks - List', component: TasksListView, meta: {
+        }, {
+            path: '/tasks/list', name: 'Tasks - List', component: TasksListView, meta: {
                 requiresAuth: true
             }
-        },{
-            path: '/tasks/edit/:id', 'name': 'Edit - Task', component: TaskEdit, meta: {
+        }, {
+            path: '/tasks/edit/:id',
+            name: 'Edit - Task',
+            component: TaskEdit,
+            meta: {
                 requiresAuth: true
             }
-        },{
-            path: '/tasks/create', 'name': 'Create - Task', component: TaskEdit, meta: {
+        }, {
+            path: '/tasks/create',
+            name: 'Create - Task',
+            component: TaskEdit,
+            meta: {
                 requiresAuth: true
             }
-        },{
-            path: '/chats/:id', 'name': 'Chat', component: Chat, meta: {
+        }, {
+            path: '/chats/:id', name: 'Chat', component: Chat, meta: {
                 requiresAuth: true
             }
-        },{
-            path: '/chats', 'name': 'My Chats', component: MyChats, meta: {
+        }, {
+            path: '/chats', name: 'My Chats', component: MyChats, meta: {
                 requiresAuth: true
             }
-        },{
-            path: '/profile', 'name': 'Profile', component: Profile, meta: {
+        }, {
+            path: '/profile', name: 'Profile', component: Profile, meta: {
                 requiresAuth: true
             }
-        },{ path: '*', redirect: '/tasks/list' }
+        }, { path: '*', redirect: '/tasks/list' }
     ]
 });
 
