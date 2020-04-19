@@ -121,6 +121,7 @@
                           :items="doneByUserOptions"
                           style="margin-top: 15px"
                           label="User Picker"
+                          :clearable="true"
                         ></v-autocomplete>
                       </td>
                       <td>
@@ -184,6 +185,8 @@
                           item-text="display_as"
                           style="margin-top: 15px"
                           label="User Picker"
+                          v-on:change="collaboratorChanged(key)"
+                          :clearable="true"
                         ></v-autocomplete>
                       </td>
                       <td>
@@ -250,17 +253,17 @@ export default {
     if (this.$router.currentRoute.name == "Create - Task") {
       this.form.user_id = await this.currentUser.id;
     } else {
-        const response = await api.getTaskData(this.$route.params.id);
-        if (response.status == 200) {
-            this.form = response.data;
-        }
+      const response = await api.getTaskData(this.$route.params.id);
+      if (response.status == 200) {
+        this.form = response.data;
+      }
     }
     setTimeout(() => (this.loading = false), 500);
   },
   computed: {
     doneByUserOptions() {
       const { users, form } = this;
-      const collaboratorIds = form.collaborators.map(colab => colab.user);
+      const collaboratorIds = form.collaborators.map(colab => colab.user_id);
 
       const options = users.filter(
         user =>
@@ -307,6 +310,24 @@ export default {
         delete this.form.subtasks[subtask_index].done_date;
       }
     },
+    collaboratorChanged(key) {
+      const { collaborators } = this.form;
+      collaborators.forEach(({ user_id }, index) => {
+        if (user_id == collaborators[key].user_id && key != index && user_id) {
+          this.$swal
+            .fire(
+              "Error!",
+              "The user is already registered as a collaborator!",
+              "error"
+            )
+            .then(() => {
+              this.$set(this.form.collaborators[key], "user_id", undefined);
+              delete this.form.collaborators[key].user_id;
+            });
+          return;
+        }
+      });
+    },
     addSubtask() {
       this.form.subtasks.push({ status_id: this.statuses[0].id });
     },
@@ -314,11 +335,14 @@ export default {
       this.form.subtasks.splice(index, 1);
     },
     addCollaborator() {
-      this.form.collaborators.push({ permission_id: this.permissions[0].id });
+      this.form.collaborators.push({
+        permission_id: this.permissions[0].id,
+        user_id: null
+      });
     },
     deleteCollaborator(index) {
       this.form.subtasks.forEach((item, key) => {
-        if (item.done_by == this.form.collaborators[index].user) {
+        if (item.done_by == this.form.collaborators[index].user_id) {
           delete this.form.subtasks[key].done_by;
         }
       });
