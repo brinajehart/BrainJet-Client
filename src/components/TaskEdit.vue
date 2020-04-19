@@ -7,6 +7,26 @@
       <v-form>
         <v-container>
           <v-row>
+            <v-col cols="12" md="6" style="margin-top:15px">
+              <v-select
+                label="Owner"
+                :items="users"
+                item-value="id"
+                item-text="display_as"
+                v-model="form.user_id"
+                :readonly="true"
+              ></v-select>
+            </v-col>
+            <v-col cols="12" md="6" style="margin-top:15px">
+              <v-text-field
+                :value="form.timestamp || new Date() | moment('dddd, MMMM Do YYYY')"
+                label="Date Created"
+                required
+                :readonly="true"
+              ></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row>
             <v-col cols="12" md="4" style="margin-top:15px">
               <v-text-field v-model="form.title" label="Title" required></v-text-field>
             </v-col>
@@ -68,7 +88,7 @@
                       <th class="text-left">Title</th>
                       <th class="text-left">Status</th>
                       <th class="text-left">Done By</th>
-                      <th class="text-left">Date Completed</th>
+                      <th class="text-left">Done Date</th>
                       <th class="text-right">Actions</th>
                     </tr>
                   </thead>
@@ -84,12 +104,13 @@
                       </td>
                       <td>
                         <v-select
+                          label="Status"
                           style="margin-top:15px"
                           :items="statuses"
                           item-value="id"
                           item-text="display_as"
                           :change="statusChanged(key)"
-                          v-model="item.status"
+                          v-model="item.status_id"
                         ></v-select>
                       </td>
                       <td>
@@ -104,9 +125,9 @@
                       </td>
                       <td>
                         <datepicker
-                          v-model="item.date_completed"
+                          v-model="item.done_date"
                           name="due_date"
-                          :disabled="item.status !== 3"
+                          :disabled="item.status_id !== 3"
                           style="width: 100%"
                         ></datepicker>
                       </td>
@@ -157,7 +178,7 @@
                     <tr v-for="(item,key) in form.collaborators" :key="key" style="height: 50px">
                       <td>
                         <v-autocomplete
-                          v-model="item.user"
+                          v-model="item.user_id"
                           :items="newCollaboratorOptions"
                           item-value="id"
                           item-text="display_as"
@@ -167,10 +188,11 @@
                       </td>
                       <td>
                         <v-select
+                          label="Permissions"
                           :items="permissions"
                           item-value="id"
                           item-text="display_as"
-                          v-model="item.permission"
+                          v-model="item.permission_id"
                         ></v-select>
                       </td>
                       <td class="text-right">
@@ -196,6 +218,7 @@
         </v-container>
       </v-form>
     </v-card>
+    <bj-loading v-if="loading" />
   </div>
 </template>
 
@@ -214,48 +237,53 @@ export default {
       },
       statuses: [],
       permissions: [],
-      users: []
+      users: [],
+      currentUser: null,
+      loading: true
     };
   },
-  created: function() {
-    this.fetchPermissions();
-    this.fetchStatuses();
-    this.fetchUsers();
+  created: async function() {
+    await this.setCurrentUser();
+    await this.fetchPermissions();
+    await this.fetchStatuses();
+    await this.fetchUsers();
+    if (this.$router.currentRoute.name == "Create - Task") {
+      this.form.user_id = await this.currentUser.id;
+    } else {
+        const response = await api.getTaskData(this.$route.params.id);
+        if (response.status == 200) {
+            this.form = response.data;
+        }
+    }
+    setTimeout(() => (this.loading = false), 500);
   },
   computed: {
     doneByUserOptions() {
-      const { users, form, $store } = this;
-
-      // get owner of task
-      let currentUser = $store.getters.user;
-      if (currentUser)
-        currentUser =
-          typeof currentUser != typeof {}
-            ? JSON.parse(currentUser)
-            : currentUser;
-
+      const { users, form } = this;
       const collaboratorIds = form.collaborators.map(colab => colab.user);
+
       const options = users.filter(
-        user => collaboratorIds.includes(user.id) || user.id == currentUser.id
+        user =>
+          collaboratorIds.includes(user.id) || user.id == this.currentUser.id
       );
       return options;
     },
     newCollaboratorOptions() {
-      const { users, $store } = this;
+      const { users } = this;
 
-      // get owner of task
-      let currentUser = $store.getters.user;
-      if (currentUser)
-        currentUser =
-          typeof currentUser != typeof {}
-            ? JSON.parse(currentUser)
-            : currentUser;
-
-      const options = users.filter(user => user.id !== currentUser.id);
+      const options = users.filter(user => user.id !== this.currentUser.id);
       return options;
     }
   },
   methods: {
+    setCurrentUser: function() {
+      const currentUser = this.$store.getters.user;
+      if (currentUser)
+        this.currentUser =
+          typeof currentUser != typeof {}
+            ? JSON.parse(currentUser)
+            : currentUser;
+    },
     async fetchStatuses() {
       const response = await api.pickerRetriver("status");
       if (response.status == 200) {
@@ -275,18 +303,18 @@ export default {
       }
     },
     statusChanged(subtask_index) {
-      if (this.form.subtasks[subtask_index].status !== 3) {
-        delete this.form.subtasks[subtask_index].date_completed;
+      if (this.form.subtasks[subtask_index].status_id !== 3) {
+        delete this.form.subtasks[subtask_index].done_date;
       }
     },
     addSubtask() {
-      this.form.subtasks.push({ status: this.statuses[0].id });
+      this.form.subtasks.push({ status_id: this.statuses[0].id });
     },
     deleteSubtask(index) {
       this.form.subtasks.splice(index, 1);
     },
     addCollaborator() {
-      this.form.collaborators.push({ permission: this.permissions[0].id });
+      this.form.collaborators.push({ permission_id: this.permissions[0].id });
     },
     deleteCollaborator(index) {
       this.form.subtasks.forEach((item, key) => {

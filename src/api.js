@@ -26,4 +26,10 @@ export default class api {
             axios.get(`${URI}/picker/${item_type}`).then(resolve).catch(reject);
         }); 
     }
+
+    static async getTaskData(task_id) {
+        return new Promise((resolve, reject) => {
+            axios.get(`${URI}/task/${task_id}`).then(resolve).catch(reject);
+        });  
+    }
 }
