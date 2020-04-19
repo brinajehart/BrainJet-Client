@@ -20,4 +20,16 @@ export default class api {
             axios.post(`${URI}/auth/create`, data).then(resolve).catch(reject);
         });
     }
+
+    static async retriveStatuses() {
+        return new Promise((resolve, reject) => {
+            axios.get(`${URI}/picker/status`).then(resolve).catch(reject);
+        }); 
+    }
+
+    static async retrivePermissions() {
+        return new Promise((resolve, reject) => {
+            axios.get(`${URI}/picker/permission`).then(resolve).catch(reject);
+        }); 
+    }
 }
