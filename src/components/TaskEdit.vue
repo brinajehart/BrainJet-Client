@@ -68,6 +68,7 @@
                         :items="statuses"
                         item-value="id"
                         item-text="display_as"
+                        :change="statusChanged(key)"
                         v-model="item.status"
                       ></v-select>
                     </td>
@@ -198,6 +199,11 @@ export default {
       if (response.status == 200) {
         this.permissions = response.data;
       }
+    },
+    statusChanged(subtask_index) {
+        if (this.form.subtasks[subtask_index].status !== 3) {
+            delete this.form.subtasks[subtask_index].date_completed;
+        }
     },
     addSubtask() {
       this.form.subtasks.push({ status: this.statuses[0] });

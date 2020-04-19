@@ -230,3 +230,7 @@ header.v-sheet {
 .user-avatar:hover {
     cursor: pointer !important;
 }
+
+.v-data-table__wrapper, .v-dialog {
+    overflow: visible !important;
+}
