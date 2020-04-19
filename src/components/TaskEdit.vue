@@ -3,8 +3,8 @@
     <v-row>
       <h2 style="margin: 0 0 0 15px;" class="display-1 font-weight-light">General</h2>
     </v-row>
-    <v-card style="width: 100%; margin-bottom: 15px">
-      <v-form>
+    <v-form ref="form" v-model="valid">
+      <v-card style="width: 100%; margin-bottom: 15px">
         <v-container>
           <v-row>
             <v-col cols="12" md="6" style="margin-top:15px">
@@ -28,14 +28,19 @@
           </v-row>
           <v-row>
             <v-col cols="12" md="4" style="margin-top:15px">
-              <v-text-field v-model="form.title" label="Title" required></v-text-field>
+              <v-text-field v-model="form.title" label="Title*" :rules="rules" required></v-text-field>
             </v-col>
             <v-col cols="12" md="4" style="margin-top:15px">
               <v-text-field v-model="form.time_complexity" label="Time Complexity (days)" required></v-text-field>
             </v-col>
             <v-col cols="12" md="4">
               <small style="color: #555">Due Date</small>
-              <datepicker v-model="form.due_date" name="due_date" style="width: 100%"></datepicker>
+              <datepicker
+                :rules="[v => !!v || 'Item is required']"
+                v-model="form.due_date"
+                name="due_date"
+                style="width: 100%"
+              ></datepicker>
             </v-col>
           </v-row>
           <v-row>
@@ -63,21 +68,20 @@
             <v-btn
               class="ma-4"
               color="primary"
+              :disabled="!valid"
               @click="primarySubmit()"
             >{{ $route.name === 'Edit - Task' ? 'Update' : 'Create' }}</v-btn>
             <v-btn class="ma-4" color="error" @click="$router.go(-1)">Cancel</v-btn>
           </v-row>
         </v-container>
-      </v-form>
-    </v-card>
-    <v-row>
-      <h2 style="margin: 0 5px 0 15px;" class="display-1 font-weight-light">Subtasks</h2>
-      <v-btn large v-tooltip="'Add Subtask'" color="primary" icon @click="addSubtask()">
-        <v-icon color="teal">mdi-plus-circle</v-icon>
-      </v-btn>
-    </v-row>
-    <v-card style="margin-bottom: 15px">
-      <v-form>
+      </v-card>
+      <v-row>
+        <h2 style="margin: 0 5px 0 15px;" class="display-1 font-weight-light">Subtasks</h2>
+        <v-btn large v-tooltip="'Add Subtask'" color="primary" icon @click="addSubtask()">
+          <v-icon color="teal">mdi-plus-circle</v-icon>
+        </v-btn>
+      </v-row>
+      <v-card style="margin-bottom: 15px">
         <v-container>
           <v-row>
             <v-col cols="12" md="12">
@@ -98,7 +102,8 @@
                         <v-text-field
                           style="margin-top:15px"
                           v-model="item.title"
-                          label="Title"
+                          label="Title*"
+                          :rules="rules"
                           required
                         ></v-text-field>
                       </td>
@@ -110,6 +115,7 @@
                           item-value="id"
                           item-text="display_as"
                           :change="statusChanged(key)"
+                          :rules="[v => !!v || 'Item is required']"
                           v-model="item.status_id"
                         ></v-select>
                       </td>
@@ -153,16 +159,14 @@
             </v-col>
           </v-row>
         </v-container>
-      </v-form>
-    </v-card>
-    <v-row>
-      <h2 style="margin: 0 5px 0 15px;" class="display-1 font-weight-light">Collaborators</h2>
-      <v-btn large v-tooltip="'Add Collaborator'" color="primary" icon @click="addCollaborator()">
-        <v-icon color="teal">mdi-plus-circle</v-icon>
-      </v-btn>
-    </v-row>
-    <v-card style="margin-bottom: 20vw">
-      <v-form>
+      </v-card>
+      <v-row>
+        <h2 style="margin: 0 5px 0 15px;" class="display-1 font-weight-light">Collaborators</h2>
+        <v-btn large v-tooltip="'Add Collaborator'" color="primary" icon @click="addCollaborator()">
+          <v-icon color="teal">mdi-plus-circle</v-icon>
+        </v-btn>
+      </v-row>
+      <v-card style="margin-bottom: 20vw">
         <v-container>
           <v-row>
             <v-col cols="12" md="12">
@@ -184,6 +188,7 @@
                           item-value="id"
                           item-text="display_as"
                           style="margin-top: 15px"
+                          :rules="[v => !!v || 'Item is required']"
                           label="User Picker"
                           v-on:change="collaboratorChanged(key)"
                           :clearable="true"
@@ -196,6 +201,7 @@
                           item-value="id"
                           item-text="display_as"
                           v-model="item.permission_id"
+                          :rules="[v => !!v || 'Item is required']"
                         ></v-select>
                       </td>
                       <td class="text-right">
@@ -219,8 +225,8 @@
             </v-col>
           </v-row>
         </v-container>
-      </v-form>
-    </v-card>
+      </v-card>
+    </v-form>
     <bj-loading v-if="loading" />
   </div>
 </template>
@@ -242,7 +248,12 @@ export default {
       permissions: [],
       users: [],
       currentUser: null,
-      loading: true
+      loading: true,
+      valid: true,
+      rules: [
+        value => !!value || "Required.",
+        value => (value && value.length >= 3) || "Min 3 characters"
+      ]
     };
   },
   created: async function() {

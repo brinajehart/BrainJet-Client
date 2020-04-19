@@ -4,36 +4,70 @@
       <v-row align="center" justify="center">
         <v-col cols="12" sm="8" md="2"></v-col>
         <v-col cols="12" sm="8" md="9">
-          <v-card class="elevation-0 base-form-card" style="margin-bottom: 20px; box-shadow: none">
-            <v-toolbar color="transparent" dark flat>
-              <v-toolbar-title>Sign Up</v-toolbar-title>
-              <v-spacer />
-            </v-toolbar>
-            <v-card-text>
-              <v-form>
-                <v-text-field v-model="form.first_name" label="Name" name="login" type="text" />
-                <v-text-field v-model="form.last_name" label="Surname" name="login" type="text" />
-                <v-text-field v-model="form.username" label="Username" name="login" type="text" />
-                <v-text-field v-model="form.email" label="Email" name="login" type="email" />
+          <v-form ref="form" v-model="valid" style="width: 100%">
+            <v-card
+              class="elevation-0 base-form-card"
+              style="margin-bottom: 20px; box-shadow: none"
+            >
+              <v-toolbar color="transparent" dark flat>
+                <v-toolbar-title>Sign Up</v-toolbar-title>
+                <v-spacer />
+              </v-toolbar>
+              <v-card-text>
+                <v-text-field
+                  :rules="[v => !!v || 'Item is required']"
+                  v-model="form.first_name"
+                  label="Name"
+                  name="login"
+                  type="text"
+                  required
+                />
+                <v-text-field
+                  :rules="[v => !!v || 'Item is required']"
+                  v-model="form.last_name"
+                  label="Surname"
+                  name="login"
+                  type="text"
+                  required
+                />
+                <v-text-field
+                  :rules="[v => !!v || 'Item is required']"
+                  v-model="form.username"
+                  label="Username"
+                  name="login"
+                  type="text"
+                  required
+                />
+                <v-text-field
+                  :rules="[v => !!v || 'Item is required']"
+                  v-model="form.email"
+                  label="Email"
+                  name="login"
+                  type="email"
+                  required
+                />
                 <v-text-field
                   v-model="form.password"
                   id="password"
+                  :rules="[v => !!v || 'Item is required']"
                   label="Password"
                   name="password"
                   type="password"
+                  required
                 />
-              </v-form>
-            </v-card-text>
-            <v-card-actions>
-              <router-link class="form-link" to="/login">Already have an account?</router-link>
-              <v-spacer />
-              <v-btn @click="register()" color="indigo white-text">Sign Up</v-btn>
-            </v-card-actions>
-          </v-card>
+              </v-card-text>
+              <v-card-actions>
+                <router-link class="form-link" to="/login">Already have an account?</router-link>
+                <v-spacer />
+                <v-btn @click="register()" :disabled="!valid" color="indigo white-text">Sign Up</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-form>
           <v-img src="./../assets/logo-dark.png" aspect-ratio="2.26"></v-img>
         </v-col>
       </v-row>
     </div>
+    <bj-loading v-if="loading" />
   </div>
 </template>
 
@@ -49,17 +83,23 @@ export default {
         email: "",
         username: "",
         password: ""
-      }
+      },
+      valid: true,
+      loading: false
     };
   },
   methods: {
     register: async function() {
+      this.loading = true;
       const response = await api.registerUser(this.form);
       if (response) {
-        this.$swal.fire("Success!", response.data.message, "success").then(() => {
-          this.$router.push("/login");
-        });
+        this.$swal
+          .fire("Success!", response.data.message, "success")
+          .then(() => {
+            this.$router.push("/login");
+          });
       }
+      this.loading = false;
     }
   }
 };
