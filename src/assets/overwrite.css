@@ -243,3 +243,12 @@ header.v-sheet {
     transform: scale(1.1,1.1);
     cursor: pointer;
 }
+
+.border-all-sides {
+    background-color: #fff !important;
+    padding: 5px;
+    margin: 0px !important;
+    border-radius: 10px !important;
+    border: 1px solid #64646477 !important;
+    box-shadow: 0 4px 2px -2px #bebebea1 !important;
+}

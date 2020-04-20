@@ -83,13 +83,15 @@
     </v-navigation-drawer>
 
     <v-app-bar app color="indigo darken-2" dark>
+      <v-toolbar-title class="ma-2">{{ $route.name }}</v-toolbar-title>
+      <v-divider class="mx-3" vertical></v-divider>
       <v-avatar v-tooltip="'Toggle theme'">
         <v-icon @click="toggleTheme()">{{ !isLightTheme ? 'mdi-brightness-3' : 'mdi-brightness-7'}}</v-icon>
       </v-avatar>
-      <v-toolbar-title style="margin-left: 5px">{{ $route.name }}</v-toolbar-title>
       <v-spacer></v-spacer>
       <div>
         <v-avatar
+          v-tooltip="'View profile'"
           :color="profileImage ? 'transparent' : 'red'"
           class="user-avatar"
           @click="changeNav('/profile')"
@@ -143,7 +145,9 @@ export default {
     },
     getAvatarUrl() {
       const { email } = this.user;
-      const url = `http://www.gravatar.com/avatar/${md5(email)}.jpg?s=80&d=undefined`;
+      const url = `http://www.gravatar.com/avatar/${md5(
+        email
+      )}.jpg?s=80&d=undefined`;
       this.profileImage = url;
     },
     setCurrentUser: function() {

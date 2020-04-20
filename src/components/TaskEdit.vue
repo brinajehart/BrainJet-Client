@@ -19,7 +19,7 @@
             </v-col>
             <v-col cols="12" md="6" style="margin-top:15px">
               <v-text-field
-                :value="form.timestamp || new Date() | moment('dddd, MMMM Do YYYY')"
+                :value="form.timestamp || new Date() | moment('ddD, MMMM Do YYYY')"
                 label="Date Created"
                 required
                 :readonly="true"
@@ -36,6 +36,7 @@
             <v-col cols="12" md="4">
               <small style="color: #555">Due Date</small>
               <datepicker
+              format="D, MMMM dth yyyy"
                 :rules="[v => !!v || 'Item is required']"
                 v-model="form.due_date"
                 name="due_date"
@@ -132,6 +133,7 @@
                       </td>
                       <td>
                         <datepicker
+                        format="D, MMMM dth yyyy"
                           v-model="item.done_date"
                           name="due_date"
                           :disabled="item.status_id !== 3"

@@ -1,7 +1,7 @@
 <template>
   <v-container style="width: 100%">
     <v-row style="margin-bottom: 20px">
-      <v-col cols="12" sm="2" style="margin-top: 10px">
+      <v-col cols="12" sm="3" style="margin-top: 10px">
         <v-row>
           <v-btn
             v-tooltip="'Add new task'"
@@ -24,7 +24,7 @@
                   dark
                   color="orange darken-3"
                 >
-                  <v-icon dark>mdi-file</v-icon>
+                  <v-icon dark>mdi-file-pdf</v-icon>
                 </v-btn>
               </template>
               <v-card>
@@ -42,7 +42,12 @@
                       <v-col cols="12" sm="6" md="12">
                         <div>
                           <label style="color: #555">Start Date</label>
-                          <datepicker :value="new Date()" name="due_date" style="width: 100%"></datepicker>
+                          <datepicker
+                            format="D, MMMM dth yyyy"
+                            :value="new Date()"
+                            name="due_date"
+                            style="width: 100%"
+                          ></datepicker>
                         </div>
                       </v-col>
                     </v-row>
@@ -87,9 +92,22 @@
               </v-card>
             </v-dialog>
           </v-row>
+          <v-row justify="center">
+            <v-btn
+              v-tooltip="'Open calendar view'"
+              v-on="on"
+              class="mx-4 ma-0 pa-0"
+              fab
+              @click="$router.push('/tasks/calendar')"
+              dark
+              color="info"
+            >
+              <v-icon dark>mdi-calendar</v-icon>
+            </v-btn>
+          </v-row>
         </v-row>
       </v-col>
-      <v-col cols="12" sm="10" style="margin-top: 10px">
+      <v-col cols="12" sm="9" style="margin-top: 10px">
         <v-text-field v-model="taskFilter" label="Filter" append-icon="mdi-filter"></v-text-field>
       </v-col>
     </v-row>
@@ -113,7 +131,7 @@
                 <br />
                 <span>
                   Due:
-                  <b>{{ item.due_date | moment("dddd, MMMM Do YYYY") }}</b>
+                  <b>{{ item.due_date | moment("ddD, MMMM Do YYYY") }}</b>
                 </span>
               </v-list-item-subtitle>
             </v-list-item-content>
@@ -208,7 +226,9 @@ export default {
         const order = orderOptions[sortProperty];
         const { value } = order;
         const asc_desc = order.asc === true ? [-1, 1] : [1, -1];
-        return filtered.sort((a, b) => a[value] < b[value] ? asc_desc[0] : asc_desc[1]);
+        return filtered.sort((a, b) =>
+          a[value] < b[value] ? asc_desc[0] : asc_desc[1]
+        );
       }
 
       return filtered;
