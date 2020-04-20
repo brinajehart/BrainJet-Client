@@ -1,9 +1,9 @@
 <template>
   <div style="width: 100%">
-    <v-row>
-      <h2 style="margin: 0 0 0 15px;" class="display-1 font-weight-light">General</h2>
-    </v-row>
-    <v-form ref="form" v-model="valid">
+    <v-form ref="form" v-model="valid" v-show="!loading">
+      <v-row>
+        <h2 style="margin: 0 0 0 15px;" class="display-1 font-weight-light">General</h2>
+      </v-row>
       <v-card style="width: 100%; margin-bottom: 15px">
         <v-container>
           <v-row>
@@ -19,7 +19,7 @@
             </v-col>
             <v-col cols="12" md="6" style="margin-top:15px">
               <v-text-field
-                :value="form.timestamp || new Date() | moment('ddD, MMMM Do YYYY')"
+                :value="form.timestamp || new Date() | moment('dd, MMMM Do YYYY')"
                 label="Date Created"
                 required
                 :readonly="true"
@@ -36,7 +36,7 @@
             <v-col cols="12" md="4">
               <small style="color: #555">Due Date</small>
               <datepicker
-              format="D, MMMM dth yyyy"
+                format="D, MMMM dth yyyy"
                 :rules="[v => !!v || 'Item is required']"
                 v-model="form.due_date"
                 name="due_date"
@@ -133,7 +133,7 @@
                       </td>
                       <td>
                         <datepicker
-                        format="D, MMMM dth yyyy"
+                          format="D, MMMM dth yyyy"
                           v-model="item.done_date"
                           name="due_date"
                           :disabled="item.status_id !== 3"
@@ -229,7 +229,7 @@
         </v-container>
       </v-card>
     </v-form>
-    <bj-loading v-if="loading" />
+    <bj-i-loading v-if="loading" loading_text="The form is loading..." />
   </div>
 </template>
 
@@ -271,7 +271,7 @@ export default {
         this.form = response.data;
       }
     }
-    setTimeout(() => (this.loading = false), 500);
+    this.loading = false;
   },
   computed: {
     doneByUserOptions() {

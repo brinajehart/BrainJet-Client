@@ -14,7 +14,11 @@
         </v-list-item>
 
         <v-divider style="margin-top: 10px"></v-divider>
-        <v-list-item link @click="changeNav('/tasks/list')">
+        <v-list-item
+          link
+          @click="changeNav('/tasks/list')"
+          v-on:mousedown.middle="changeNav('/profile', true)"
+        >
           <v-list-item-action>
             <v-icon>mdi-view-list</v-icon>
           </v-list-item-action>
@@ -22,7 +26,11 @@
             <v-list-item-title>Tasks - List</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item link @click="changeNav('/tasks/calendar')">
+        <v-list-item
+          link
+          @click="changeNav('/tasks/calendar')"
+          v-on:mousedown.middle="changeNav('/tasks/calendar', true)"
+        >
           <v-list-item-action>
             <v-icon>mdi-calendar-today</v-icon>
           </v-list-item-action>
@@ -30,7 +38,11 @@
             <v-list-item-title>Tasks - Calendar</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item link @click="changeNav('/tasks/create')">
+        <v-list-item
+          link
+          @click="changeNav('/tasks/create')"
+          v-on:mousedown.middle="changeNav('/profile', true)"
+        >
           <v-list-item-action>
             <v-icon>mdi-plus-circle</v-icon>
           </v-list-item-action>
@@ -38,7 +50,11 @@
             <v-list-item-title>Add Task</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item link @click="changeNav('/chats')">
+        <v-list-item
+          link
+          @click="changeNav('/chats')"
+          v-on:mousedown.middle="changeNav('/profile', true)"
+        >
           <v-list-item-action>
             <v-icon>mdi-email</v-icon>
           </v-list-item-action>
@@ -46,7 +62,11 @@
             <v-list-item-title>Your Chats</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item link @click="changeNav('/profile')">
+        <v-list-item
+          link
+          @click="changeNav('/profile')"
+          v-on:mousedown.middle="changeNav('/profile', true)"
+        >
           <v-list-item-action>
             <v-icon>mdi-account-circle</v-icon>
           </v-list-item-action>
@@ -85,9 +105,14 @@
     <v-app-bar app color="indigo darken-2" dark>
       <v-toolbar-title class="ma-2">{{ $route.name }}</v-toolbar-title>
       <v-divider class="mx-3" vertical></v-divider>
+      <v-avatar v-tooltip="'Go back'">
+        <v-icon @click="$router.go(-1)">mdi-history</v-icon>
+      </v-avatar>
+      <v-divider class="mx-3" vertical></v-divider>
       <v-avatar v-tooltip="'Toggle theme'">
         <v-icon @click="toggleTheme()">{{ !isLightTheme ? 'mdi-brightness-3' : 'mdi-brightness-7'}}</v-icon>
       </v-avatar>
+      <v-divider class="mx-3" vertical></v-divider>
       <v-spacer></v-spacer>
       <div>
         <v-avatar
@@ -95,6 +120,7 @@
           :color="profileImage ? 'transparent' : 'red'"
           class="user-avatar"
           @click="changeNav('/profile')"
+          v-on:mousedown.middle="changeNav('/profile', true)"
         >
           <img v-if="profileImage" :src="profileImage" @error="profileImage = null" alt="Google" />
           <span v-else class="white--text headline">{{ user | genavatar }}</span>
@@ -144,11 +170,13 @@ export default {
       });
     },
     getAvatarUrl() {
-      const { email } = this.user;
-      const url = `http://www.gravatar.com/avatar/${md5(
-        email
-      )}.jpg?s=80&d=undefined`;
-      this.profileImage = url;
+      if (this.user) {
+        const { email } = this.user;
+        const url = `http://www.gravatar.com/avatar/${md5(
+          email
+        )}.jpg?s=80&d=undefined`;
+        this.profileImage = url;
+      }
     },
     setCurrentUser: function() {
       const currentUser = this.$store.getters.user;
@@ -173,7 +201,13 @@ export default {
           this.$swal.fire("Unknown error occured!", "", "error");
         });
     },
-    changeNav: function(uri) {
+    changeNav: function(uri, newWindow = false) {
+      debugger;
+      window.event.preventDefault();
+      if (newWindow) {
+        window.open(uri, "_blank");
+        return;
+      }
       if (this.$router.currentRoute.path == uri) return;
       this.$router.push(uri);
     },

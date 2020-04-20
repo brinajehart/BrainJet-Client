@@ -10,6 +10,7 @@ import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 import VTooltip from 'v-tooltip';
 import LoadingComponent from './helpers/Loading.vue';
+import InternalLoadingComponent from './helpers/InternalLoading.vue';
 import TinyMCE from '@tinymce/tinymce-vue';
 import Datepicker from 'vuejs-datepicker';
 import GAuth from 'vue-google-oauth2'
@@ -45,6 +46,7 @@ Vue.filter('genavatar', user => {
 Vue.component('bj-loading', LoadingComponent);
 Vue.component('tiny-mce', TinyMCE);
 Vue.component('datepicker', Datepicker);
+Vue.component('bj-i-loading', InternalLoadingComponent);
 
 new Vue({
     vuetify,
