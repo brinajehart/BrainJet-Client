@@ -46,6 +46,26 @@ export default new Vuex.Store({
                 } catch (err) { reject(err) }
             });
         },
+        googleAuth({ commit }, user) {
+            return new Promise((resolve, reject) => {
+                commit('auth_request')
+                axios({ url: `${URI}/auth/google`, data: user, method: 'POST' })
+                    .then(resp => {
+                        const { data } = resp;
+                        localStorage.setItem('token', data.token)
+                        localStorage.setItem('user', JSON.stringify(data.user))
+                        axios.defaults.headers.common['Authorization'] = `Token ${data.token}`
+                        commit('auth_success', data)
+                        resolve(resp)
+                    })
+                    .catch(err => {
+                        commit('auth_error')
+                        localStorage.removeItem('token');
+                        localStorage.removeItem('user');
+                        reject(err)
+                    })
+            })
+        },
         updateUser({ commit }, data) {
             return new Promise((resolve, reject) => {
                 axios({ url: `${URI}/auth/update`, data, method: 'POST' })
@@ -85,7 +105,7 @@ export default new Vuex.Store({
         },
         logout({ commit }) {
             return new Promise((resolve, reject) => {
-                axios({ url: `${URI}/auth/logout`,method: 'POST' })
+                axios({ url: `${URI}/auth/logout`, method: 'POST' })
                     .then(() => {
                         commit('auth_logout');
                         localStorage.removeItem('token');

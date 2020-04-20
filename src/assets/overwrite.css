@@ -64,7 +64,7 @@ header.v-sheet {
 }
 
 .loading-wrapper {
-  background-color: #fffff0a6;
+  background-color: #cfcfcf99;
   background-size: cover;
   position: fixed;
   top: 0;
@@ -233,4 +233,13 @@ header.v-sheet {
 
 .v-data-table__wrapper, .v-dialog {
     overflow: visible !important;
+}
+
+.google-login-btn {
+    transition: .3s all;
+}
+
+.google-login-btn:hover {
+    transform: scale(1.1,1.1);
+    cursor: pointer;
 }

@@ -89,8 +89,13 @@
       <v-toolbar-title style="margin-left: 5px">{{ $route.name }}</v-toolbar-title>
       <v-spacer></v-spacer>
       <div>
-        <v-avatar color="red" class="user-avatar" @click="changeNav('/profile')">
-          <span class="white--text headline">{{ user | genavatar }}</span>
+        <v-avatar
+          :color="profileImage ? 'transparent' : 'red'"
+          class="user-avatar"
+          @click="changeNav('/profile')"
+        >
+          <img v-if="profileImage" :src="profileImage" @error="profileImage = null" alt="Google" />
+          <span v-else class="white--text headline">{{ user | genavatar }}</span>
         </v-avatar>
         <span style="margin-left: 10px">{{ user | fullname }}</span>
       </div>
@@ -101,25 +106,33 @@
         <router-view />
       </v-container>
     </v-content>
+
+    <bj-loading v-if="loading" />
   </v-app>
 </template>
 
 <script>
+import md5 from "md5";
 export default {
   name: "App",
 
   data: () => ({
     user: null,
-    isLightTheme: false
+    isLightTheme: true,
+    loading: false,
+    isGoogleAuth: false,
+    profileImage: null
   }),
   created: function() {
     this.setCurrentUser();
     const theme = JSON.parse(this.$store.getters.theme);
     if (theme) this.isLightTheme = theme.light;
+    this.getAvatarUrl();
   },
   watch: {
     $route() {
       this.setCurrentUser();
+      this.getAvatarUrl();
     }
   },
   methods: {
@@ -128,6 +141,11 @@ export default {
         this.isLightTheme = res.light;
       });
     },
+    getAvatarUrl() {
+      const { email } = this.user;
+      const url = `http://www.gravatar.com/avatar/${md5(email)}.jpg?s=80&d=undefined`;
+      this.profileImage = url;
+    },
     setCurrentUser: function() {
       const currentUser = this.$store.getters.user;
       if (currentUser)
@@ -135,11 +153,21 @@ export default {
           typeof currentUser != typeof {}
             ? JSON.parse(currentUser)
             : currentUser;
+
+      this.isGoogleAuth = !!this.user.isGoogleAuth;
     },
-    logout: function() {
-      this.$store.dispatch("logout").then(() => {
-        this.$router.push("/login");
-      });
+    logout: async function() {
+      this.loading = true;
+      await this.$store
+        .dispatch("logout")
+        .then(() => {
+          this.$router.push("/login");
+          this.loading = false;
+        })
+        .catch(() => {
+          this.loading = false;
+          this.$swal.fire("Unknown error occured!", "", "error");
+        });
     },
     changeNav: function(uri) {
       if (this.$router.currentRoute.path == uri) return;

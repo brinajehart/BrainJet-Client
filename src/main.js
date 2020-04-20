@@ -12,6 +12,7 @@ import VTooltip from 'v-tooltip';
 import LoadingComponent from './helpers/Loading.vue';
 import TinyMCE from '@tinymce/tinymce-vue';
 import Datepicker from 'vuejs-datepicker';
+import GAuth from 'vue-google-oauth2'
 
 Vue.prototype.$http = Axios;
 const token = localStorage.getItem('token')
@@ -19,6 +20,13 @@ if (token) Vue.prototype.$http.defaults.headers.common['Authorization'] = `Token
 
 Vue.config.productionTip = false;
 
+
+const gauthOption = {
+    clientId: '563233502342-gbc17b6hsrd9vm2vgsfo037geg83v79c.apps.googleusercontent.com'
+};
+
+
+Vue.use(GAuth, gauthOption)
 Vue.use(VueRouter);
 Vue.use(VueMoment);
 Vue.use(VTooltip);
@@ -39,8 +47,8 @@ Vue.component('tiny-mce', TinyMCE);
 Vue.component('datepicker', Datepicker);
 
 new Vue({
-  vuetify,
-  router,
-  store,
-  render: h => h(App)
+    vuetify,
+    router,
+    store,
+    render: h => h(App)
 }).$mount('#app');

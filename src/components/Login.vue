@@ -29,6 +29,13 @@
               <v-card-actions>
                 <router-link class="form-link" to="/register">Don't have an account yet?</router-link>
                 <v-spacer />
+                <v-avatar
+                  @click="googleLogin()"
+                  class="google-login-btn mx-3"
+                  v-tooltip="'Sign in with google'"
+                >
+                  <img src="./../assets/google-logo.png" alt="Google" />
+                </v-avatar>
                 <v-btn color="indigo white-text" :disabled="!valid" @click="login()">Sign In</v-btn>
               </v-card-actions>
             </v-card>
@@ -59,14 +66,22 @@ export default {
       await this.$store
         .dispatch("login", { ...this.form })
         .then(() => this.$router.push("/tasks/list"))
-        .catch(err => {
+        .catch(() => {
           this.loading = false;
           this.$swal.fire("Failed to authenticate!", "", "error");
-          console.log(err);
         });
     },
-    returnHome() {
-      this.$router.push("/tasks/list");
+    googleLogin() {
+      this.$gAuth.signIn().then(async GoogleUser => {
+        this.loading = true;
+        await this.$store
+          .dispatch("googleAuth", { ...GoogleUser.getBasicProfile() })
+          .then(() => this.$router.push("/tasks/list"))
+          .catch(() => {
+            this.loading = false;
+            this.$swal.fire("Failed to authenticate!", "", "error");
+          });
+      });
     }
   }
 };
