@@ -1,120 +1,116 @@
 <template>
-  <v-container style="width: 100%">
-    <v-row style="margin-bottom: 20px">
-      <v-col cols="12" sm="3" style="margin-top: 10px">
-        <v-row>
+  <v-container style="width: 100%" class="pa-5">
+    <v-row>
+      <v-col cols="12" sm="3">
+        <v-row class="pa-2">
           <v-btn
             v-tooltip="'Add new task'"
-            @click="addTask()"
-            class="mx-4 ma-0 pa-0"
+            @click="$router.push('/tasks/create')"
+            class="mx-3 ma-0 pa-0"
             fab
             dark
-            color="teal darken-2"
+            color="teal darken-1"
           >
             <v-icon dark>mdi-plus</v-icon>
           </v-btn>
-          <v-row justify="center">
-            <v-dialog v-model="pdfDialog" width="30vw">
-              <template v-slot:activator="{ on }">
-                <v-btn
-                  v-tooltip="'Weekly Report Pdf'"
-                  v-on="on"
-                  class="mx-4 ma-0 pa-0"
-                  fab
-                  dark
-                  color="orange darken-3"
-                >
-                  <v-icon dark>mdi-file-pdf</v-icon>
-                </v-btn>
-              </template>
-              <v-card>
-                <v-card-title style="background: #303f9f; color: #eee">
-                  <span class="headline">Weekly Report</span>
-                </v-card-title>
-                <v-card-text>
-                  <v-container>
-                    <v-row>
-                      <v-col cols="12" sm="6" md="12">
-                        <v-alert type="warning">Pick the start of the week you wan't to export</v-alert>
-                      </v-col>
-                    </v-row>
-                    <v-row>
-                      <v-col cols="12" sm="6" md="12">
-                        <div>
-                          <label style="color: #555">Start Date</label>
-                          <datepicker
-                            format="D, MMMM dth yyyy"
-                            :value="new Date()"
-                            name="due_date"
-                            style="width: 100%"
-                          ></datepicker>
-                        </div>
-                      </v-col>
-                    </v-row>
-                  </v-container>
-                </v-card-text>
-                <v-divider></v-divider>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn color="error darken-1" text @click="pdfDialog = false">Cancel</v-btn>
-                  <v-btn color="blue darken-1" text @click="pdfDialog = false">Print</v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-          </v-row>
-          <v-row justify="center">
-            <v-dialog v-model="orderDialog" scrollable width="30vw">
-              <template v-slot:activator="{ on }">
-                <v-btn
-                  v-tooltip="'Order tasks by'"
-                  v-on="on"
-                  class="mx-4 ma-0 pa-0"
-                  fab
-                  dark
-                  color="orange darken-4"
-                >
-                  <v-icon dark>mdi-sort</v-icon>
-                </v-btn>
-              </template>
-              <v-card>
-                <v-card-title style="background: #303f9f; color: #eee">Change Order</v-card-title>
-                <v-divider></v-divider>
-                <v-card-text>
-                  <v-radio-group v-model="sortProperty" column>
-                    <v-radio
-                      v-for="(option, index) in orderOptions"
-                      :key="index"
-                      :label="option.label"
-                      :value="index"
-                    ></v-radio>
-                  </v-radio-group>
-                </v-card-text>
-              </v-card>
-            </v-dialog>
-          </v-row>
-          <v-row justify="center">
-            <v-btn
-              v-tooltip="'Open calendar view'"
-              v-on="on"
-              class="mx-4 ma-0 pa-0"
-              fab
-              @click="$router.push('/tasks/calendar')"
-              dark
-              color="info"
-            >
-              <v-icon dark>mdi-calendar</v-icon>
-            </v-btn>
-          </v-row>
+          <v-btn
+            v-tooltip="'Open calendar view'"
+            v-on="on"
+            class="mx-3 ma-0 pa-0"
+            fab
+            @click="$router.push('/tasks/calendar')"
+            dark
+            color="teal darken-2"
+          >
+            <v-icon dark>mdi-calendar</v-icon>
+          </v-btn>
+          <v-divider class="mx-3" vertical></v-divider>
+          <v-dialog v-model="pdfDialog" width="30vw">
+            <template v-slot:activator="{ on }">
+              <v-btn
+                v-tooltip="'Weekly Report Pdf'"
+                v-on="on"
+                class="mx-3 ma-0 pa-0"
+                fab
+                dark
+                color="orange darken-3"
+              >
+                <v-icon dark>mdi-file-pdf</v-icon>
+              </v-btn>
+            </template>
+            <v-card>
+              <v-card-title style="background: #303f9f; color: #eee">
+                <span class="headline">Weekly Report</span>
+              </v-card-title>
+              <v-card-text>
+                <v-container>
+                  <v-row>
+                    <v-col cols="12" sm="6" md="12">
+                      <v-alert type="warning">Pick the start of the week you wan't to export</v-alert>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col cols="12" sm="6" md="12">
+                      <div>
+                        <label style="color: #555">Start Date</label>
+                        <datepicker
+                          format="D, MMMM dth yyyy"
+                          :value="new Date()"
+                          name="due_date"
+                          style="width: 100%"
+                        ></datepicker>
+                      </div>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-card-text>
+              <v-divider></v-divider>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="error darken-1" text @click="pdfDialog = false">Cancel</v-btn>
+                <v-btn color="blue darken-1" text @click="pdfDialog = false">Print</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+          <v-divider class="mx-3" vertical></v-divider>
+          <v-dialog v-model="orderDialog" scrollable width="30vw">
+            <template v-slot:activator="{ on }">
+              <v-btn
+                v-tooltip="'Order tasks by'"
+                v-on="on"
+                class="mx-3 ma-0 pa-0"
+                fab
+                dark
+                color="orange darken-4"
+              >
+                <v-icon dark>mdi-sort</v-icon>
+              </v-btn>
+            </template>
+            <v-card>
+              <v-card-title style="background: #303f9f; color: #eee">Change Order</v-card-title>
+              <v-divider></v-divider>
+              <v-card-text>
+                <v-radio-group v-model="sortProperty" column>
+                  <v-radio
+                    v-for="(option, index) in orderOptions"
+                    :key="index"
+                    :label="option.label"
+                    :value="index"
+                  ></v-radio>
+                </v-radio-group>
+              </v-card-text>
+            </v-card>
+          </v-dialog>
         </v-row>
       </v-col>
       <v-col cols="12" sm="9" style="margin-top: 10px">
-        <v-text-field v-model="taskFilter" label="Filter" append-icon="mdi-filter"></v-text-field>
+        <v-text-field solo v-model="taskFilter" label="Filter" append-icon="mdi-filter"></v-text-field>
       </v-col>
     </v-row>
     <v-row>
       <v-card v-bind:class="{ 'task-list-card': !loading }" style="width: 100%">
         <div class="text-center pa-10" v-if="loading">
-          <v-progress-circular :size="70" :width="7" color="indigo" indeterminate></v-progress-circular>
+          <v-progress-circular :size="70" :width="5" color="indigo" indeterminate></v-progress-circular>
         </div>
         <v-list two-line subheader v-else-if="filteredTasks.length">
           <v-list-item class="tasks-list-item" v-for="(item, index) in filteredTasks" :key="index">
@@ -140,9 +136,10 @@
               <v-row>
                 <v-col>
                   <v-progress-circular
+                    v-tooltip="'Progress'"
                     :rotate="90"
-                    :size="80"
-                    :width="15"
+                    :size="60"
+                    :width="8"
                     :value="80"
                     :color="gColor(80)"
                   >{{ 80 }}</v-progress-circular>
@@ -245,9 +242,6 @@ export default {
       const response = await api.getMyTasks();
       this.tasks = response.data;
       this.loading = false;
-    },
-    addTask() {
-      this.$router.push("/tasks/create");
     },
     openEdit(id) {
       this.$router.push(`/tasks/edit/${id}`);

@@ -106,7 +106,7 @@
       <v-toolbar-title class="ma-2">{{ $route.name }}</v-toolbar-title>
       <v-divider class="mx-3" vertical></v-divider>
       <v-avatar v-tooltip="'Go back'">
-        <v-icon @click="$router.go(-1)">mdi-history</v-icon>
+        <v-icon @click="$router.go(-1)">mdi-undo</v-icon>
       </v-avatar>
       <v-divider class="mx-3" vertical></v-divider>
       <v-avatar v-tooltip="'Toggle theme'">

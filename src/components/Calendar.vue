@@ -1,46 +1,66 @@
 <template>
   <v-container style="width: 100%">
-    <v-row style="margin-bottom: 20px">
-      <v-col cols="12" sm="2" style="margin-top: 10px">
-        <v-row>
+    <v-row>
+      <v-col cols="12" sm="4" style="margin-top: 10px">
+        <v-row class="pa-2">
           <v-btn
             v-tooltip="'Add new task'"
             @click="$router.push('/tasks/create')"
             class="mx-4 ma-0 pa-0"
             fab
             dark
-            color="teal darken-2"
+            color="teal darken-1"
           >
             <v-icon dark>mdi-plus</v-icon>
           </v-btn>
-          <v-row justify="center">
-            <v-btn
-              v-tooltip="'Weekly Report Pdf'"
-              v-on="on"
-              class="mx-4 ma-0 pa-0"
-              fab
-              dark
-              color="orange darken-3"
-            >
-              <v-icon dark>mdi-file-pdf</v-icon>
-            </v-btn>
-          </v-row>
-          <v-row justify="center">
-            <v-btn
-              v-tooltip="'Open list view'"
-              v-on="on"
-              class="mx-4 ma-0 pa-0"
-              fab
-              @click="$router.push('/tasks/list')"
-              dark
-              color="info"
-            >
-              <v-icon dark>mdi-view-list</v-icon>
-            </v-btn>
-          </v-row>
+          <v-btn
+            v-tooltip="'Open list view'"
+            v-on="on"
+            class="mx-4 ma-0 pa-0"
+            fab
+            @click="$router.push('/tasks/list')"
+            dark
+            color="teal darken-2"
+          >
+            <v-icon dark>mdi-view-list</v-icon>
+          </v-btn>
+          <v-divider class="mx-3" vertical></v-divider>
+          <v-btn
+            v-tooltip="'Weekly Report Pdf'"
+            v-on="on"
+            class="mx-4 ma-0 pa-0"
+            fab
+            dark
+            color="orange darken-3"
+          >
+            <v-icon dark>mdi-file-pdf</v-icon>
+          </v-btn>
+          <v-divider class="mx-3" vertical></v-divider>
+          <v-btn
+            v-tooltip="'Go 1 Week Backward'"
+            v-on="on"
+            class="mx-4 ma-0 pa-0"
+            fab
+            @click="weekGo(-1)"
+            dark
+            color="orange darken-4"
+          >
+            <v-icon dark>mdi-arrow-left</v-icon>
+          </v-btn>
+          <v-btn
+            v-tooltip="'Go 1 Week Forward'"
+            v-on="on"
+            class="mx-4 ma-0 pa-0"
+            fab
+            @click="weekGo(1)"
+            dark
+            color="orange darken-4"
+          >
+            <v-icon dark>mdi-arrow-right</v-icon>
+          </v-btn>
         </v-row>
       </v-col>
-      <v-col cols="12" sm="10">
+      <v-col cols="12" sm="8">
         <small class="caption font-italic font-weight-medium">Change the date to see other tasks</small>
         <datepicker
           format="D, MMMM dth yyyy"
@@ -69,6 +89,7 @@
 </template>
 
 <script>
+import moment from "moment";
 export default {
   data: () => ({
     today: new Date(),
@@ -88,6 +109,13 @@ export default {
   mounted() {
     this.$refs.calendar.scrollToTime("08:00");
   },
-  methods: {}
+  methods: {
+    weekGo(direction) {
+      this.today =
+        direction === 1
+          ? moment(this.today).add(7, "days")
+          : moment(this.today).subtract(7, "days");
+    }
+  }
 };
 </script>
