@@ -4,7 +4,7 @@
       <v-col cols="12" sm="4" style="margin-top: 10px">
         <v-row class="pa-2">
           <v-btn
-            v-tooltip="'Add new task'"
+            v-tooltip="'Add New Task'"
             @click="$router.push('/tasks/create')"
             class="mx-4 ma-0 pa-0"
             fab
@@ -14,7 +14,7 @@
             <v-icon dark>mdi-plus</v-icon>
           </v-btn>
           <v-btn
-            v-tooltip="'Open list view'"
+            v-tooltip="'Open List View'"
             v-on="on"
             class="mx-4 ma-0 pa-0"
             fab
@@ -26,7 +26,7 @@
           </v-btn>
           <v-divider class="mx-3" vertical></v-divider>
           <v-btn
-            v-tooltip="'Weekly Report Pdf'"
+            v-tooltip="'Generate Weekly PDF Report'"
             v-on="on"
             class="mx-4 ma-0 pa-0"
             fab

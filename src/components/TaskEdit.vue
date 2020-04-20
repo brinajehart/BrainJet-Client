@@ -9,7 +9,7 @@
           <v-row>
             <v-col cols="12" md="6" style="margin-top:15px">
               <v-select
-                label="Owner"
+                label="Author"
                 :items="users"
                 item-value="id"
                 item-text="display_as"
@@ -19,7 +19,7 @@
             </v-col>
             <v-col cols="12" md="6" style="margin-top:15px">
               <v-text-field
-                :value="form.timestamp || new Date() | moment('dd, MMMM Do YYYY')"
+                :value="form.timestamp || new Date() | moment('ddd, MMMM Do YYYY')"
                 label="Date Created"
                 required
                 :readonly="true"

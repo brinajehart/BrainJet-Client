@@ -59,13 +59,16 @@
               <v-card-actions>
                 <router-link class="form-link" to="/login">Already have an account?</router-link>
                 <v-spacer />
-                <v-btn @click="register()" :disabled="!valid" color="indigo white-text">Sign Up</v-btn>
+                <v-btn @click="register()" color="indigo white-text">Sign Up</v-btn>
               </v-card-actions>
             </v-card>
           </v-form>
           <v-img src="./../assets/logo-dark.png" aspect-ratio="2.26"></v-img>
         </v-col>
       </v-row>
+    </div>
+    <div class="no-back-credits white-text pa-3">
+      <small>&copy; 2020 ( Brina Jehart & Janez Sedeljsak )</small>
     </div>
     <bj-loading v-if="loading" />
   </div>
@@ -90,6 +93,10 @@ export default {
   },
   methods: {
     register: async function() {
+      if (!this.valid) {
+        this.$swal.fire("Fill out the form!", "...", "warning");
+        return;
+      }
       this.loading = true;
       const response = await api.registerUser(this.form);
       if (response) {

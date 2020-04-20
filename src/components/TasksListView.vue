@@ -4,7 +4,7 @@
       <v-col cols="12" sm="3">
         <v-row class="pa-2">
           <v-btn
-            v-tooltip="'Add new task'"
+            v-tooltip="'Add New Task'"
             @click="$router.push('/tasks/create')"
             class="mx-3 ma-0 pa-0"
             fab
@@ -14,7 +14,7 @@
             <v-icon dark>mdi-plus</v-icon>
           </v-btn>
           <v-btn
-            v-tooltip="'Open calendar view'"
+            v-tooltip="'Open Calendar View'"
             v-on="on"
             class="mx-3 ma-0 pa-0"
             fab
@@ -28,7 +28,7 @@
           <v-dialog v-model="pdfDialog" width="30vw">
             <template v-slot:activator="{ on }">
               <v-btn
-                v-tooltip="'Weekly Report Pdf'"
+                v-tooltip="'Generate Weekly PDF Report'"
                 v-on="on"
                 class="mx-3 ma-0 pa-0"
                 fab
@@ -127,7 +127,7 @@
                 <br />
                 <span>
                   Due:
-                  <b>{{ item.due_date | moment("ddD, MMMM Do YYYY") }}</b>
+                  <b>{{ item.due_date | moment("ddd, MMMM Do YYYY") }}</b>
                 </span>
               </v-list-item-subtitle>
             </v-list-item-content>

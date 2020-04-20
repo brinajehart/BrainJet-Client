@@ -160,6 +160,8 @@ export default {
   watch: {
     $route() {
       this.setCurrentUser();
+    },
+    user() {
       this.getAvatarUrl();
     }
   },

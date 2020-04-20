@@ -36,13 +36,16 @@
                 >
                   <img src="./../assets/google-logo.png" alt="Google" />
                 </v-avatar>
-                <v-btn color="indigo white-text" :disabled="!valid" @click="login()">Sign In</v-btn>
+                <v-btn color="indigo white-text" @click="login()">Sign In</v-btn>
               </v-card-actions>
             </v-card>
           </v-form>
           <v-img src="./../assets/logo-dark.png" aspect-ratio="2.26"></v-img>
         </v-col>
       </v-row>
+    </div>
+    <div class="no-back-credits white-text pa-3">
+      <small>&copy; 2020 ( Brina Jehart & Janez Sedeljsak )</small>
     </div>
     <bj-loading v-if="loading" />
   </div>
@@ -62,6 +65,10 @@ export default {
   },
   methods: {
     async login() {
+      if (!this.valid) {
+        this.$swal.fire("Fill out the form!", "...", "warning");
+        return;
+      }
       this.loading = true;
       await this.$store
         .dispatch("login", { ...this.form })
