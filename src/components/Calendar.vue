@@ -41,20 +41,27 @@
         </v-row>
       </v-col>
       <v-col cols="12" sm="10">
-        <small class="caption font-italic font-weight-medium">(start of the week date)</small>
+        <small class="caption font-italic font-weight-medium">Change the date to see other tasks</small>
         <datepicker
           format="D, MMMM dth yyyy"
           class="border-all-sides"
           name="due_date"
           style="width: 100%"
-          v-model="startOfTheWeek"
+          v-model="today"
         ></datepicker>
       </v-col>
     </v-row>
     <v-row>
       <v-col>
         <v-sheet height="600">
-          <v-calendar color="primary" type="week"></v-calendar>
+          <v-calendar
+            ref="calendar"
+            :now="today | moment('YYYY-MM-DD')"
+            :value="today | moment('YYYY-MM-DD')"
+            :events="events"
+            color="primary"
+            type="week"
+          ></v-calendar>
         </v-sheet>
       </v-col>
     </v-row>
@@ -62,13 +69,24 @@
 </template>
 
 <script>
-import moment from 'moment';
 export default {
   data: () => ({
-    startOfTheWeek: null
+    today: new Date(),
+    events: [
+      {
+        name: "Weekly Meeting",
+        start: "2019-01-07 09:00",
+        end: "2019-01-07 10:00"
+      },
+      {
+        name: "Mash Potatoes",
+        start: "2019-01-09 12:30",
+        end: "2019-01-09 15:30"
+      }
+    ]
   }),
-  created: function() {
-    this.startOfTheWeek = moment().startOf("week");
+  mounted() {
+    this.$refs.calendar.scrollToTime("08:00");
   },
   methods: {}
 };
