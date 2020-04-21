@@ -123,11 +123,11 @@
             v-for="(item, index) in filteredTasks"
             :key="index"
           >
-            <v-list-item-avatar size="70">
+            <v-list-item-avatar size="70" class="mx-4">
               <img src="./../assets/task.jpg" alt="Task" />
             </v-list-item-avatar>
             <v-divider class="mx-4 ma-3" vertical></v-divider>
-            <v-list-item-content>
+            <v-list-item-content class="mx-4">
               <v-list-item-title v-text="item.title"></v-list-item-title>
               <v-list-item-subtitle>
                 <span>

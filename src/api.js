@@ -32,4 +32,10 @@ export default class api {
             axios.get(`${URI}/task/${task_id}`).then(resolve).catch(reject);
         });  
     }
+
+    static async getTaskDetails(task_id) {
+        return new Promise((resolve, reject) => {
+            axios.get(`${URI}/task/detail/${task_id}`).then(resolve).catch(reject);
+        });  
+    }
 }

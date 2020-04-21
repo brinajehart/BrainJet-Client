@@ -259,10 +259,6 @@ export default {
     };
   },
   created: async function() {
-    await this.setCurrentUser();
-    await this.fetchPermissions();
-    await this.fetchStatuses();
-    await this.fetchUsers();
     if (this.$router.currentRoute.name == "Create - Task") {
       this.form.user_id = await this.currentUser.id;
     } else {
@@ -271,6 +267,10 @@ export default {
         this.form = response.data;
       }
     }
+    await this.setCurrentUser();
+    await this.fetchPermissions();
+    await this.fetchStatuses();
+    await this.fetchUsers();
     this.loading = false;
   },
   computed: {
