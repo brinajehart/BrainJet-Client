@@ -109,6 +109,10 @@
         <v-icon @click="$router.go(-1)">mdi-undo</v-icon>
       </v-avatar>
       <v-divider class="mx-3" vertical></v-divider>
+      <v-avatar v-tooltip="'Go Forward'">
+        <v-icon @click="$router.go(1)">mdi-redo</v-icon>
+      </v-avatar>
+      <v-divider class="mx-3" vertical></v-divider>
       <v-avatar v-tooltip="'Toggle theme'">
         <v-icon @click="toggleTheme()">{{ !isLightTheme ? 'mdi-brightness-3' : 'mdi-brightness-7'}}</v-icon>
       </v-avatar>
