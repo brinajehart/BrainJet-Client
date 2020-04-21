@@ -17,7 +17,7 @@
         <v-list-item
           link
           @click="changeNav('/tasks/list')"
-          v-on:mousedown.middle="changeNav('/profile', true)"
+          v-on:mousedown.middle="changeNav('/tasks/list', true)"
         >
           <v-list-item-action>
             <v-icon>mdi-view-list</v-icon>
@@ -41,7 +41,7 @@
         <v-list-item
           link
           @click="changeNav('/tasks/create')"
-          v-on:mousedown.middle="changeNav('/profile', true)"
+          v-on:mousedown.middle="changeNav('/tasks/create', true)"
         >
           <v-list-item-action>
             <v-icon>mdi-plus-circle</v-icon>
@@ -53,7 +53,7 @@
         <v-list-item
           link
           @click="changeNav('/chats')"
-          v-on:mousedown.middle="changeNav('/profile', true)"
+          v-on:mousedown.middle="changeNav('/chats', true)"
         >
           <v-list-item-action>
             <v-icon>mdi-email</v-icon>
@@ -186,13 +186,14 @@ export default {
     },
     setCurrentUser: function() {
       const currentUser = this.$store.getters.user;
-      if (currentUser)
+      if (currentUser) {
         this.user =
           typeof currentUser != typeof {}
             ? JSON.parse(currentUser)
             : currentUser;
 
-      this.isGoogleAuth = !!this.user.isGoogleAuth;
+        this.isGoogleAuth = !!this.user.isGoogleAuth;
+      }
     },
     logout: async function() {
       this.loading = true;
