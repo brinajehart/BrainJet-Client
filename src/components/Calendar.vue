@@ -43,7 +43,7 @@
           <v-btn
             v-tooltip="'Go 1 Week Backward'"
             v-on="on"
-            class="mx-4 ma-0 pa-0"
+            class="mx-3 ma-0 pa-0"
             fab
             @click="weekGo(-1)"
             dark
@@ -54,7 +54,7 @@
           <v-btn
             v-tooltip="'Go 1 Week Forward'"
             v-on="on"
-            class="mx-4 ma-0 pa-0"
+            class="mx-3 ma-0 pa-0"
             fab
             @click="weekGo(1)"
             dark
@@ -65,7 +65,7 @@
           <v-btn
             v-tooltip="'Change Date To Today'"
             v-on="on"
-            class="mx-4 ma-0 pa-0"
+            class="mx-3 ma-0 pa-0"
             fab
             @click="changeToToday()"
             dark
