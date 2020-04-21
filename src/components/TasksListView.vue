@@ -1,12 +1,16 @@
 <template>
   <v-container style="width: 100%" class="pa-5">
-    <v-row>
-      <v-col cols="12" sm="3">
+    <v-row class="action-panel" style="margin-bottom: 10px">
+      <v-col cols="12" sm="5">
         <v-row class="pa-2">
+          <h2 style="margin: 10px 10px 0 15px;" class="display-1 font-weight-light">
+            <v-icon color="grey darken-3">mdi-wrench</v-icon>
+            <span>{{ " Actions: "}}</span>
+          </h2>
           <v-btn
             v-tooltip="'Add New Task'"
             @click="$router.push('/tasks/create')"
-            class="mx-3 ma-0 pa-0"
+            class="mx-4 ma-0 pa-0"
             fab
             dark
             color="teal darken-1"
@@ -16,7 +20,7 @@
           <v-btn
             v-tooltip="'Open Calendar View'"
             v-on="on"
-            class="mx-3 ma-0 pa-0"
+            class="mx-4 ma-0 pa-0"
             fab
             @click="$router.push('/tasks/calendar')"
             dark
@@ -24,16 +28,16 @@
           >
             <v-icon dark>mdi-calendar</v-icon>
           </v-btn>
-          <v-divider class="mx-3" vertical></v-divider>
+          <v-divider class="mx-4" vertical></v-divider>
           <v-dialog v-model="pdfDialog" width="30vw">
             <template v-slot:activator="{ on }">
               <v-btn
                 v-tooltip="'Generate Weekly PDF Report'"
                 v-on="on"
-                class="mx-3 ma-0 pa-0"
+                class="mx-4 ma-0 pa-0"
                 fab
                 dark
-                color="orange darken-3"
+                color="orange darken-1"
               >
                 <v-icon dark>mdi-file-pdf</v-icon>
               </v-btn>
@@ -72,13 +76,13 @@
               </v-card-actions>
             </v-card>
           </v-dialog>
-          <v-divider class="mx-3" vertical></v-divider>
+          <v-divider class="mx-4" vertical></v-divider>
           <v-dialog v-model="orderDialog" scrollable width="30vw">
             <template v-slot:activator="{ on }">
               <v-btn
                 v-tooltip="'Order tasks by'"
                 v-on="on"
-                class="mx-3 ma-0 pa-0"
+                class="mx-4 ma-0 pa-0"
                 fab
                 dark
                 color="orange darken-4"
@@ -103,8 +107,8 @@
           </v-dialog>
         </v-row>
       </v-col>
-      <v-col cols="12" sm="9" style="margin-top: 10px">
-        <v-text-field solo v-model="taskFilter" label="Filter" append-icon="mdi-filter"></v-text-field>
+      <v-col cols="12" sm="4" style="margin-top: 10px">
+        <v-text-field v-model="taskFilter" label="Filter" append-icon="mdi-filter"></v-text-field>
       </v-col>
     </v-row>
     <v-row>
@@ -158,7 +162,8 @@
             </v-list-item-action>
           </v-list-item>
         </v-list>
-        <v-alert class="ma-5" type="warning" v-else>No tasks were found!</v-alert>
+        <v-alert style="margin-top: 10px" type="warning" v-else-if="taskFilter">None of your tasks match the filter!</v-alert>
+        <v-alert style="margin-top: 10px" type="warning" v-else>It seems you don't have any tasks yet... You can add your first here!</v-alert>
       </v-card>
     </v-row>
   </v-container>

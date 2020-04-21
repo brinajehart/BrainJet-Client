@@ -11,7 +11,7 @@
           </div>
         </v-row>
         <v-row align="center" justify="center" class="text-center">
-          <h2 class="display-1 font-weight-light">{{ loading_text }}</h2>
+          <h2 style="color: #657" class="display-1 font-weight-light">{{ loading_text }}</h2>
         </v-row>
       </v-col>
     </v-row>

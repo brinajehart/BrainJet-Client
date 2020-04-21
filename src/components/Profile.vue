@@ -1,7 +1,7 @@
 <template>
   <div style="width: 100%">
     <v-form ref="form" v-model="valid">
-      <h2 class="display-1 font-weight-light">New Credentials</h2>
+      <h2 class="display-1 font-weight-light">{{ !loggedInThroughGoogle ? "New " : "Google " }}Credentials</h2>
       <v-card style="margin-bottom: 20px">
         <v-container>
           <v-row v-if="loggedInThroughGoogle">
