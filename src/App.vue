@@ -105,7 +105,7 @@
     <v-app-bar app color="indigo darken-2" dark>
       <v-toolbar-title class="ma-2">{{ $route.name }}</v-toolbar-title>
       <v-divider class="mx-3" vertical></v-divider>
-      <v-avatar v-tooltip="'Go back'">
+      <v-avatar v-tooltip="'Go Backwards'">
         <v-icon @click="$router.go(-1)">mdi-undo</v-icon>
       </v-avatar>
       <v-divider class="mx-3" vertical></v-divider>
@@ -208,7 +208,6 @@ export default {
         });
     },
     changeNav: function(uri, newWindow = false) {
-      debugger;
       window.event.preventDefault();
       if (newWindow) {
         window.open(uri, "_blank");

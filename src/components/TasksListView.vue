@@ -117,10 +117,16 @@
           <v-progress-circular :size="70" :width="5" color="indigo" indeterminate></v-progress-circular>
         </div>
         <v-list two-line subheader v-else-if="filteredTasks.length">
-          <v-list-item class="tasks-list-item" v-for="(item, index) in filteredTasks" :key="index">
+          <v-list-item
+            v-on:mousedown.middle="openView(item.id, true)"
+            class="tasks-list-item"
+            v-for="(item, index) in filteredTasks"
+            :key="index"
+          >
             <v-list-item-avatar size="70">
               <img src="./../assets/task.jpg" alt="Task" />
             </v-list-item-avatar>
+            <v-divider class="mx-4 ma-3" vertical></v-divider>
             <v-list-item-content>
               <v-list-item-title v-text="item.title"></v-list-item-title>
               <v-list-item-subtitle>
@@ -138,7 +144,7 @@
 
             <v-list-item-action>
               <v-row>
-                <v-col>
+                <v-col cols="12" sm="5">
                   <v-progress-circular
                     v-tooltip="'Progress'"
                     :rotate="90"
@@ -148,10 +154,16 @@
                     :color="gColor(80)"
                   >{{ 80 }}</v-progress-circular>
                 </v-col>
-                <v-col>
+                <v-col cols="12" sm="2">
+                  <v-divider vertical></v-divider>
+                </v-col>
+                <v-col cols="12" sm="5">
                   <v-row>
                     <v-btn v-tooltip="'Edit Task'" icon @click="openEdit(item.id)">
-                      <v-icon color="indigo lighten-1">mdi-tab</v-icon>
+                      <v-icon color="info darken-1">mdi-pen</v-icon>
+                    </v-btn>
+                    <v-btn v-tooltip="'View Task'" icon @click="openView(item.id)">
+                      <v-icon color="info darken-2">mdi-tab</v-icon>
                     </v-btn>
                     <v-btn v-tooltip="'Delete Task'" icon @click="deleteTask(item.id)">
                       <v-icon color="red lighten-1">mdi-delete</v-icon>
@@ -162,8 +174,16 @@
             </v-list-item-action>
           </v-list-item>
         </v-list>
-        <v-alert style="margin-top: 10px" type="warning" v-else-if="taskFilter">None of your tasks match the filter!</v-alert>
-        <v-alert style="margin-top: 10px" type="warning" v-else>It seems you don't have any tasks yet... You can add your first here!</v-alert>
+        <v-alert
+          style="margin-top: 10px"
+          type="warning"
+          v-else-if="taskFilter"
+        >None of your tasks match the filter!</v-alert>
+        <v-alert
+          style="margin-top: 10px"
+          type="warning"
+          v-else
+        >It seems you don't have any tasks yet... You can add your first here!</v-alert>
       </v-card>
     </v-row>
   </v-container>
@@ -250,6 +270,14 @@ export default {
     },
     openEdit(id) {
       this.$router.push(`/tasks/edit/${id}`);
+    },
+    openView(id, newWindow = false) {
+      window.event.preventDefault();
+      if (newWindow) {
+        window.open(`/tasks/view/${id}`, "_blank");
+        return;
+      }
+      this.$router.push(`/tasks/view/${id}`);
     },
     deleteTask(id) {
       console.log(id);

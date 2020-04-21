@@ -11,6 +11,7 @@ import TaskEdit from './components/TaskEdit.vue';
 import Chat from './components/Chat.vue';
 import MyChats from './components/MyChats.vue';
 import Profile from './components/Profile.vue';
+import TaskView from './components/TaskView.vue';
 
 Vue.use(Router);
 
@@ -38,6 +39,13 @@ let router = new Router({
             path: '/tasks/create',
             name: 'Create - Task',
             component: TaskEdit,
+            meta: {
+                requiresAuth: true
+            }
+        }, {
+            path: '/tasks/view/:id',
+            name: 'View - Task',
+            component: TaskView,
             meta: {
                 requiresAuth: true
             }
