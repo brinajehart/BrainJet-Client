@@ -24,18 +24,24 @@ export default class api {
     static async pickerRetriver(item_type) {
         return new Promise((resolve, reject) => {
             axios.get(`${URI}/picker/${item_type}`).then(resolve).catch(reject);
-        }); 
+        });
     }
 
     static async getTaskData(task_id) {
         return new Promise((resolve, reject) => {
             axios.get(`${URI}/task/${task_id}`).then(resolve).catch(reject);
-        });  
+        });
     }
 
     static async getTaskDetails(task_id) {
         return new Promise((resolve, reject) => {
             axios.get(`${URI}/task/detail/${task_id}`).then(resolve).catch(reject);
-        });  
+        });
+    }
+
+    static async getMyTasksForDateRange(data) {
+        return new Promise((resolve, reject) => {
+            axios.post(`${URI}/tasks/range`, data).then(resolve).catch(reject);
+        });
     }
 }

@@ -3,7 +3,7 @@
 }
 
 ::-webkit-scrollbar {
-  width: .5em;
+  width: 0.5em;
 }
 
 ::-webkit-scrollbar-track {
@@ -250,6 +250,10 @@ header.v-sheet {
   padding: 5px !important;
 }
 
+.vdp-datepicker input:focus {
+  outline: none !important;
+}
+
 .user-avatar:hover {
   cursor: pointer !important;
 }
@@ -299,12 +303,28 @@ header.v-sheet {
   font-size: 0.8em !important;
 }
 
-.desc-container,
-.bordered-table {
+.desc-container {
   width: 100%;
-  border: 1px solid #6161613d;
   padding: 10px !important;
   max-height: 300px;
   height: 100px;
   border-radius: 3px;
+}
+
+.no-hover table {
+  border: 1px solid #4444443a !important;
+  border-radius: 3px;
+}
+
+.no-hover * {
+  background-color: transparent !important;
+}
+
+.no-hover:hover *:not(thead) {
+  cursor: default;
+  background-color: transparent !important;
+}
+
+.no-hover * thead {
+  background-color: #dfe1f3 !important;
 }

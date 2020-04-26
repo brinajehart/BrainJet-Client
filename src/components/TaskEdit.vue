@@ -229,6 +229,19 @@
         </v-container>
       </v-card>
     </v-form>
+    <v-btn
+      fixed
+      dark
+      fab
+      bottom
+      right
+      color="pink"
+      v-tooltip="'Open Task View'"
+      v-if="$route.name != 'Create - Task' && !loading"
+      @click="$router.push(`/tasks/view/${$route.params.id}`)"
+    >
+      <v-icon>mdi-fullscreen</v-icon>
+    </v-btn>
     <bj-i-loading v-if="loading" loading_text="The form is loading..." />
   </div>
 </template>

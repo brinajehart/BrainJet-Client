@@ -82,37 +82,51 @@
       </v-row>
       <v-row>
         <v-card class="pa-5" style="width:100%">
-          <h3 class="pa-2 headline font-weight-light">
+          <h3 class="pa-2 body-1 font-weight-light">
             <v-icon color="grey darken-3" style="margin-right: 10px">mdi-label</v-icon>Title:
             <b>{{ task.title }}</b>
           </h3>
           <v-divider class="mx-4"></v-divider>
-          <h3 class="pa-2 headline font-weight-light">
+          <h3 class="pa-2 body-1 font-weight-light">
             <v-icon color="grey darken-3" style="margin-right: 10px">mdi-account</v-icon>Author:
             <b>{{ task.author }}</b>
           </h3>
           <v-divider class="mx-4"></v-divider>
-          <h3 class="pa-2 headline font-weight-light">
+          <h3 class="pa-2 body-1 font-weight-light">
             <v-icon color="grey darken-3" style="margin-right: 10px">mdi-calendar-today</v-icon>Date Created:
             <b>{{ task.timestamp | moment('ddd, MMMM Do YYYY') }}</b>
           </h3>
           <v-divider class="mx-4"></v-divider>
-          <h3 class="pa-2 headline font-weight-light">
+          <h3 class="pa-2 body-1 font-weight-light">
             <v-icon color="grey darken-3" style="margin-right: 10px">mdi-calendar</v-icon>Due Date:
             <b>{{ task.due_date | moment('ddd, MMMM Do YYYY') }}</b>
           </h3>
-          <v-divider class="mx-4"></v-divider>
-          <h3 class="pa-2 headline font-weight-light">
-            <v-icon color="grey darken-3" style="margin-right: 10px">mdi-text</v-icon>Description:
-            <div class="desc-container body-1" v-html="task.description"></div>
-          </h3>
+          <div v-if="task.description">
+            <v-divider class="mx-4"></v-divider>
+            <h3 class="pa-2 body-1 font-weight-light">
+              <v-dialog v-model="descDialog" width="50vw">
+                <template v-slot:activator="{ on }">
+                  <v-btn color="info darken-2" small dark v-on="on">View Description</v-btn>
+                </template>
+                <v-card>
+                  <v-card-title class="headline indigo white-text" primary-title>{{ task.title }} - Description</v-card-title>
+                  <v-card-text class="pa-5" style="min-height: 150px" v-html="task.description"></v-card-text>
+                  <v-divider></v-divider>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="primary" text @click="descDialog = false">Close</v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+            </h3>
+          </div>
         </v-card>
-        <v-card class="pa-5" style="width:100%; margin-top: 15px">
-          <h2 style="margin: 10px 10px 0 0;" class="pa-2 headline font-weight-light">
+        <v-card v-if="task.collaborators.length" class="pa-5" style="width:100%; margin-top: 15px">
+          <h2 style="margin: 10px 10px 0 0;" class="pa-2 body-1 font-weight-light">
             <v-icon color="grey darken-3">mdi-contacts</v-icon>
             <span>{{ " Collaborators: "}}</span>
           </h2>
-          <v-simple-table fixed-header max-height="300px">
+          <v-simple-table fixed-header max-height="300px" class="no-hover">
             <template v-slot:default>
               <thead>
                 <tr>
@@ -129,7 +143,7 @@
             </template>
           </v-simple-table>
         </v-card>
-        <v-card class="pa-5" style="width:100%; margin-top: 15px">
+        <v-card v-if="task.subtasks.length" class="pa-5" style="width:100%; margin-top: 15px">
           <h2 style="margin: 10px 10px 0 0;" class="pa-2 headline font-weight-light">
             <v-icon color="grey darken-3">mdi-tab</v-icon>
             <span>{{ " Subtasks: "}}</span>
@@ -137,24 +151,24 @@
           <v-expansion-panels class="pa-2">
             <v-expansion-panel v-for="(subtask,i) in task.subtasks" :key="i">
               <v-expansion-panel-header>
-                <h3 class="headline font-weight-light">
-                  <v-icon color="grey darken-3" style="margin-right: 10px">mdi-label</v-icon>Title:
+                <h3 class="body-1 font-weight-light">
+                  <v-icon color="grey darken-3" style="margin-right: 10px">mdi-label</v-icon>
                   <b>{{ subtask.title }}</b>
                 </h3>
               </v-expansion-panel-header>
               <v-expansion-panel-content>
                 <v-divider class="mx-4"></v-divider>
-                <h3 class="mx-4 pa-2 subtitle-1 font-weight-light">
+                <h3 class="mx-4 pa-2 body-2 font-weight-light">
                   <v-icon color="grey darken-3" style="margin-right: 10px">mdi-wrench</v-icon>Status:
                   <b>{{ subtask.status }}</b>
                 </h3>
                 <v-divider class="mx-4"></v-divider>
-                <h3 class="mx-4 pa-2 subtitle-1 font-weight-light">
+                <h3 class="mx-4 pa-2 body-2 font-weight-light">
                   <v-icon color="grey darken-3" style="margin-right: 10px">mdi-account</v-icon>Worker:
                   <b>{{ subtask.worker }}</b>
                 </h3>
                 <v-divider class="mx-4"></v-divider>
-                <h3 class="mx-4 pa-2 subtitle-1 font-weight-light">
+                <h3 class="mx-4 pa-2 body-2 font-weight-light">
                   <v-icon color="grey darken-3" style="margin-right: 10px">mdi-calendar</v-icon>Done Date:
                   <b
                     v-if="subtask.done_date"
@@ -175,7 +189,8 @@ import api from "./../api";
 export default {
   data: () => ({
     task: {},
-    loading: false
+    loading: false,
+    descDialog: false
   }),
   created: function() {
     this.loading = true;
