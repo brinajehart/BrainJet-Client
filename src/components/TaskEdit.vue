@@ -66,6 +66,19 @@
             </v-col>
           </v-row>
           <v-row>
+            <v-col cols="12" md="12">
+              <h3 class="pa-2 body-1 font-weight-light">
+                <v-icon color="grey darken-3" style="margin-right: 10px">mdi-wrench</v-icon>Progress:
+                <b>{{ progress }}%</b>
+                <v-progress-linear
+                  v-model="progress"
+                  style="margin-top: 15px"
+                  :color="gColor(progress)"
+                ></v-progress-linear>
+              </h3>
+            </v-col>
+          </v-row>
+          <v-row>
             <v-btn
               class="ma-4"
               color="primary"
@@ -287,6 +300,17 @@ export default {
     this.loading = false;
   },
   computed: {
+    progress() {
+      if (this.form) {
+        if (this.form.subtasks.length) {
+          const completedCount = this.form.subtasks.filter(
+            item => item.status_id == 3
+          ).length;
+          return (completedCount / this.form.subtasks.length) * 100;
+        }
+      }
+      return 0;
+    },
     doneByUserOptions() {
       const { users, form } = this;
       const collaboratorIds = form.collaborators.map(colab => colab.user_id);
@@ -353,6 +377,12 @@ export default {
           return;
         }
       });
+    },
+    gColor(progress) {
+      if (progress < 40) return "red";
+      else if (progress < 70) return "primary";
+      else if (progress < 90) return "teal";
+      else return "green";
     },
     addSubtask() {
       this.form.subtasks.push({ status_id: this.statuses[0].id });

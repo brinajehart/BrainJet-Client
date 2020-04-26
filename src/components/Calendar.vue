@@ -90,7 +90,6 @@
       <v-row>
         <v-sheet v-if="!loading" height="600" width="100%">
           <v-calendar
-            ref="calendar"
             :now="today | moment('YYYY-MM-DD')"
             :value="today | moment('YYYY-MM-DD')"
             :events="events"
@@ -109,21 +108,40 @@
               <v-toolbar color="indigo" dark dense height="40px">
                 <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
                 <v-spacer></v-spacer>
-                <v-btn icon>
-                  <v-icon>mdi-magnify</v-icon>
+                <v-btn v-tooltip="'Edit Task'" icon @click="openEdit(selectedEvent.id)">
+                  <v-icon color="info lighten-2">mdi-pen</v-icon>
+                </v-btn>
+                <v-btn v-tooltip="'View Task'" icon @click="openView(selectedEvent.id)">
+                  <v-icon color="info lighten-2">mdi-tab</v-icon>
+                </v-btn>
+                <v-btn v-tooltip="'Delete Task'" icon @click="deleteTask(selectedEvent.id)">
+                  <v-icon color="red lighten-1">mdi-delete</v-icon>
                 </v-btn>
               </v-toolbar>
               <v-card-text>
-                <span v-html="selectedEvent.details"></span>
+                <h3 class="pa-2 body-1 font-weight-light">
+                  <v-icon color="grey darken-3" style="margin-right: 10px">mdi-account</v-icon>Author:
+                  <b>{{ selectedEvent.author }}</b>
+                </h3>
+                <h3 class="pa-2 body-1 font-weight-light">
+                  <v-icon color="grey darken-3" style="margin-right: 10px">mdi-calendar-range</v-icon>Time Complexity:
+                  <b>{{ selectedEvent.time_complexity }} days</b>
+                </h3>
+                <h3 class="pa-2 body-1 font-weight-light">
+                  <v-icon color="grey darken-3" style="margin-right: 10px">mdi-wrench</v-icon>Progress:
+                  <b>{{ selectedEvent.progress }}%</b>
+                  <v-progress-linear
+                    v-model="selectedEvent.progress"
+                    style="margin-top: 15px"
+                    :color="gColor(selectedEvent.progress)"
+                  ></v-progress-linear>
+                </h3>
               </v-card-text>
-              <v-card-actions>
-                <v-btn text color="secondary" @click="selectedOpen = false">Cancel</v-btn>
-              </v-card-actions>
             </v-card>
           </v-menu>
         </v-sheet>
         <div width="100%" class="text-center pa-10" v-if="loading">
-          <v-progress-circular :size="70" :width="5" color="indigo" indeterminate></v-progress-circular>
+          <v-progress-circular :size="70" :width="8" color="indigo" indeterminate></v-progress-circular>
         </div>
       </v-row>
     </v-container>
@@ -166,11 +184,48 @@ export default {
       };
       const response = await api.getMyTasksForDateRange(data);
       if (response.status == 200) {
-        debugger;
         this.events = response.data;
-        this.loading = false;
       }
       this.loading = false;
+    },
+    gColor(progress) {
+      if (progress < 40) return "red";
+      else if (progress < 70) return "primary";
+      else if (progress < 90) return "teal";
+      else return "green";
+    },
+    openEdit(id) {
+      this.$router.push(`/tasks/edit/${id}`);
+    },
+    openView(id, newWindow = false) {
+      window.event.preventDefault();
+      if (newWindow) {
+        window.open(`/tasks/view/${id}`, "_blank");
+        return;
+      }
+      this.$router.push(`/tasks/view/${id}`);
+    },
+    deleteTask(id) {
+      console.log(id);
+      this.$swal
+        .fire({
+          title: "Are you sure?",
+          text: "You won't be able to revert this!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes, delete it!"
+        })
+        .then(result => {
+          if (result.value) {
+            this.$swal.fire(
+              "Deleted!",
+              "The task has been deleted.",
+              "success"
+            );
+          }
+        });
     },
     showEvent({ nativeEvent, event }) {
       const open = () => {

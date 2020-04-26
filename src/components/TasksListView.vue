@@ -150,9 +150,9 @@
                     :rotate="90"
                     :size="60"
                     :width="8"
-                    :value="80"
-                    :color="gColor(80)"
-                  >{{ 80 }}</v-progress-circular>
+                    :value="item.progress"
+                    :color="gColor(item.progress)"
+                  >{{ item.progress }}</v-progress-circular>
                 </v-col>
                 <v-col cols="12" sm="2">
                   <v-divider vertical></v-divider>
@@ -192,6 +192,7 @@
 <script>
 import api from "./../api";
 import { URI } from "./../uri";
+import moment from "moment";
 
 export default {
   data: () => ({
@@ -244,13 +245,18 @@ export default {
         item.title.toLowerCase().includes(taskFilter.toLowerCase())
       );
 
-      if (sortProperty) {
+      if (sortProperty || sortProperty == 0) {
         const order = orderOptions[sortProperty];
         const { value } = order;
         const asc_desc = order.asc === true ? [-1, 1] : [1, -1];
-        return filtered.sort((a, b) =>
-          a[value] < b[value] ? asc_desc[0] : asc_desc[1]
-        );
+        return filtered.sort((a, b) => {
+          if (value == "due_date") {
+            return moment(a[value]).diff(b[value], "minutes") < 0
+              ? asc_desc[0]
+              : asc_desc[1];
+          }
+          return a[value] < b[value] ? asc_desc[0] : asc_desc[1];
+        });
       }
 
       return filtered;

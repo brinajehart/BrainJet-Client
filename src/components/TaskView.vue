@@ -101,6 +101,19 @@
             <v-icon color="grey darken-3" style="margin-right: 10px">mdi-calendar</v-icon>Due Date:
             <b>{{ task.due_date | moment('ddd, MMMM Do YYYY') }}</b>
           </h3>
+          <h3 class="pa-2 body-1 font-weight-light">
+            <v-icon color="grey darken-3" style="margin-right: 10px">mdi-calendar-range</v-icon>Time Complexity:
+            <b>{{ task.time_complexity }} days</b>
+          </h3>
+          <h3 class="pa-2 body-1 font-weight-light">
+            <v-icon color="grey darken-3" style="margin-right: 10px">mdi-wrench</v-icon>Progress:
+            <b>{{ progress }}%</b>
+            <v-progress-linear
+              v-model="progress"
+              style="margin-top: 15px"
+              :color="gColor(progress)"
+            ></v-progress-linear>
+          </h3>
           <div v-if="task.description">
             <v-divider class="mx-4"></v-divider>
             <h3 class="pa-2 body-1 font-weight-light">
@@ -109,7 +122,10 @@
                   <v-btn color="info darken-2" small dark v-on="on">View Description</v-btn>
                 </template>
                 <v-card>
-                  <v-card-title class="headline indigo white-text" primary-title>{{ task.title }} - Description</v-card-title>
+                  <v-card-title
+                    class="headline indigo white-text"
+                    primary-title
+                  >{{ task.title }} - Description</v-card-title>
                   <v-card-text class="pa-5" style="min-height: 150px" v-html="task.description"></v-card-text>
                   <v-divider></v-divider>
                   <v-card-actions>
@@ -189,20 +205,41 @@ import api from "./../api";
 export default {
   data: () => ({
     task: {},
-    loading: false,
-    descDialog: false
+    loading: true,
+    descDialog: false,
+    pdfDialog: false
   }),
   created: function() {
-    this.loading = true;
     this.fetchTaskDetails();
+  },
+  computed: {
+    progress() {
+      if (this.task) {
+        if (this.task.subtasks.length) {
+          const completedCount = this.task.subtasks.filter(
+            item => item.status_id == 3
+          ).length;
+          return (completedCount / this.task.subtasks.length) * 100;
+        }
+      }
+      return 0;
+    }
   },
   methods: {
     async fetchTaskDetails() {
       const response = await api.getTaskDetails(this.$route.params.id);
       if (response.status == 200) {
         this.task = response.data;
+        this.loading = false;
+      } else {
+        this.loading = false;
       }
-      this.loading = false;
+    },
+    gColor(progress) {
+      if (progress < 40) return "red";
+      else if (progress < 70) return "primary";
+      else if (progress < 90) return "teal";
+      else return "green";
     }
   }
 };
