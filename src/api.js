@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { URI } from './uri';
+import { v4 as uuidv4 } from 'uuid';
 
 axios.interceptors.response.use(response => {
     return response;
@@ -42,6 +43,38 @@ export default class api {
     static async getMyTasksForDateRange(data) {
         return new Promise((resolve, reject) => {
             axios.post(`${URI}/tasks/range`, data).then(resolve).catch(reject);
+        });
+    }
+
+    static async generateWeeklyReport(data) {
+        axios({
+            url: `${URI}/render/pdf/weekly?start=${data.start}&end=${data.end}`,
+            method: 'GET',
+            responseType: 'blob', // important
+        }).then((response) => {
+            const randomUUID = uuidv4();
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', `brainjet-weekly-${randomUUID}.pdf`);
+            document.body.appendChild(link);
+            link.click();
+        });
+    }
+
+    static async generateTaskReport(data) {
+        axios({
+            url: `${URI}/render/pdf/task?task_id=${data.id}`,
+            method: 'GET',
+            responseType: 'blob', // important
+        }).then((response) => {
+            const randomUUID = uuidv4();
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', `brainjet-task-${randomUUID}.pdf`);
+            document.body.appendChild(link);
+            link.click();
         });
     }
 }

@@ -258,6 +258,14 @@ header.v-sheet {
   cursor: pointer !important;
 }
 
+.v-event-timed {
+  min-height: 50px !important;
+}
+
+.v-event-timed .pl-1 {
+    padding: 10px !important;
+}
+
 .v-data-table__wrapper,
 .v-dialog {
   overflow: visible !important;

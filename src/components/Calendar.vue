@@ -32,11 +32,11 @@
             <v-divider class="mx-4" vertical></v-divider>
             <v-btn
               v-tooltip="'Generate Weekly PDF Report'"
-              v-on="on"
               class="mx-4 ma-0 pa-0"
               fab
               dark
               color="orange darken-1"
+              @click="generateWeeklyReport()"
             >
               <v-icon dark>mdi-file-pdf</v-icon>
             </v-btn>
@@ -196,6 +196,22 @@ export default {
     },
     openEdit(id) {
       this.$router.push(`/tasks/edit/${id}`);
+    },
+    async generateWeeklyReport() {
+      this.loading = await true;
+      const data = {
+        // 09/19/18-13:55:26 format of date for server
+        start: moment(this.today)
+          .startOf("week")
+          .format("DD/MM/YY"),
+        end: moment(this.today)
+          .endOf("week")
+          .add(1, "days")
+          .format("DD/MM/YY")
+      };
+
+      await api.generateWeeklyReport(data);
+      this.loading = false;
     },
     openView(id, newWindow = false) {
       window.event.preventDefault();
