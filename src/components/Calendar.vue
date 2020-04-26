@@ -9,7 +9,7 @@
               <span>{{ " Actions: "}}</span>
             </h2>
             <v-btn
-              v-tooltip="'Add New Task'"
+              v-tooltip="'Add New Assignment'"
               @click="$router.push('/tasks/create')"
               class="mx-4 ma-0 pa-0"
               fab
@@ -93,7 +93,7 @@
             :now="today | moment('YYYY-MM-DD')"
             :value="today | moment('YYYY-MM-DD')"
             :events="events"
-            event-color="orange darken-4"
+            :event-color="getEventColor"
             @click:event="showEvent"
             color="primary"
             type="week"
@@ -104,20 +104,24 @@
             :activator="selectedElement"
             offset-x
           >
-            <v-card color="grey lighten-4" min-width="400px" flat>
+            <v-card v-if="selectedEvent" color="grey lighten-4" min-width="400px" flat>
               <v-toolbar color="indigo" dark dense height="40px">
                 <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
                 <v-spacer></v-spacer>
-                <v-btn v-tooltip="'Edit Task'" icon @click="openEdit(selectedEvent.id)">
+                <v-btn v-tooltip="'Edit Assignment'" icon @click="openEdit(selectedEvent.id)">
                   <v-icon color="info lighten-2">mdi-pen</v-icon>
                 </v-btn>
-                <v-btn v-tooltip="'Generate Task Report'" icon @click="generateTaskPdf(selectedEvent.id)">
+                <v-btn
+                  v-tooltip="'Generate Assignment Report'"
+                  icon
+                  @click="generateTaskPdf(selectedEvent.id)"
+                >
                   <v-icon color="info lighten-2">mdi-file-pdf</v-icon>
                 </v-btn>
-                <v-btn v-tooltip="'View Task'" icon @click="openView(selectedEvent.id)">
+                <v-btn v-tooltip="'View Assignment'" icon @click="openView(selectedEvent.id)">
                   <v-icon color="info lighten-2">mdi-tab</v-icon>
                 </v-btn>
-                <v-btn v-tooltip="'Delete Task'" icon @click="deleteTask(selectedEvent.id)">
+                <v-btn v-tooltip="'Delete Assignment'" icon @click="deleteTask(selectedEvent.id)">
                   <v-icon color="red lighten-1">mdi-delete</v-icon>
                 </v-btn>
               </v-toolbar>
@@ -127,10 +131,11 @@
                   <b>{{ selectedEvent.author }}</b>
                 </h3>
                 <h3 class="pa-2 body-1 font-weight-light">
-                  <v-icon color="grey darken-3" style="margin-right: 10px">mdi-calendar-range</v-icon>Time Complexity:
-                  <b>{{ selectedEvent.time_complexity }} days</b>
+                  <v-icon color="grey darken-3" style="margin-right: 10px">mdi-calendar-range</v-icon>
+                  {{ !selectedEvent.is_event ? "Time Complexity" : "Duration" }}
+                  <b>{{ selectedEvent.time_complexity }} {{ !selectedEvent.is_event ? "days" : "hours"}}</b>
                 </h3>
-                <h3 class="pa-2 body-1 font-weight-light">
+                <h3 v-if="!selectedEvent.is_event" class="pa-2 body-1 font-weight-light">
                   <v-icon color="grey darken-3" style="margin-right: 10px">mdi-wrench</v-icon>Progress:
                   <b>{{ selectedEvent.progress }}%</b>
                   <v-progress-linear
@@ -176,7 +181,6 @@ export default {
   methods: {
     async fetchTasks() {
       const data = {
-        // 09/19/18-13:55:26 format of date for server
         start: moment(this.today)
           .startOf("week")
           .format("DD/MM/YY"),
@@ -187,9 +191,25 @@ export default {
       };
       const response = await api.getMyTasksForDateRange(data);
       if (response.status == 200) {
-        this.events = response.data;
+        this.events = response.data.map(slot => {
+          if (slot.is_event) {
+            const eventEnd = moment(slot.start)
+              .add(slot.time_complexity, "hours")
+              .format("YYYY-MM-DD HH:mm");
+            return { ...slot, end: eventEnd };
+          } else {
+            return slot;
+          }
+        });
       }
       this.loading = false;
+    },
+    getEventColor(event) {
+        if (event.is_event) {
+            return 'green darken-2';
+        } else {
+            return 'orange darken-3';
+        }
     },
     gColor(progress) {
       if (progress < 40) return "red";
@@ -240,7 +260,7 @@ export default {
           if (result.value) {
             this.$swal.fire(
               "Deleted!",
-              "The task has been deleted.",
+              "The Assignment has been deleted.",
               "success"
             );
           }

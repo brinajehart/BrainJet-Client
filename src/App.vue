@@ -16,18 +16,6 @@
         <v-divider style="margin-top: 10px"></v-divider>
         <v-list-item
           link
-          @click="changeNav('/tasks/list')"
-          v-on:mousedown.middle="changeNav('/tasks/list', true)"
-        >
-          <v-list-item-action>
-            <v-icon>mdi-view-list</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>Tasks - List</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item
-          link
           @click="changeNav('/tasks/calendar')"
           v-on:mousedown.middle="changeNav('/tasks/calendar', true)"
         >
@@ -35,7 +23,19 @@
             <v-icon>mdi-calendar-today</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>Tasks - Calendar</v-list-item-title>
+            <v-list-item-title>Assignment - Calendar</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item
+          link
+          @click="changeNav('/tasks/list')"
+          v-on:mousedown.middle="changeNav('/tasks/list', true)"
+        >
+          <v-list-item-action>
+            <v-icon>mdi-view-list</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Assignment - List</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-list-item
@@ -47,7 +47,7 @@
             <v-icon>mdi-plus-circle</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>Add Task</v-list-item-title>
+            <v-list-item-title>Add Assignment</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-list-item

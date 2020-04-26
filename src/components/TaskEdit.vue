@@ -31,10 +31,14 @@
               <v-text-field v-model="form.title" label="Title*" :rules="rules" required></v-text-field>
             </v-col>
             <v-col cols="12" md="4" style="margin-top:15px">
-              <v-text-field v-model="form.time_complexity" label="Time Complexity (days)" required></v-text-field>
+              <v-text-field
+                v-model="form.time_complexity"
+                :label="`${form.is_event ? 'Event Duration (hours)' : 'Time Complexity (days)'}`"
+                required
+              ></v-text-field>
             </v-col>
             <v-col cols="12" md="4">
-              <small style="color: #555">Due Date</small>
+              <small style="color: #555">{{ form.is_event ? "Event Date" : "Due Date" }}</small>
               <datepicker
                 format="D, MMMM dth yyyy"
                 :rules="[v => !!v || 'Item is required']"
@@ -66,6 +70,14 @@
             </v-col>
           </v-row>
           <v-row>
+            <v-col>
+              <v-switch
+                v-model="form.is_event"
+                :label="`Type: ${form.is_event ? 'Event' : 'Task'}`"
+              ></v-switch>
+            </v-col>
+          </v-row>
+          <v-row v-if="!form.is_event">
             <v-col cols="12" md="12">
               <h3 class="pa-2 body-1 font-weight-light">
                 <v-icon color="grey darken-3" style="margin-right: 10px">mdi-wrench</v-icon>Progress:
@@ -90,7 +102,10 @@
         </v-container>
       </v-card>
       <v-row>
-        <h2 style="margin: 0 5px 0 15px;" class="display-1 font-weight-light">Subtasks</h2>
+        <h2
+          style="margin: 0 5px 0 15px;"
+          class="display-1 font-weight-light"
+        >{{ form.is_event ? "Schedule Slots": "Subtasks" }}</h2>
         <v-btn large v-tooltip="'Add Subtask'" color="primary" icon @click="addSubtask()">
           <v-icon color="teal">mdi-plus-circle</v-icon>
         </v-btn>
@@ -104,9 +119,10 @@
                   <thead>
                     <tr>
                       <th class="text-left">Title</th>
-                      <th class="text-left">Status</th>
+                      <th v-if="!form.is_event" class="text-left">Status</th>
+                      <th v-if="form.is_event" class="text-left">Description</th>
                       <th class="text-left">Done By</th>
-                      <th class="text-left">Done Date</th>
+                      <th v-if="!form.is_event" class="text-left">Done Date</th>
                       <th class="text-right">Actions</th>
                     </tr>
                   </thead>
@@ -121,7 +137,14 @@
                           required
                         ></v-text-field>
                       </td>
-                      <td>
+                      <td v-if="form.is_event">
+                        <v-text-field
+                          style="margin-top:15px"
+                          v-model="item.description"
+                          label="Description"
+                        ></v-text-field>
+                      </td>
+                      <td v-if="!form.is_event">
                         <v-select
                           label="Status"
                           style="margin-top:15px"
@@ -144,7 +167,7 @@
                           :clearable="true"
                         ></v-autocomplete>
                       </td>
-                      <td>
+                      <td v-if="!form.is_event">
                         <datepicker
                           format="D, MMMM dth yyyy"
                           v-model="item.done_date"
@@ -269,6 +292,7 @@ export default {
         time_complexity: "",
         description: "",
         due_date: new Date(),
+        is_event: false,
         subtasks: [],
         collaborators: []
       },

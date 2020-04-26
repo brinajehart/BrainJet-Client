@@ -8,7 +8,7 @@
             <span>{{ " Actions: "}}</span>
           </h2>
           <v-btn
-            v-tooltip="'Add New Task'"
+            v-tooltip="'Add New Assignment'"
             @click="$router.push('/tasks/create')"
             class="mx-4 ma-0 pa-0"
             fab
@@ -80,7 +80,7 @@
           <v-dialog v-model="orderDialog" scrollable width="30vw">
             <template v-slot:activator="{ on }">
               <v-btn
-                v-tooltip="'Order tasks by'"
+                v-tooltip="'Order Assignments by'"
                 v-on="on"
                 class="mx-4 ma-0 pa-0"
                 fab
@@ -119,7 +119,7 @@
         <v-list two-line subheader v-else-if="filteredTasks.length">
           <v-list-item
             v-on:mousedown.middle="openView(item.id, true)"
-            class="tasks-list-item"
+            :class="{ 'events-list-item': item.is_event, 'tasks-list-item': !item.is_event }"
             v-for="(item, index) in filteredTasks"
             :key="index"
           >
@@ -146,6 +146,7 @@
               <v-row>
                 <v-col cols="12" sm="4">
                   <v-progress-circular
+                    v-if="!item.is_event"
                     v-tooltip="'Progress'"
                     :rotate="90"
                     :size="60"
@@ -159,20 +160,20 @@
                 </v-col>
                 <v-col cols="12" sm="6">
                   <v-row>
-                    <v-btn v-tooltip="'Edit Task'" icon @click="openEdit(item.id)">
+                    <v-btn v-tooltip="'Edit Assignment'" icon @click="openEdit(item.id)">
                       <v-icon color="info darken-2">mdi-pen</v-icon>
                     </v-btn>
-                    <v-btn v-tooltip="'View Task'" icon @click="openView(item.id)">
+                    <v-btn v-tooltip="'View Assignment'" icon @click="openView(item.id)">
                       <v-icon color="info darken-2">mdi-tab</v-icon>
                     </v-btn>
                     <v-btn
-                      v-tooltip="'Generate Task Report'"
+                      v-tooltip="'Generate Assignment Report'"
                       icon
                       @click="generateTaskPdf(item.id)"
                     >
                       <v-icon color="info darken-2">mdi-file-pdf</v-icon>
                     </v-btn>
-                    <v-btn v-tooltip="'Delete Task'" icon @click="deleteTask(item.id)">
+                    <v-btn v-tooltip="'Delete Assignment'" icon @click="deleteTask(item.id)">
                       <v-icon color="red lighten-1">mdi-delete</v-icon>
                     </v-btn>
                   </v-row>
@@ -185,12 +186,12 @@
           style="margin-top: 10px"
           type="warning"
           v-else-if="taskFilter"
-        >None of your tasks match the filter!</v-alert>
+        >None of your assignments match the filter!</v-alert>
         <v-alert
           style="margin-top: 10px"
           type="warning"
           v-else
-        >It seems you don't have any tasks yet... You can add your first here!</v-alert>
+        >It seems you don't have any Assignments yet... You can add your first here!</v-alert>
       </v-card>
     </v-row>
   </v-container>
@@ -212,16 +213,16 @@ export default {
     pdfDialog: false,
     orderOptions: [
       {
-        label: "Due Date - Up",
+        label: "Date - Up",
         value: "due_date",
         asc: true
       },
       {
-        label: "Due Date - Down",
+        label: "Date - Down",
         value: "due_date",
         asc: false
       },
-      {
+      /*{
         label: "Progress - Up",
         value: "progress",
         asc: true
@@ -230,7 +231,7 @@ export default {
         label: "Progress - Down",
         value: "progress",
         asc: false
-      },
+      },*/
       {
         label: "Alphabeticly - Up",
         value: "title",

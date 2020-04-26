@@ -9,7 +9,7 @@
               <span>{{ " Actions: "}}</span>
             </h2>
             <v-btn
-              v-tooltip="'Edit Task'"
+              v-tooltip="'Edit Assignment'"
               @click="$router.push(`/tasks/edit/${$route.params.id}`)"
               class="mx-4 ma-0 pa-0"
               fab
@@ -19,7 +19,7 @@
               <v-icon dark>mdi-pen</v-icon>
             </v-btn>
             <v-btn
-              v-tooltip="'Open Task Chat'"
+              v-tooltip="'Open Assignment Chat'"
               v-on="on"
               class="mx-4 ma-0 pa-0"
               fab
@@ -31,7 +31,7 @@
             </v-btn>
             <v-divider class="mx-4" vertical></v-divider>
             <v-btn
-              v-tooltip="'Generate PDF Task Report'"
+              v-tooltip="'Generate PDF Assignment Report'"
               v-on="on"
               class="mx-4 ma-0 pa-0"
               fab
@@ -62,14 +62,16 @@
           </h3>
           <v-divider class="mx-4"></v-divider>
           <h3 class="pa-2 body-1 font-weight-light">
-            <v-icon color="grey darken-3" style="margin-right: 10px">mdi-calendar</v-icon>Due Date:
+            <v-icon color="grey darken-3" style="margin-right: 10px">mdi-calendar</v-icon>
+            {{ task.is_event ? "Event Date" : "Due Date" }}
             <b>{{ task.due_date | moment('ddd, MMMM Do YYYY') }}</b>
           </h3>
           <h3 class="pa-2 body-1 font-weight-light">
-            <v-icon color="grey darken-3" style="margin-right: 10px">mdi-calendar-range</v-icon>Time Complexity:
-            <b>{{ task.time_complexity }} days</b>
+            <v-icon color="grey darken-3" style="margin-right: 10px">mdi-calendar-range</v-icon>
+            {{ task.is_event ? "Duration:" : "Time Complexity:" }}
+            <b>{{ task.time_complexity }} {{ task.is_event ? "hours:" : "days:" }}</b>
           </h3>
-          <h3 class="pa-2 body-1 font-weight-light">
+          <h3 class="pa-2 body-1 font-weight-light" v-if="!task.is_event">
             <v-icon color="grey darken-3" style="margin-right: 10px">mdi-wrench</v-icon>Progress:
             <b>{{ progress }}%</b>
             <v-progress-linear
@@ -126,7 +128,7 @@
         <v-card v-if="task.subtasks.length" class="pa-5" style="width:100%; margin-top: 15px">
           <h2 style="margin: 10px 10px 0 0;" class="pa-2 headline font-weight-light">
             <v-icon color="grey darken-3">mdi-tab</v-icon>
-            <span>{{ " Subtasks: "}}</span>
+            <span>{{ task.is_event ? " Schedule Slots: ": " Subtasks: "}}</span>
           </h2>
           <v-expansion-panels class="pa-2">
             <v-expansion-panel v-for="(subtask,i) in task.subtasks" :key="i">
@@ -138,7 +140,7 @@
               </v-expansion-panel-header>
               <v-expansion-panel-content>
                 <v-divider class="mx-4"></v-divider>
-                <h3 class="mx-4 pa-2 body-2 font-weight-light">
+                <h3 v-if="!task.is_event" class="mx-4 pa-2 body-2 font-weight-light">
                   <v-icon color="grey darken-3" style="margin-right: 10px">mdi-wrench</v-icon>Status:
                   <b>{{ subtask.status }}</b>
                 </h3>
@@ -147,8 +149,12 @@
                   <v-icon color="grey darken-3" style="margin-right: 10px">mdi-account</v-icon>Worker:
                   <b>{{ subtask.worker }}</b>
                 </h3>
-                <v-divider class="mx-4"></v-divider>
                 <h3 class="mx-4 pa-2 body-2 font-weight-light">
+                  <v-icon color="grey darken-3" style="margin-right: 10px">mdi-account</v-icon>Description:
+                  <b>{{ subtask.description }}</b>
+                </h3>
+                <v-divider class="mx-4"></v-divider>
+                <h3 v-if="!task.is_event" class="mx-4 pa-2 body-2 font-weight-light">
                   <v-icon color="grey darken-3" style="margin-right: 10px">mdi-calendar</v-icon>Done Date:
                   <b
                     v-if="subtask.done_date"
@@ -160,7 +166,7 @@
         </v-card>
       </v-row>
     </v-container>
-    <bj-i-loading v-if="loading" loading_text="We are retriving task data..." />
+    <bj-i-loading v-if="loading" loading_text="We are retriving assignment data..." />
   </div>
 </template>
 

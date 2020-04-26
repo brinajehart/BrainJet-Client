@@ -21,30 +21,30 @@ let router = new Router({
         { path: "/login", name: 'Sign In', component: Login },
         { path: "/register", name: 'Sign Up', component: Register },
         {
-            path: '/tasks/calendar', name: 'Tasks - Calendar', component: Calendar, meta: {
+            path: '/tasks/calendar', name: 'Assignment - Calendar', component: Calendar, meta: {
                 requiresAuth: true
             }
         }, {
-            path: '/tasks/list', name: 'Tasks - List', component: TasksListView, meta: {
+            path: '/tasks/list', name: 'Assignment - List', component: TasksListView, meta: {
                 requiresAuth: true
             }
         }, {
             path: '/tasks/edit/:id',
-            name: 'Edit - Task',
+            name: 'Edit - Assignment',
             component: TaskEdit,
             meta: {
                 requiresAuth: true
             }
         }, {
             path: '/tasks/create',
-            name: 'Create - Task',
+            name: 'Create - Assignment',
             component: TaskEdit,
             meta: {
                 requiresAuth: true
             }
         }, {
             path: '/tasks/view/:id',
-            name: 'View - Task',
+            name: 'View - Assignment',
             component: TaskView,
             meta: {
                 requiresAuth: true
