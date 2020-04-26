@@ -59,7 +59,7 @@
                         <label style="color: #555">Start Date</label>
                         <datepicker
                           format="D, MMMM dth yyyy"
-                          :value="new Date()"
+                          v-model="today"
                           name="due_date"
                           style="width: 100%"
                         ></datepicker>
@@ -72,7 +72,7 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="error darken-1" text @click="pdfDialog = false">Cancel</v-btn>
-                <v-btn color="blue darken-1" text @click="pdfDialog = false">Print</v-btn>
+                <v-btn color="blue darken-1" text @click="generateWeeklyReport()">Print</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -144,7 +144,7 @@
 
             <v-list-item-action>
               <v-row>
-                <v-col cols="12" sm="5">
+                <v-col cols="12" sm="4">
                   <v-progress-circular
                     v-tooltip="'Progress'"
                     :rotate="90"
@@ -157,13 +157,20 @@
                 <v-col cols="12" sm="2">
                   <v-divider vertical></v-divider>
                 </v-col>
-                <v-col cols="12" sm="5">
+                <v-col cols="12" sm="6">
                   <v-row>
                     <v-btn v-tooltip="'Edit Task'" icon @click="openEdit(item.id)">
-                      <v-icon color="info darken-1">mdi-pen</v-icon>
+                      <v-icon color="info darken-2">mdi-pen</v-icon>
                     </v-btn>
                     <v-btn v-tooltip="'View Task'" icon @click="openView(item.id)">
                       <v-icon color="info darken-2">mdi-tab</v-icon>
+                    </v-btn>
+                    <v-btn
+                      v-tooltip="'Generate Task Report'"
+                      icon
+                      @click="generateTaskPdf(item.id)"
+                    >
+                      <v-icon color="info darken-2">mdi-file-pdf</v-icon>
                     </v-btn>
                     <v-btn v-tooltip="'Delete Task'" icon @click="deleteTask(item.id)">
                       <v-icon color="red lighten-1">mdi-delete</v-icon>
@@ -198,6 +205,7 @@ export default {
   data: () => ({
     taskFilter: "",
     tasks: [],
+    today: new Date(),
     sortProperty: null,
     loading: true,
     orderDialog: false,
@@ -273,6 +281,23 @@ export default {
       const response = await api.getMyTasks();
       this.tasks = response.data;
       this.loading = false;
+    },
+    async generateWeeklyReport() {
+      const data = {
+        start: moment(this.today)
+          .startOf("week")
+          .format("DD/MM/YY"),
+        end: moment(this.today)
+          .endOf("week")
+          .add(1, "days")
+          .format("DD/MM/YY")
+      };
+      this.pdfDialog = false;
+
+      await api.generateWeeklyReport(data);
+    },
+    async generateTaskPdf(id) {
+      await api.generateTaskReport({ id });
     },
     openEdit(id) {
       this.$router.push(`/tasks/edit/${id}`);

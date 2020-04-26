@@ -30,53 +30,17 @@
               <v-icon dark>mdi-chat</v-icon>
             </v-btn>
             <v-divider class="mx-4" vertical></v-divider>
-            <v-dialog v-model="pdfDialog" width="30vw">
-              <template v-slot:activator="{ on }">
-                <v-btn
-                  v-tooltip="'Generate PDF Task Report'"
-                  v-on="on"
-                  class="mx-4 ma-0 pa-0"
-                  fab
-                  dark
-                  color="orange darken-4"
-                >
-                  <v-icon dark>mdi-file-pdf</v-icon>
-                </v-btn>
-              </template>
-              <v-card>
-                <v-card-title style="background: #303f9f; color: #eee">
-                  <span class="headline">Weekly Report</span>
-                </v-card-title>
-                <v-card-text>
-                  <v-container>
-                    <v-row>
-                      <v-col cols="12" sm="6" md="12">
-                        <v-alert type="warning">Pick the start of the week you wan't to export</v-alert>
-                      </v-col>
-                    </v-row>
-                    <v-row>
-                      <v-col cols="12" sm="6" md="12">
-                        <div>
-                          <label style="color: #555">Start Date</label>
-                          <datepicker
-                            format="D, MMMM dth yyyy"
-                            :value="new Date()"
-                            name="due_date"
-                            style="width: 100%"
-                          ></datepicker>
-                        </div>
-                      </v-col>
-                    </v-row>
-                  </v-container>
-                </v-card-text>
-                <v-divider></v-divider>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn color="error darken-1" text @click="pdfDialog = false">Cancel</v-btn>
-                  <v-btn color="blue darken-1" text @click="pdfDialog = false">Print</v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
+            <v-btn
+              v-tooltip="'Generate PDF Task Report'"
+              v-on="on"
+              class="mx-4 ma-0 pa-0"
+              fab
+              dark
+              color="orange darken-4"
+              @click="generateTaskPdf($route.params.id)"
+            >
+              <v-icon dark>mdi-file-pdf</v-icon>
+            </v-btn>
           </v-row>
         </v-col>
       </v-row>
@@ -206,8 +170,7 @@ export default {
   data: () => ({
     task: {},
     loading: true,
-    descDialog: false,
-    pdfDialog: false
+    descDialog: false
   }),
   created: function() {
     this.fetchTaskDetails();
@@ -240,6 +203,9 @@ export default {
       else if (progress < 70) return "primary";
       else if (progress < 90) return "teal";
       else return "green";
+    },
+    async generateTaskPdf(id) {
+      await api.generateTaskReport({ id });
     }
   }
 };

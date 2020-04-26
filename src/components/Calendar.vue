@@ -104,12 +104,15 @@
             :activator="selectedElement"
             offset-x
           >
-            <v-card color="grey lighten-4" min-width="350px" flat>
+            <v-card color="grey lighten-4" min-width="400px" flat>
               <v-toolbar color="indigo" dark dense height="40px">
                 <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
                 <v-spacer></v-spacer>
                 <v-btn v-tooltip="'Edit Task'" icon @click="openEdit(selectedEvent.id)">
                   <v-icon color="info lighten-2">mdi-pen</v-icon>
+                </v-btn>
+                <v-btn v-tooltip="'Generate Task Report'" icon @click="generateTaskPdf(selectedEvent.id)">
+                  <v-icon color="info lighten-2">mdi-file-pdf</v-icon>
                 </v-btn>
                 <v-btn v-tooltip="'View Task'" icon @click="openView(selectedEvent.id)">
                   <v-icon color="info lighten-2">mdi-tab</v-icon>
@@ -198,9 +201,7 @@ export default {
       this.$router.push(`/tasks/edit/${id}`);
     },
     async generateWeeklyReport() {
-      this.loading = await true;
       const data = {
-        // 09/19/18-13:55:26 format of date for server
         start: moment(this.today)
           .startOf("week")
           .format("DD/MM/YY"),
@@ -211,7 +212,6 @@ export default {
       };
 
       await api.generateWeeklyReport(data);
-      this.loading = false;
     },
     openView(id, newWindow = false) {
       window.event.preventDefault();
@@ -220,6 +220,9 @@ export default {
         return;
       }
       this.$router.push(`/tasks/view/${id}`);
+    },
+    async generateTaskPdf(id) {
+      await api.generateTaskReport({ id });
     },
     deleteTask(id) {
       console.log(id);
