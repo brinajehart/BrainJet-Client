@@ -256,11 +256,13 @@ export default {
           cancelButtonColor: "#d33",
           confirmButtonText: "Yes, delete it!"
         })
-        .then(result => {
+        .then(async result => {
           if (result.value) {
+            await api.deleteTask(id);
+            this.fetchTasks();
             this.$swal.fire(
               "Deleted!",
-              "The Assignment has been deleted.",
+              "The task has been deleted.",
               "success"
             );
           }

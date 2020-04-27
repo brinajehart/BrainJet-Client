@@ -37,15 +37,13 @@
                 required
               ></v-text-field>
             </v-col>
-            <v-col cols="12" md="4">
-              <small style="color: #555">{{ form.is_event ? "Event Date" : "Due Date" }}</small>
-              <datepicker
-                format="D, MMMM dth yyyy"
+            <v-col cols="12" md="4" style="margin-top:15px">
+              <v-datetime-picker
                 :rules="[v => !!v || 'Item is required']"
+                :label="`${form.is_event ? 'Event Date' : 'Due Date'}`"
                 v-model="form.due_date"
-                name="due_date"
-                style="width: 100%"
-              ></datepicker>
+                requred
+              ></v-datetime-picker>
             </v-col>
           </v-row>
           <v-row>
@@ -272,8 +270,8 @@
       bottom
       right
       color="pink"
-      v-tooltip="'Open Task View'"
-      v-if="$route.name != 'Create - Task' && !loading"
+      v-tooltip="'Open Assignment View'"
+      v-if="$route.name != 'Create - Assignment' && !loading"
       @click="$router.push(`/tasks/view/${$route.params.id}`)"
     >
       <v-icon>mdi-fullscreen</v-icon>
@@ -284,6 +282,7 @@
 
 <script>
 import api from "./../api";
+
 export default {
   data() {
     return {
@@ -294,7 +293,8 @@ export default {
         due_date: new Date(),
         is_event: false,
         subtasks: [],
-        collaborators: []
+        collaborators: [],
+        user_id: null
       },
       statuses: [],
       permissions: [],
@@ -310,7 +310,7 @@ export default {
   },
   created: async function() {
     await this.setCurrentUser();
-    if (this.$router.currentRoute.name == "Create - Task") {
+    if (this.$router.currentRoute.name == "Create - Assignment") {
       this.form.user_id = await this.currentUser.id;
     } else {
       const response = await api.getTaskData(this.$route.params.id);
@@ -428,16 +428,14 @@ export default {
       });
       this.form.collaborators.splice(index, 1);
     },
-    primarySubmit() {
-      switch (this.$router.currentRoute.name) {
-        case "Create - Task":
-          debugger;
-          return;
-        case "Edit - Task":
-          console.log("update");
-          return;
-        default:
-          return;
+    async primarySubmit() {
+      if (this.$router.currentRoute.name == "Create - Assignment") {
+        const response = await api.generateTask(this.form);
+        if (response.status == 201) {
+          console.log(response);
+        }
+      } else {
+        console.log("update");
       }
     }
   }

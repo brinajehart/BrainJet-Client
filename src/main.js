@@ -13,7 +13,8 @@ import LoadingComponent from './helpers/Loading.vue';
 import InternalLoadingComponent from './helpers/InternalLoading.vue';
 import TinyMCE from '@tinymce/tinymce-vue';
 import Datepicker from 'vuejs-datepicker';
-import GAuth from 'vue-google-oauth2'
+import GAuth from 'vue-google-oauth2';
+import DatetimePicker from 'vuetify-datetime-picker';
 
 Vue.prototype.$http = Axios;
 const token = localStorage.getItem('token')
@@ -32,6 +33,7 @@ Vue.use(VueRouter);
 Vue.use(VueMoment);
 Vue.use(VTooltip);
 Vue.use(VueSweetalert2);
+Vue.use(DatetimePicker);
 
 Vue.filter('fullname', user => {
     if (!user) return "";
