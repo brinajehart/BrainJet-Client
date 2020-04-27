@@ -43,7 +43,7 @@ export default class api {
     static async deleteTask(id) {
         return new Promise((resolve, reject) => {
             axios.delete(`${URI}/task/${id}`).then(resolve).catch(reject);
-        });  
+        });
     }
 
     static async getMyTasksForDateRange(data) {
@@ -55,6 +55,12 @@ export default class api {
     static async generateTask(data) {
         return new Promise((resolve, reject) => {
             axios.post(`${URI}/task/create`, data).then(resolve).catch(reject);
+        });
+    }
+
+    static async updateTask(data, id) {
+        return new Promise((resolve, reject) => {
+            axios.put(`${URI}/task/${id}`, data).then(resolve).catch(reject);
         });
     }
 

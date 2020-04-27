@@ -41,6 +41,18 @@
             >
               <v-icon dark>mdi-file-pdf</v-icon>
             </v-btn>
+            <v-divider class="mx-4" vertical></v-divider>
+            <v-btn
+              v-tooltip="'Delete Assignment'"
+              v-on="on"
+              class="mx-4 ma-0 pa-0"
+              fab
+              dark
+              color="red"
+              @click="deleteTask($route.params.id)"
+            >
+              <v-icon dark>mdi-delete</v-icon>
+            </v-btn>
           </v-row>
         </v-col>
       </v-row>
@@ -209,6 +221,31 @@ export default {
       else if (progress < 70) return "primary";
       else if (progress < 90) return "teal";
       else return "green";
+    },
+    deleteTask(id) {
+      console.log(id);
+      this.$swal
+        .fire({
+          title: "Are you sure?",
+          text: "You won't be able to revert this!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes, delete it!"
+        })
+        .then(async result => {
+          if (result.value) {
+            await api.deleteTask(id);
+            this.$swal.fire(
+              "Deleted!",
+              "The task has been deleted.",
+              "success"
+            ).then(() => {
+                this.$router.push('/tasks/list');
+            })
+          }
+        });
     },
     async generateTaskPdf(id) {
       await api.generateTaskReport({ id });

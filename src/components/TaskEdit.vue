@@ -68,7 +68,7 @@
             </v-col>
           </v-row>
           <v-row>
-            <v-col>
+            <v-col cols="12" md="2">
               <v-switch
                 v-model="form.is_event"
                 :label="`Type: ${form.is_event ? 'Event' : 'Task'}`"
@@ -94,7 +94,7 @@
               color="primary"
               :disabled="!valid"
               @click="primarySubmit()"
-            >{{ $route.name === 'Edit - Task' ? 'Update' : 'Create' }}</v-btn>
+            >{{ $route.name === 'Edit - Assignment' ? 'Update' : 'Create' }}</v-btn>
             <v-btn class="ma-4" color="error" @click="$router.go(-1)">Cancel</v-btn>
           </v-row>
         </v-container>
@@ -215,8 +215,8 @@
                       <th class="text-right">Actions</th>
                     </tr>
                   </thead>
-                  <tbody v-if="form.collaborators.length">
-                    <tr v-for="(item,key) in form.collaborators" :key="key" style="height: 50px">
+                  <tbody v-if="form.taskcollaborators.length">
+                    <tr v-for="(item,key) in form.taskcollaborators" :key="key" style="height: 50px">
                       <td>
                         <v-autocomplete
                           v-model="item.user_id"
@@ -293,7 +293,7 @@ export default {
         due_date: new Date(),
         is_event: false,
         subtasks: [],
-        collaborators: [],
+        taskcollaborators: [],
         user_id: null
       },
       statuses: [],
@@ -337,7 +337,7 @@ export default {
     },
     doneByUserOptions() {
       const { users, form } = this;
-      const collaboratorIds = form.collaborators.map(colab => colab.user_id);
+      const collaboratorIds = form.taskcollaborators.map(colab => colab.user_id);
 
       const options = users.filter(
         user =>
@@ -385,9 +385,9 @@ export default {
       }
     },
     collaboratorChanged(key) {
-      const { collaborators } = this.form;
-      collaborators.forEach(({ user_id }, index) => {
-        if (user_id == collaborators[key].user_id && key != index && user_id) {
+      const { taskcollaborators } = this.form;
+      taskcollaborators.forEach(({ user_id }, index) => {
+        if (user_id == taskcollaborators[key].user_id && key != index && user_id) {
           this.$swal
             .fire(
               "Error!",
@@ -395,8 +395,8 @@ export default {
               "error"
             )
             .then(() => {
-              this.$set(this.form.collaborators[key], "user_id", undefined);
-              delete this.form.collaborators[key].user_id;
+              this.$set(this.form.taskcollaborators[key], "user_id", undefined);
+              delete this.form.taskcollaborators[key].user_id;
             });
           return;
         }
@@ -415,18 +415,18 @@ export default {
       this.form.subtasks.splice(index, 1);
     },
     addCollaborator() {
-      this.form.collaborators.push({
+      this.form.taskcollaborators.push({
         permission_id: this.permissions[0].id,
         user_id: null
       });
     },
     deleteCollaborator(index) {
       this.form.subtasks.forEach((item, key) => {
-        if (item.done_by == this.form.collaborators[index].user_id) {
+        if (item.done_by == this.form.taskcollaborators[index].user_id) {
           delete this.form.subtasks[key].done_by;
         }
       });
-      this.form.collaborators.splice(index, 1);
+      this.form.taskcollaborators.splice(index, 1);
     },
     async primarySubmit() {
       if (this.$router.currentRoute.name == "Create - Assignment") {
@@ -435,7 +435,10 @@ export default {
           console.log(response);
         }
       } else {
-        console.log("update");
+        const response = await api.updateTask(this.form, this.$route.params.id);
+        if (response.status == 201) {
+          console.log(response);
+        }
       }
     }
   }
