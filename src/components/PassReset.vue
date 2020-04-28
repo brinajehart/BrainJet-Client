@@ -44,6 +44,8 @@
 </template>
 
 <script>
+import api from "./../api";
+
 export default {
   data() {
     return {
@@ -65,7 +67,18 @@ export default {
       const { form } = this;
       if (form.password !== form.confirm_password) {
         this.$swal.fire("Error!", "The passwords do not match", "warning");
-        return; 
+        return;
+      }
+
+      const response = await api.updatePassword({
+        password: form.password,
+        uuid: this.$route.params.uuid
+      });
+
+      if (response.status == 200) {
+        this.$swal.fire("Success!", response.data.message, "success").then(() => {
+            this.$router.push('/login');
+        });
       }
     }
   }
