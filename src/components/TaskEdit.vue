@@ -311,6 +311,7 @@
 <script>
 import api from "./../api";
 import { v4 as uuidv4 } from "uuid";
+//import moment from 'moment';
 
 export default {
   data() {
@@ -319,7 +320,7 @@ export default {
         title: "",
         time_complexity: "",
         description: "",
-        due_date: new Date(),
+        due_date: "",
         is_event: false,
         subtasks: [],
         taskcollaborators: [],
@@ -342,10 +343,12 @@ export default {
     await this.setCurrentUser();
     if (this.$router.currentRoute.name == "Create - Assignment") {
       this.form.user = await this.currentUser.id;
+      this.form.due_date = new Date();
     } else {
       const response = await api.getTaskData(this.$route.params.id);
       if (response.status == 200) {
         this.form = response.data;
+        this.form.due_date = new Date(this.form.due_date);
       }
     }
     await this.fetchPermissions();
@@ -488,6 +491,7 @@ export default {
       element.click();
     },
     async primarySubmit() {
+      debugger;
       this.loadingText = "Proccessing Data...";
       this.loading = true;
       if (this.$router.currentRoute.name == "Create - Assignment") {

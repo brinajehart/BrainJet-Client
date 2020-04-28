@@ -47,15 +47,7 @@ Vue.filter('genavatar', user => {
 });
 
 Vue.filter('timediff', aDate => {
-    const current = moment().startOf('day');
-    const diff = Math.floor(moment.duration(current.diff(aDate)).asDays());
-    if (diff < 0) {
-        return `${diff} day/s ago`;
-    } else if (diff > 0) {
-        return `In ${diff} day/s`;
-    } else {
-        return `Today at ${moment(aDate).format('HH:mm')}`;
-    }
+    return String(moment(aDate).fromNow());
 })
 
 Vue.component('bj-loading', LoadingComponent);
