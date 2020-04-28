@@ -15,6 +15,7 @@ import TinyMCE from '@tinymce/tinymce-vue';
 import Datepicker from 'vuejs-datepicker';
 import GAuth from 'vue-google-oauth2';
 import DatetimePicker from 'vuetify-datetime-picker';
+import moment from 'moment';
 
 Vue.prototype.$http = Axios;
 const token = localStorage.getItem('token')
@@ -43,6 +44,18 @@ Vue.filter('fullname', user => {
 Vue.filter('genavatar', user => {
     if (!user) return "";
     return user.first_name[0] + user.last_name[0]
+});
+
+Vue.filter('timediff', aDate => {
+    const current = moment().startOf('day');
+    const diff = (moment.duration(current.diff(aDate)).asDays());
+    if (diff < -1) {
+        return `${Math.ceil(diff)} day/s ago`;
+    } else if (diff > 0) {
+        return `In ${Math.floor(diff)} day/s`;
+    } else {
+        return 'Today';
+    }
 })
 
 Vue.component('bj-loading', LoadingComponent);

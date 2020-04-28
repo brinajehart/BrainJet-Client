@@ -140,6 +140,11 @@
                   {{ !selectedEvent.is_event ? "Time Complexity" : "Duration" }}
                   <b>{{ selectedEvent.time_complexity }} {{ !selectedEvent.is_event ? "days" : "hours"}}</b>
                 </h3>
+                <h3 class="pa-2 body-1 font-weight-light">
+                  <v-icon color="grey darken-3" style="margin-right: 10px">mdi-calendar-today</v-icon>
+                  {{ "When:" }}
+                  <b>{{ selectedEvent.due_date | timediff }}</b>
+                </h3>
                 <h3 v-if="!selectedEvent.is_event" class="pa-2 body-1 font-weight-light">
                   <v-icon color="grey darken-3" style="margin-right: 10px">mdi-wrench</v-icon>Progress:
                   <b>{{ selectedEvent.progress ? selectedEvent.progress.toFixed(2) : 0 }}%</b>
@@ -188,19 +193,19 @@ export default {
     }
   },
   computed: {
-      computedEvents() {
-          const { events, displayFilters } = this;
-          const filteredEvents = events.filter(item => {
-              let display = false;
-              if (item.is_event) {
-                  if (displayFilters.events) display = true;
-              } else {
-                  if (displayFilters.tasks) display = true;
-              }
-              return display;
-          });
-          return filteredEvents;
-      }
+    computedEvents() {
+      const { events, displayFilters } = this;
+      const filteredEvents = events.filter(item => {
+        let display = false;
+        if (item.is_event) {
+          if (displayFilters.events) display = true;
+        } else {
+          if (displayFilters.tasks) display = true;
+        }
+        return display;
+      });
+      return filteredEvents;
+    }
   },
   methods: {
     async fetchTasks() {
