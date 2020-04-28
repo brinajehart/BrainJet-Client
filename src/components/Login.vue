@@ -81,17 +81,16 @@ export default {
       const actiaveAccountUUID = this.getUrlParam("uuid");
       const response = await api.actiaveAccount({ uuid: actiaveAccountUUID });
       if (response.status == 200) {
-          if (response.data.ok) {
-            this.$swal.fire("Success!", response.data.message, "success");
-          } else {
-            this.$swal.fire(response.data.error, "", "error");
-          }
-        
+        if (response.data.ok) {
+          this.$swal.fire("Success!", response.data.message, "success");
+        } else {
+          this.$swal.fire(response.data.error, "", "error");
+        }
       }
     }
 
-    if (this.getUrlParam('error')) {
-        this.$swal.fire("A runtime error occured in the app!", "", "error");
+    if (this.getUrlParam("error")) {
+      this.$swal.fire("A runtime error occured in the app!", "", "error");
     }
   },
   methods: {
@@ -121,14 +120,23 @@ export default {
           });
       });
     },
-    forgotPassword() {
-      if (!this.valid) {
+    async forgotPassword() {
+      const { username } = this.form;
+      if (!username) {
         this.$swal.fire(
           "Insert username!",
           "A password reset link will be sent to your email account!",
           "warning"
         );
         return;
+      }
+
+      const response = await api.sendPasswordResetLink({
+        username,
+        uri: window.location.origin
+      });
+      if (response.status == 200) {
+        this.$swal.fire("Success!", response.data.message, "success");
       }
     },
     getUrlParam(name) {

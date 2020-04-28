@@ -71,6 +71,12 @@ export default class api {
         });
     }
 
+    static async sendPasswordResetLink(data) {
+        return new Promise((resolve, reject) => {
+            axios.post(`${URI}/auth/send-reset`, data).then(resolve).catch(reject);
+        });    
+    }
+
     static async generateWeeklyReport(data) {
         axios({
             url: `${URI}/render/pdf/weekly?start=${data.start}&end=${data.end}`,
