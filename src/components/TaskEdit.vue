@@ -43,7 +43,14 @@
                 :label="`${form.is_event ? 'Event Date' : 'Due Date'}`"
                 v-model="form.due_date"
                 requred
-              ></v-datetime-picker>
+              >
+                <template slot="dateIcon">
+                  <v-icon left>mdi-calendar-today</v-icon>
+                </template>
+                <template slot="timeIcon">
+                  <v-icon left>mdi-clock</v-icon>
+                </template>
+              </v-datetime-picker>
             </v-col>
           </v-row>
           <v-row>
@@ -303,7 +310,7 @@
 
 <script>
 import api from "./../api";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
 export default {
   data() {
