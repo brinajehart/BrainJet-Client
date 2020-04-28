@@ -143,7 +143,7 @@
                 <h3 class="pa-2 body-1 font-weight-light">
                   <v-icon color="grey darken-3" style="margin-right: 10px">mdi-calendar-today</v-icon>
                   {{ "When:" }}
-                  <b>{{ selectedEvent.due_date | timediff }}</b>
+                  <b>{{ selectedEvent.start | timediff }}</b>
                 </h3>
                 <h3 v-if="!selectedEvent.is_event" class="pa-2 body-1 font-weight-light">
                   <v-icon color="grey darken-3" style="margin-right: 10px">mdi-wrench</v-icon>Progress:
@@ -227,7 +227,10 @@ export default {
               .format("YYYY-MM-DD HH:mm");
             return { ...slot, end: eventEnd };
           } else {
-            return slot;
+            const eventEnd = moment(slot.start)
+              .add(1, "hours")
+              .format("YYYY-MM-DD HH:mm");
+            return { ...slot, end: eventEnd };
           }
         });
       }

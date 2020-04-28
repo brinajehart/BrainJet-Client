@@ -48,13 +48,13 @@ Vue.filter('genavatar', user => {
 
 Vue.filter('timediff', aDate => {
     const current = moment().startOf('day');
-    const diff = (moment.duration(current.diff(aDate)).asDays());
-    if (diff < -1) {
-        return `${Math.ceil(diff)} day/s ago`;
+    const diff = Math.floor(moment.duration(current.diff(aDate)).asDays());
+    if (diff < 0) {
+        return `${diff} day/s ago`;
     } else if (diff > 0) {
-        return `In ${Math.floor(diff)} day/s`;
+        return `In ${diff} day/s`;
     } else {
-        return 'Today';
+        return `Today at ${moment(aDate).format('HH:mm')}`;
     }
 })
 

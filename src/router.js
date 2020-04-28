@@ -12,6 +12,7 @@ import Chat from './components/Chat.vue';
 import MyChats from './components/MyChats.vue';
 import Profile from './components/Profile.vue';
 import TaskView from './components/TaskView.vue';
+import PassReset from './components/PassReset.vue';
 
 Vue.use(Router);
 
@@ -20,6 +21,7 @@ let router = new Router({
     routes: [
         { path: "/login", name: 'Sign In', component: Login },
         { path: "/register", name: 'Sign Up', component: Register },
+        { path: "/forgot-pass/:uuid", name: "Forgot Password", component: PassReset },
         {
             path: '/tasks/calendar', name: 'Assignment - Calendar', component: Calendar, meta: {
                 requiresAuth: true

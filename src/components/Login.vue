@@ -27,7 +27,11 @@
                 />
               </v-card-text>
               <v-card-actions>
-                <router-link class="form-link" to="/register">Don't have an account yet?</router-link>
+                <a
+                  class="form-link"
+                  style="text-decoration: underline"
+                  @click="forgotPassword"
+                >Forgot Password?</a>
                 <v-spacer />
                 <v-avatar
                   @click="googleLogin()"
@@ -38,9 +42,16 @@
                 </v-avatar>
                 <v-btn color="indigo white-text" @click="login()">Sign In</v-btn>
               </v-card-actions>
+              <v-card-actions>
+                <router-link
+                  style="margin-left: 15px"
+                  class="form-link"
+                  to="/register"
+                >Create a new account</router-link>
+              </v-card-actions>
             </v-card>
           </v-form>
-          <v-img src="./../assets/logo-dark.png" aspect-ratio="2.26"></v-img>
+          <v-img src="./../assets/logo-dark.png" class="ma-4" aspect-ratio="2.26"></v-img>
         </v-col>
       </v-row>
     </div>
@@ -52,6 +63,8 @@
 </template>
 
 <script>
+import api from "./../api";
+
 export default {
   data() {
     return {
@@ -62,6 +75,24 @@ export default {
       loading: false,
       valid: true
     };
+  },
+  created: async function() {
+    if (this.getUrlParam("uuid")) {
+      const actiaveAccountUUID = this.getUrlParam("uuid");
+      const response = await api.actiaveAccount({ uuid: actiaveAccountUUID });
+      if (response.status == 200) {
+          if (response.data.ok) {
+            this.$swal.fire("Success!", response.data.message, "success");
+          } else {
+            this.$swal.fire(response.data.error, "", "error");
+          }
+        
+      }
+    }
+
+    if (this.getUrlParam('error')) {
+        this.$swal.fire("A runtime error occured in the app!", "", "error");
+    }
   },
   methods: {
     async login() {
@@ -89,6 +120,24 @@ export default {
             this.$swal.fire("Failed to authenticate!", "", "error");
           });
       });
+    },
+    forgotPassword() {
+      if (!this.valid) {
+        this.$swal.fire(
+          "Insert username!",
+          "A password reset link will be sent to your email account!",
+          "warning"
+        );
+        return;
+      }
+    },
+    getUrlParam(name) {
+      if (
+        (name = new RegExp("[?&]" + encodeURIComponent(name) + "=([^&]*)").exec(
+          location.search
+        ))
+      )
+        return decodeURIComponent(name[1]);
     }
   }
 };

@@ -98,7 +98,7 @@ export default {
         return;
       }
       this.loading = true;
-      const response = await api.registerUser(this.form);
+      const response = await api.registerUser({...this.form, uri: window.location.origin });
       if (response) {
         this.$swal
           .fire("Success!", response.data.message, "success")

@@ -5,7 +5,8 @@ import { v4 as uuidv4 } from 'uuid';
 axios.interceptors.response.use(response => {
     return response;
 }, error => {
-    window.location = '/login';
+    console.log(error);
+    window.location = '/login?erorr=1';
     return error;
 });
 
@@ -61,6 +62,12 @@ export default class api {
     static async updateTask(data, id) {
         return new Promise((resolve, reject) => {
             axios.put(`${URI}/task/${id}`, data).then(resolve).catch(reject);
+        });
+    }
+
+    static async actiaveAccount(data) {
+        return new Promise((resolve, reject) => {
+            axios.post(`${URI}/auth/econfirm`, data).then(resolve).catch(reject);
         });
     }
 
