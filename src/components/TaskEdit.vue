@@ -96,6 +96,23 @@
               @click="primarySubmit()"
             >{{ $route.name === 'Edit - Assignment' ? 'Update' : 'Create' }}</v-btn>
             <v-btn class="ma-4" color="error" @click="$router.go(-1)">Cancel</v-btn>
+            <v-btn
+              v-tooltip="'Import data from json file...'"
+              @click="readJsonFile()"
+              class="ma-4"
+              color="yellow darken-1"
+            >
+              <v-icon left>mdi-upload</v-icon>Import
+            </v-btn>
+            <v-btn
+              :disabled="!valid"
+              v-tooltip="'Export form to json file...'"
+              class="ma-4"
+              color="yellow darken-1"
+              @click="exportJsonFile()"
+            >
+              <v-icon left>mdi-download</v-icon>Export
+            </v-btn>
           </v-row>
         </v-container>
       </v-card>
@@ -286,6 +303,7 @@
 
 <script>
 import api from "./../api";
+import { v4 as uuidv4 } from 'uuid';
 
 export default {
   data() {
@@ -432,6 +450,35 @@ export default {
         }
       });
       this.form.taskcollaborators.splice(index, 1);
+    },
+    readJsonFile() {
+      const reader = new FileReader();
+      const input = document.createElement("input");
+      input.type = "file";
+      input.style.visibility = "hidden";
+      setTimeout(() => input.click(), 200);
+
+      input.onchange = () => {
+        const file = input.files[0];
+        reader.addEventListener(
+          "load",
+          async () => (this.form = JSON.parse(reader.result)),
+          false
+        );
+
+        if (file) reader.readAsText(file);
+      };
+    },
+    exportJsonFile() {
+      const element = document.createElement("a");
+      element.setAttribute(
+        "href",
+        "data:text/plain;charset=utf-8," +
+          encodeURIComponent(JSON.stringify(this.form))
+      );
+      element.setAttribute("download", `brainjet-data-${uuidv4()}.json`);
+      element.style.display = "none";
+      element.click();
     },
     async primarySubmit() {
       this.loadingText = "Proccessing Data...";
