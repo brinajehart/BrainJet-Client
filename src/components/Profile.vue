@@ -1,7 +1,9 @@
 <template>
   <div style="width: 100%">
     <v-form ref="form" v-model="valid">
-      <h2 class="display-1 font-weight-light">{{ !loggedInThroughGoogle ? "New " : "Google " }}Credentials</h2>
+      <h2
+        class="display-1 font-weight-light"
+      >{{ !loggedInThroughGoogle ? "New " : "Google " }}Credentials</h2>
       <v-card style="margin-bottom: 20px">
         <v-container>
           <v-row v-if="loggedInThroughGoogle">
@@ -51,6 +53,26 @@
                 label="Email"
                 required
               ></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <v-icon>mdi-image</v-icon>
+              <a
+                style="margin-left: 10px"
+                href="https://en.gravatar.com"
+                target="_blank"
+              >Edit your profile image on Gravatar!</a>
+            </v-col>
+          </v-row>
+          <v-row v-if="loggedInThroughGoogle">
+            <v-col>
+              <v-icon>mdi-google</v-icon>
+              <a
+                style="margin-left: 10px"
+                href="https://myaccount.google.com"
+                target="_blank"
+              >Edit your account details through Google!</a>
             </v-col>
           </v-row>
           <v-row v-if="!loggedInThroughGoogle">

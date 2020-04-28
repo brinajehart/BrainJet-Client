@@ -2,12 +2,22 @@
   <div style="width: 100%">
     <v-container v-show="!loading" style="margin-bottom: 20vw" class="pa-5 task-view-container">
       <v-row class="action-panel" style="margin-bottom: 10px">
-        <v-col cols="12" sm="5">
+        <v-col cols="12" sm="7">
           <v-row class="pa-2">
             <h2 style="margin: 10px 10px 0 15px;" class="display-1 font-weight-light">
               <v-icon color="grey darken-3">mdi-wrench</v-icon>
               <span>{{ " Actions: "}}</span>
             </h2>
+            <v-btn
+              v-tooltip="'Add New Assignment'"
+              @click="$router.push('/tasks/create')"
+              class="mx-4 ma-0 pa-0"
+              fab
+              dark
+              color="teal darken-1"
+            >
+              <v-icon dark>mdi-plus</v-icon>
+            </v-btn>
             <v-btn
               v-tooltip="'Edit Assignment'"
               @click="$router.push(`/tasks/edit/${$route.params.id}`)"
@@ -200,7 +210,9 @@ export default {
           const completedCount = this.task.subtasks.filter(
             item => item.status_id == 3
           ).length;
-          return (completedCount / this.task.subtasks.length) * 100;
+          return ((completedCount / this.task.subtasks.length) * 100).toFixed(
+            2
+          );
         }
       }
       return 0;
@@ -237,13 +249,11 @@ export default {
         .then(async result => {
           if (result.value) {
             await api.deleteTask(id);
-            this.$swal.fire(
-              "Deleted!",
-              "The task has been deleted.",
-              "success"
-            ).then(() => {
-                this.$router.push('/tasks/list');
-            })
+            this.$swal
+              .fire("Deleted!", "The task has been deleted.", "success")
+              .then(() => {
+                this.$router.push("/tasks/list");
+              });
           }
         });
     },

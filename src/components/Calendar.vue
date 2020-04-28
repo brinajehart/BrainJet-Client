@@ -85,14 +85,19 @@
             v-model="today"
           ></datepicker>
         </v-col>
-        <v-col cols="12" sm="3"></v-col>
+        <v-col cols="12" sm="1" style="margin-top: 10px">
+          <v-switch v-model="displayFilters.tasks" label="Tasks" v-tooltip="'Toggle tasks'"></v-switch>
+        </v-col>
+        <v-col cols="12" sm="1" style="margin-top: 10px">
+          <v-switch v-model="displayFilters.events" label="Events" v-tooltip="'Toggle events'"></v-switch>
+        </v-col>
       </v-row>
       <v-row>
         <v-sheet v-if="!loading" height="600" width="100%">
           <v-calendar
             :now="today | moment('YYYY-MM-DD')"
             :value="today | moment('YYYY-MM-DD')"
-            :events="events"
+            :events="computedEvents"
             :event-color="getEventColor"
             @click:event="showEvent"
             color="primary"
@@ -137,7 +142,7 @@
                 </h3>
                 <h3 v-if="!selectedEvent.is_event" class="pa-2 body-1 font-weight-light">
                   <v-icon color="grey darken-3" style="margin-right: 10px">mdi-wrench</v-icon>Progress:
-                  <b>{{ selectedEvent.progress }}%</b>
+                  <b>{{ selectedEvent.progress ? selectedEvent.progress.toFixed(2) : 0 }}%</b>
                   <v-progress-linear
                     v-model="selectedEvent.progress"
                     style="margin-top: 15px"
@@ -167,7 +172,11 @@ export default {
     events: [],
     selectedEvent: {},
     selectedElement: null,
-    selectedOpen: false
+    selectedOpen: false,
+    displayFilters: {
+      tasks: true,
+      events: true
+    }
   }),
   mounted() {
     this.fetchTasks();
@@ -177,6 +186,21 @@ export default {
       this.loading = true;
       this.fetchTasks();
     }
+  },
+  computed: {
+      computedEvents() {
+          const { events, displayFilters } = this;
+          const filteredEvents = events.filter(item => {
+              let display = false;
+              if (item.is_event) {
+                  if (displayFilters.events) display = true;
+              } else {
+                  if (displayFilters.tasks) display = true;
+              }
+              return display;
+          });
+          return filteredEvents;
+      }
   },
   methods: {
     async fetchTasks() {
@@ -205,11 +229,11 @@ export default {
       this.loading = false;
     },
     getEventColor(event) {
-        if (event.is_event) {
-            return 'green darken-2';
-        } else {
-            return 'orange darken-3';
-        }
+      if (event.is_event) {
+        return "green darken-2";
+      } else {
+        return "orange darken-3";
+      }
     },
     gColor(progress) {
       if (progress < 40) return "red";

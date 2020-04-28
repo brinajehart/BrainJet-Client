@@ -13,7 +13,7 @@
                 :items="users"
                 item-value="id"
                 item-text="display_as"
-                v-model="form.user_id"
+                v-model="form.user"
                 :readonly="true"
               ></v-select>
             </v-col>
@@ -151,7 +151,7 @@
                           item-text="display_as"
                           :change="statusChanged(key)"
                           :rules="[v => !!v || 'Item is required']"
-                          v-model="item.status_id"
+                          v-model="item.status"
                         ></v-select>
                       </td>
                       <td>
@@ -170,7 +170,7 @@
                           format="D, MMMM dth yyyy"
                           v-model="item.done_date"
                           name="due_date"
-                          :disabled="item.status_id !== 3"
+                          :disabled="item.status !== 3"
                           style="width: 100%"
                         ></datepicker>
                       </td>
@@ -216,10 +216,14 @@
                     </tr>
                   </thead>
                   <tbody v-if="form.taskcollaborators.length">
-                    <tr v-for="(item,key) in form.taskcollaborators" :key="key" style="height: 50px">
+                    <tr
+                      v-for="(item,key) in form.taskcollaborators"
+                      :key="key"
+                      style="height: 50px"
+                    >
                       <td>
                         <v-autocomplete
-                          v-model="item.user_id"
+                          v-model="item.user"
                           :items="newCollaboratorOptions"
                           item-value="id"
                           item-text="display_as"
@@ -236,7 +240,7 @@
                           :items="permissions"
                           item-value="id"
                           item-text="display_as"
-                          v-model="item.permission_id"
+                          v-model="item.permission"
                           :rules="[v => !!v || 'Item is required']"
                         ></v-select>
                       </td>
@@ -276,7 +280,7 @@
     >
       <v-icon>mdi-fullscreen</v-icon>
     </v-btn>
-    <bj-i-loading v-if="loading" loading_text="The form is loading..." />
+    <bj-i-loading v-if="loading" :loading_text="loadingText" />
   </div>
 </template>
 
@@ -294,7 +298,7 @@ export default {
         is_event: false,
         subtasks: [],
         taskcollaborators: [],
-        user_id: null
+        user: null
       },
       statuses: [],
       permissions: [],
@@ -305,13 +309,14 @@ export default {
       rules: [
         value => !!value || "Required.",
         value => (value && value.length >= 3) || "Min 3 characters"
-      ]
+      ],
+      loadingText: "The form is loading..."
     };
   },
   created: async function() {
     await this.setCurrentUser();
     if (this.$router.currentRoute.name == "Create - Assignment") {
-      this.form.user_id = await this.currentUser.id;
+      this.form.user = await this.currentUser.id;
     } else {
       const response = await api.getTaskData(this.$route.params.id);
       if (response.status == 200) {
@@ -328,7 +333,7 @@ export default {
       if (this.form) {
         if (this.form.subtasks.length) {
           const completedCount = this.form.subtasks.filter(
-            item => item.status_id == 3
+            item => item.status == 3
           ).length;
           return (completedCount / this.form.subtasks.length) * 100;
         }
@@ -337,7 +342,7 @@ export default {
     },
     doneByUserOptions() {
       const { users, form } = this;
-      const collaboratorIds = form.taskcollaborators.map(colab => colab.user_id);
+      const collaboratorIds = form.taskcollaborators.map(colab => colab.user);
 
       const options = users.filter(
         user =>
@@ -380,14 +385,14 @@ export default {
       }
     },
     statusChanged(subtask_index) {
-      if (this.form.subtasks[subtask_index].status_id !== 3) {
+      if (this.form.subtasks[subtask_index].status !== 3) {
         delete this.form.subtasks[subtask_index].done_date;
       }
     },
     collaboratorChanged(key) {
       const { taskcollaborators } = this.form;
-      taskcollaborators.forEach(({ user_id }, index) => {
-        if (user_id == taskcollaborators[key].user_id && key != index && user_id) {
+      taskcollaborators.forEach(({ user }, index) => {
+        if (user == taskcollaborators[key].user && key != index && user) {
           this.$swal
             .fire(
               "Error!",
@@ -395,8 +400,8 @@ export default {
               "error"
             )
             .then(() => {
-              this.$set(this.form.taskcollaborators[key], "user_id", undefined);
-              delete this.form.taskcollaborators[key].user_id;
+              this.$set(this.form.taskcollaborators[key], "user", undefined);
+              delete this.form.taskcollaborators[key].user;
             });
           return;
         }
@@ -409,35 +414,48 @@ export default {
       else return "green";
     },
     addSubtask() {
-      this.form.subtasks.push({ status_id: this.statuses[0].id });
+      this.form.subtasks.push({ status: this.statuses[0].id });
     },
     deleteSubtask(index) {
       this.form.subtasks.splice(index, 1);
     },
     addCollaborator() {
       this.form.taskcollaborators.push({
-        permission_id: this.permissions[0].id,
-        user_id: null
+        permission: this.permissions[0].id,
+        user: null
       });
     },
     deleteCollaborator(index) {
       this.form.subtasks.forEach((item, key) => {
-        if (item.done_by == this.form.taskcollaborators[index].user_id) {
+        if (item.done_by == this.form.taskcollaborators[index].user) {
           delete this.form.subtasks[key].done_by;
         }
       });
       this.form.taskcollaborators.splice(index, 1);
     },
     async primarySubmit() {
+      this.loadingText = "Proccessing Data...";
+      this.loading = true;
       if (this.$router.currentRoute.name == "Create - Assignment") {
         const response = await api.generateTask(this.form);
         if (response.status == 201) {
-          console.log(response);
+          this.loading = false;
+          this.$swal
+            .fire("Success!", "The task was successfuly created.", "success")
+            .then(() => {
+              this.$router.push(`/tasks/view/${response.data.id}`);
+            });
         }
       } else {
         const response = await api.updateTask(this.form, this.$route.params.id);
-        if (response.status == 201) {
-          console.log(response);
+        if (response.status == 200) {
+          this.loading = false;
+          this.$swal.fire(
+            "Success!",
+            "The task was successfuly updated.",
+            "success"
+          );
+          this.form = response.data.task_data;
         }
       }
     }

@@ -108,7 +108,13 @@
         </v-row>
       </v-col>
       <v-col cols="12" sm="4" style="margin-top: 10px">
-        <v-text-field v-model="taskFilter" label="Filter" append-icon="mdi-filter"></v-text-field>
+        <v-text-field v-model="taskFilter" label="Search" append-icon="mdi-filter"></v-text-field>
+      </v-col>
+      <v-col cols="12" sm="1" style="margin-top: 10px">
+        <v-switch v-model="displayFilters.tasks" label="Tasks" v-tooltip="'Toggle tasks'"></v-switch>
+      </v-col>
+      <v-col cols="12" sm="1" style="margin-top: 10px">
+        <v-switch v-model="displayFilters.events" label="Events" v-tooltip="'Toggle events'"></v-switch>
       </v-col>
     </v-row>
     <v-row>
@@ -153,7 +159,7 @@
                     :width="8"
                     :value="item.progress"
                     :color="gColor(item.progress)"
-                  >{{ item.progress }}</v-progress-circular>
+                  >{{ item.progress ? item.progress.toFixed(2) : 0 }}</v-progress-circular>
                 </v-col>
                 <v-col cols="12" sm="2">
                   <v-divider vertical></v-divider>
@@ -211,6 +217,10 @@ export default {
     loading: true,
     orderDialog: false,
     pdfDialog: false,
+    displayFilters: {
+      tasks: true,
+      events: true
+    },
     orderOptions: [
       {
         label: "Date - Up",
@@ -222,16 +232,6 @@ export default {
         value: "due_date",
         asc: false
       },
-      /*{
-        label: "Progress - Up",
-        value: "progress",
-        asc: true
-      },
-      {
-        label: "Progress - Down",
-        value: "progress",
-        asc: false
-      },*/
       {
         label: "Alphabeticly - Up",
         value: "title",
@@ -249,10 +249,27 @@ export default {
   },
   computed: {
     filteredTasks() {
-      const { tasks, taskFilter, sortProperty, orderOptions } = this;
-      const filtered = tasks.filter(item =>
-        item.title.toLowerCase().includes(taskFilter.toLowerCase())
-      );
+      const {
+        tasks,
+        taskFilter,
+        sortProperty,
+        orderOptions,
+        displayFilters
+      } = this;
+      const filtered = tasks.filter(item => {
+        const searchFilterCondition = item.title
+          .toLowerCase()
+          .includes(taskFilter.toLowerCase());
+
+        let display = false;
+        if (item.is_event) {
+          if (displayFilters.events) display = true;
+        } else {
+          if (displayFilters.tasks) display = true;
+        }
+
+        return searchFilterCondition && display;
+      });
 
       if (sortProperty || sortProperty == 0) {
         const order = orderOptions[sortProperty];
