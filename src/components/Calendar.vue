@@ -277,7 +277,6 @@ export default {
       await api.generateTaskReport({ id });
     },
     deleteTask(id) {
-      console.log(id);
       this.$swal
         .fire({
           title: "Are you sure?",

@@ -235,7 +235,6 @@ export default {
       else return "green";
     },
     deleteTask(id) {
-      console.log(id);
       this.$swal
         .fire({
           title: "Are you sure?",

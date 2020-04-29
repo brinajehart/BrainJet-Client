@@ -83,6 +83,24 @@ export default class api {
         });
     }
 
+    static async getOrCreateChat(task_id) {
+        return new Promise((resolve, reject) => {
+            axios.get(`${URI}/chat/${task_id}`).then(resolve).catch(reject);
+        });
+    }
+
+    static async sendMessage(data, task_id) {
+        return new Promise((resolve, reject) => {
+            axios.post(`${URI}/chat/${task_id}/send`, data).then(resolve).catch(reject);
+        });  
+    }
+
+    static async retriveNewMessages(data, task_id) {
+        return new Promise((resolve, reject) => {
+            axios.post(`${URI}/chat/${task_id}/new`, data).then(resolve).catch(reject);
+        });  
+    }
+
     static async generateWeeklyReport(data) {
         axios({
             url: `${URI}/render/pdf/weekly?start=${data.start}&end=${data.end}`,

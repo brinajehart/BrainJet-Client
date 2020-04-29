@@ -16,6 +16,7 @@ import Datepicker from 'vuejs-datepicker';
 import GAuth from 'vue-google-oauth2';
 import DatetimePicker from 'vuetify-datetime-picker';
 import moment from 'moment';
+import md5 from 'md5';
 
 Vue.prototype.$http = Axios;
 const token = localStorage.getItem('token')
@@ -48,7 +49,11 @@ Vue.filter('genavatar', user => {
 
 Vue.filter('timediff', aDate => {
     return String(moment(aDate).fromNow());
-})
+});
+
+Vue.filter('gravatar', email => `http://www.gravatar.com/avatar/${md5(
+    email
+)}.jpg?s=80&d=undefined`);
 
 Vue.component('bj-loading', LoadingComponent);
 Vue.component('tiny-mce', TinyMCE);

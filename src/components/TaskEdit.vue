@@ -32,7 +32,8 @@
             </v-col>
             <v-col cols="12" md="4" style="margin-top:15px">
               <v-text-field
-                v-model="form.time_complexity"
+                type="number"
+                v-model.number="form.time_complexity"
                 :label="`${form.is_event ? 'Event Duration (hours)' : 'Time Complexity (days)'}`"
                 required
               ></v-text-field>
@@ -491,7 +492,6 @@ export default {
       element.click();
     },
     async primarySubmit() {
-      debugger;
       this.loadingText = "Proccessing Data...";
       this.loading = true;
       if (this.$router.currentRoute.name == "Create - Assignment") {

@@ -329,7 +329,6 @@ export default {
       this.$router.push(`/tasks/view/${id}`);
     },
     deleteTask(id) {
-      console.log(id);
       this.$swal
         .fire({
           title: "Are you sure?",
