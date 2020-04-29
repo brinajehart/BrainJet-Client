@@ -9,7 +9,6 @@ import Calendar from './components/Calendar.vue';
 import TasksListView from './components/TasksListView.vue';
 import TaskEdit from './components/TaskEdit.vue';
 import Chat from './components/Chat.vue';
-import MyChats from './components/MyChats.vue';
 import Profile from './components/Profile.vue';
 import TaskView from './components/TaskView.vue';
 import PassReset from './components/PassReset.vue';
@@ -53,10 +52,6 @@ let router = new Router({
             }
         }, {
             path: '/chats/:id', name: 'Chat', component: Chat, meta: {
-                requiresAuth: true
-            }
-        }, {
-            path: '/chats', name: 'My Chats', component: MyChats, meta: {
                 requiresAuth: true
             }
         }, {

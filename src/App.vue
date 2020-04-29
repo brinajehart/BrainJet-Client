@@ -52,18 +52,6 @@
         </v-list-item>
         <v-list-item
           link
-          @click="changeNav('/chats')"
-          v-on:mousedown.middle="changeNav('/chats', true)"
-        >
-          <v-list-item-action>
-            <v-icon>mdi-email</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>Your Chats</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item
-          link
           @click="changeNav('/profile')"
           v-on:mousedown.middle="changeNav('/profile', true)"
         >
