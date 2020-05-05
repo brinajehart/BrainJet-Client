@@ -1,24 +1,40 @@
-# ms-teams-clone
+<img src="https://github.com/matiassingers/awesome-readme/blob/master/icon.png" align="right" />
 
-## Project setup
-```
-npm install
-```
+# BrainJet
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+BrainJet is a scheduler application giving you the ability to add tasks and events to your weekly calendar...
 
-### Compiles and minifies for production
-```
-npm run build
-```
+![banner-img](https://github.com/BrinaJEHART/MS-Teams-Clone-Client/blob/master/src/assets/banner.jpg)
 
-### Lints and fixes files
-```
-npm run lint
+## Getting Started
+
+```terminal
+$ git clone https://github.com/BrinaJEHART/BrainJet-Client.git
+$ npm i
+$ npm run start
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## Deployment / Build for production
+
+```terminal
+$ npm run build
+```
+
+### Prerequisites
+
+* NodeJS >= v10.0.0
+* Yarn
+
+## Built With
+* [Vue](https://vuejs.org)
+* [Vuetify](https://vuetifyjs.com/en/)
+
+## License
+
+[![CC0](https://licensebuttons.net/p/zero/1.0/88x31.png)](https://creativecommons.org/publicdomain/zero/1.0/)
+
+## Authors
+
+```JS
+const AUTHORS = ['Janez Sedeljsak', 'Brina Jehart'];
+```
