@@ -159,7 +159,7 @@
                     :width="8"
                     :value="item.progress"
                     :color="gColor(item.progress)"
-                  >{{ item.progress ? item.progress.toFixed(2) : 0 }}</v-progress-circular>
+                  >{{ item.progress ? item.progress.toFixed(0) : 0 }}</v-progress-circular>
                 </v-col>
                 <v-col cols="12" sm="2">
                   <v-divider vertical></v-divider>
