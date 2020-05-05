@@ -72,12 +72,11 @@ export default {
       }, 1000);
     },
     async sendMessage() {
-      this.chat_field = "";
       if (!this.chat_field) return;
-      await api.sendMessage(
-        { message: this.chat_field },
-        this.$route.params.id
-      );
+      const message = this.chat_field;
+      this.chat_field = "";
+      const response = await api.sendMessage({ message }, this.$route.params.id);
+      console.log(response);
     },
     async getNewMessages() {
       if (!this.$route.params.id) return;

@@ -9,7 +9,7 @@ BrainJet is a scheduler application giving you the ability to add tasks and even
 ## Getting Started
 
 ```terminal
-$ git clone https://github.com/BrinaJEHART/MS-Teams-Clone-Client.git
+$ git clone https://github.com/BrinaJEHART/BrainJet-Client.git
 $ npm i
 $ npm run start
 ```
