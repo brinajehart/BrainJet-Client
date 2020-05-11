@@ -28,7 +28,13 @@
           </v-row>
           <v-row>
             <v-col cols="12" md="4" style="margin-top:15px">
-              <v-text-field v-model="form.title" label="Title*" :rules="rules" required></v-text-field>
+              <v-text-field
+                :disabled="!adminPermission()"
+                v-model="form.title"
+                label="Title*"
+                :rules="rules"
+                required
+              ></v-text-field>
             </v-col>
             <v-col cols="12" md="4" style="margin-top:15px">
               <v-text-field
@@ -36,6 +42,7 @@
                 v-model.number="form.time_complexity"
                 :label="`${form.is_event ? 'Event Duration (hours)' : 'Time Complexity (days)'}`"
                 required
+                :disabled="!adminPermission()"
               ></v-text-field>
             </v-col>
             <v-col cols="12" md="4" style="margin-top:15px">
@@ -43,6 +50,7 @@
                 :rules="[v => !!v || 'Item is required']"
                 :label="`${form.is_event ? 'Event Date' : 'Due Date'}`"
                 v-model="form.due_date"
+                :disabled="!adminPermission()"
                 requred
               >
                 <template slot="dateIcon">
@@ -60,6 +68,7 @@
               <tiny-mce
                 api-key="cfdw8uwtdyjxz965k0wctju2xsnoyj3nnncgef9gghebc16m"
                 v-model="form.description"
+                :disabled="!adminPermission()"
                 :init="{
                     menubar: false,
                     plugins: [
@@ -80,6 +89,7 @@
               <v-switch
                 v-model="form.is_event"
                 :label="`Type: ${form.is_event ? 'Event' : 'Task'}`"
+                :disabled="!adminPermission()"
               ></v-switch>
             </v-col>
           </v-row>
@@ -100,13 +110,14 @@
             <v-btn
               class="ma-4"
               color="primary"
-              :disabled="!valid"
+              :disabled="!valid || !moderatorPermission()"
               @click="primarySubmit()"
             >{{ $route.name === 'Edit - Assignment' ? 'Update' : 'Create' }}</v-btn>
             <v-btn class="ma-4" color="error" @click="$router.go(-1)">Cancel</v-btn>
             <v-btn
               v-tooltip="'Import data from json file...'"
               @click="readJsonFile()"
+              :disabled="!adminPermission()"
               class="ma-4"
               color="yellow darken-1"
             >
@@ -129,7 +140,14 @@
           style="margin: 0 5px 0 15px;"
           class="display-1 font-weight-light"
         >{{ form.is_event ? "Schedule Slots": "Subtasks" }}</h2>
-        <v-btn large v-tooltip="'Add Subtask'" color="primary" icon @click="addSubtask()">
+        <v-btn
+          :disabled="!moderatorPermission()"
+          large
+          v-tooltip="'Add Subtask'"
+          color="primary"
+          icon
+          @click="addSubtask()"
+        >
           <v-icon color="teal">mdi-plus-circle</v-icon>
         </v-btn>
       </v-row>
@@ -158,6 +176,7 @@
                           label="Title*"
                           :rules="rules"
                           required
+                          :disabled="!moderatorPermission()"
                         ></v-text-field>
                       </td>
                       <td v-if="form.is_event">
@@ -177,6 +196,7 @@
                           :change="statusChanged(key)"
                           :rules="[v => !!v || 'Item is required']"
                           v-model="item.status"
+                          :disabled="!moderatorPermission()"
                         ></v-select>
                       </td>
                       <td>
@@ -188,6 +208,7 @@
                           style="margin-top: 15px"
                           label="User Picker"
                           :clearable="true"
+                          :disabled="!moderatorPermission()"
                         ></v-autocomplete>
                       </td>
                       <td v-if="!form.is_event">
@@ -195,12 +216,17 @@
                           format="D, MMMM dth yyyy"
                           v-model="item.done_date"
                           name="due_date"
-                          :disabled="item.status !== 3"
+                          :disabled="item.status !== 3 || !moderatorPermission()"
                           style="width: 100%"
                         ></datepicker>
                       </td>
                       <td class="text-right">
-                        <v-btn v-tooltip="'Delete Subtask'" icon @click="deleteSubtask(key)">
+                        <v-btn
+                          v-tooltip="'Delete Subtask'"
+                          icon
+                          @click="deleteSubtask(key)"
+                          :disabled="!adminPermission()"
+                        >
                           <v-icon color="red lighten-1">mdi-delete</v-icon>
                         </v-btn>
                       </td>
@@ -223,7 +249,14 @@
       </v-card>
       <v-row>
         <h2 style="margin: 0 5px 0 15px;" class="display-1 font-weight-light">Collaborators</h2>
-        <v-btn large v-tooltip="'Add Collaborator'" color="primary" icon @click="addCollaborator()">
+        <v-btn
+          large
+          v-tooltip="'Add Collaborator'"
+          color="primary"
+          icon
+          @click="addCollaborator()"
+          :disabled="!adminPermission()"
+        >
           <v-icon color="teal">mdi-plus-circle</v-icon>
         </v-btn>
       </v-row>
@@ -257,6 +290,7 @@
                           label="User Picker"
                           v-on:change="collaboratorChanged(key)"
                           :clearable="true"
+                          :disabled="!adminPermission()"
                         ></v-autocomplete>
                       </td>
                       <td>
@@ -267,10 +301,16 @@
                           item-text="display_as"
                           v-model="item.permission"
                           :rules="[v => !!v || 'Item is required']"
+                          :disabled="!adminPermission()"
                         ></v-select>
                       </td>
                       <td class="text-right">
-                        <v-btn v-tooltip="'Delete Subtask'" icon @click="deleteCollaborator(key)">
+                        <v-btn
+                          v-tooltip="'Delete Subtask'"
+                          icon
+                          @click="deleteCollaborator(key)"
+                          :disabled="!adminPermission()"
+                        >
                           <v-icon color="red lighten-1">mdi-delete</v-icon>
                         </v-btn>
                       </td>
@@ -327,6 +367,7 @@ export default {
         taskcollaborators: [],
         user: null
       },
+      edit_permissions: "partial",
       statuses: [],
       permissions: [],
       users: [],
@@ -345,10 +386,12 @@ export default {
     if (this.$router.currentRoute.name == "Create - Assignment") {
       this.form.user = await this.currentUser.id;
       this.form.due_date = new Date();
+      this.edit_permissions === "admin";
     } else {
       const response = await api.getTaskData(this.$route.params.id);
       if (response.status == 200) {
-        this.form = response.data;
+        this.form = response.data.form;
+        this.edit_permissions = response.data.permissions;
         this.form.due_date = new Date(this.form.due_date);
       }
     }
@@ -374,15 +417,14 @@ export default {
       const collaboratorIds = form.taskcollaborators.map(colab => colab.user);
 
       const options = users.filter(
-        user =>
-          collaboratorIds.includes(user.id) || user.id == this.currentUser.id
+        user => collaboratorIds.includes(user.id) || user.id == form.user
       );
       return options;
     },
     newCollaboratorOptions() {
-      const { users } = this;
+      const { users, form } = this;
 
-      const options = users.filter(user => user.id !== this.currentUser.id);
+      const options = users.filter(user => user.id !== form.user);
       return options;
     }
   },
@@ -490,6 +532,12 @@ export default {
       element.setAttribute("download", `brainjet-data-${uuidv4()}.json`);
       element.style.display = "none";
       element.click();
+    },
+    adminPermission() {
+      return this.edit_permissions === "admin";
+    },
+    moderatorPermission() {
+      return ["admin", "partial"].includes(this.edit_permissions);
     },
     async primarySubmit() {
       this.loadingText = "Proccessing Data...";
