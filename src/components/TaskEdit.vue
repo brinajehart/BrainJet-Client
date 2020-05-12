@@ -367,7 +367,7 @@ export default {
         taskcollaborators: [],
         user: null
       },
-      edit_permissions: "partial",
+      edit_permissions: "admin",
       statuses: [],
       permissions: [],
       users: [],
